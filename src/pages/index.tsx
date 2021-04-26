@@ -1,5 +1,3 @@
-import axios from "axios";
-import Head from "next/head";
 import { ChangeEvent, useEffect, useState } from "react";
 import { MdCheckCircle, MdError } from "react-icons/md";
 import {
@@ -18,11 +16,24 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
+import Head from "next/head";
 import { Nota, Result } from "./api/omie/notas";
 import { GoogleLogin, GoogleLoginResponse } from "react-google-login";
+import { Profile } from "../components/Profile";
+
+interface GoogleUser {
+  googleId: string;
+  imageUrl: string;
+  email: string;
+  name: string;
+  givenName: string;
+  familyName: string;
+}
 
 export default function Home() {
   const [notas, setNotas] = useState<Nota[]>([]);
+  const [user, setUser] = useState<GoogleUser>();
   const [loading, setLoading] = useState(false);
   const [dataInicial, setDataInicial] = useState("");
   const [dataFinal, setDataFinal] = useState("");
@@ -83,13 +94,15 @@ export default function Home() {
       });
   }
 
-  function responseGoogle(response) {
+  function responseGoogle(response: GoogleLoginResponse) {
     console.log(response);
+    setUser(response.profileObj);
   }
 
   return (
     <Stack align="center" spacing={2}>
       <Stack justify="center" align="center" direction="row">
+        {user ? <Profile user={user} /> : ""}
         <Box>
           <Stack spacing={2} mt={5}>
             <Input
