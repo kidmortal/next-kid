@@ -19,7 +19,11 @@ import {
 import axios from "axios";
 import Head from "next/head";
 import { Nota, Result } from "./api/omie/notas";
-import { GoogleLogin, GoogleLoginResponse } from "react-google-login";
+import {
+  GoogleLogin,
+  GoogleLoginResponse,
+  GoogleLogout,
+} from "react-google-login";
 import { Profile } from "../components/Profile";
 
 interface GoogleUser {
@@ -40,6 +44,14 @@ export default function Home() {
   const [tpnf, setTpnf] = useState("");
 
   const toast = useToast();
+
+  useEffect(() => {
+    let storedUser = localStorage.getItem("@next-kid:user");
+    if (storedUser) {
+      let parsedUser = JSON.parse(storedUser) as GoogleUser;
+      setUser(parsedUser);
+    }
+  }, []);
 
   function formatCurrency(value) {
     return new Intl.NumberFormat("pt-BR", {
@@ -94,15 +106,30 @@ export default function Home() {
       });
   }
 
-  function responseGoogle(response: GoogleLoginResponse) {
+  function googleLoginSuccess(response: GoogleLoginResponse) {
     console.log(response);
-    setUser(response.profileObj);
+    if (response.profileObj) {
+      setUser(response.profileObj);
+      localStorage.setItem(
+        "@next-kid:user",
+        JSON.stringify(response.profileObj)
+      );
+    }
+  }
+
+  function googleLogoutSuccess() {
+    localStorage.setItem("@next-kid:user", "");
+    setUser(null);
+  }
+
+  function googleLoginError(response: GoogleLoginResponse) {
+    console.log(response);
   }
 
   return (
     <Stack align="center" spacing={2}>
+      <Profile user={user} />
       <Stack justify="center" align="center" direction="row">
-        {user ? <Profile user={user} /> : ""}
         <Box>
           <Stack spacing={2} mt={5}>
             <Input
@@ -124,7 +151,7 @@ export default function Home() {
 
             <Button
               width={[150, 200, 250]}
-              disabled={loading}
+              disabled={!!!user}
               bg="purple.600"
               _hover={{ bg: "purple.700" }}
               isLoading={loading}
@@ -151,13 +178,21 @@ export default function Home() {
             >
               Saida
             </Checkbox>
-            <GoogleLogin
-              clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
-              buttonText="Login"
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={"single_host_origin"}
-            />
+            {user ? (
+              <GoogleLogout
+                clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                buttonText="Logout"
+                onLogoutSuccess={googleLogoutSuccess}
+              ></GoogleLogout>
+            ) : (
+              <GoogleLogin
+                clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={googleLoginSuccess}
+                onFailure={googleLoginError}
+                cookiePolicy={"single_host_origin"}
+              />
+            )}
           </Stack>
         </Box>
       </Stack>
