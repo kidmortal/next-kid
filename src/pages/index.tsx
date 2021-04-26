@@ -180,7 +180,7 @@ export default function Home() {
             </Checkbox>
             {user ? (
               <GoogleLogout
-                clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
                 buttonText="Logout"
                 onLogoutSuccess={googleLogoutSuccess}
               ></GoogleLogout>
