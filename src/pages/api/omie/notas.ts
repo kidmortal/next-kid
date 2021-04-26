@@ -172,7 +172,8 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 async function requestOmieNotas(req: NextApiRequest, res: NextApiResponse) {
-  let data = req.query.data?.toString();
+  let dataInicial = req.query.data?.toString();
+  let dataFinal = req.query.data?.toString();
   let tpnf = req.query.tpnf?.toString();
   var params = {
     call: "ListarNF",
@@ -184,8 +185,8 @@ async function requestOmieNotas(req: NextApiRequest, res: NextApiResponse) {
         registros_por_pagina: 350,
         apenas_importado_api: "N",
         ordenar_por: "CODIGO",
-        dEmiInicial: data,
-        dEmiFinal: data,
+        dEmiInicial: dataInicial,
+        dEmiFinal: dataFinal,
         tpNF: tpnf ? tpnf : null,
       },
     ],

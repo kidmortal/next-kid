@@ -16,20 +16,16 @@ import {
   HStack,
   Checkbox,
   Text,
-  Spinner,
   useToast,
 } from "@chakra-ui/react";
 import { Nota, Result } from "./api/omie/notas";
-
-interface SocketMessage {
-  event: string;
-  message: string;
-}
+import { GoogleLogin, GoogleLoginResponse } from "react-google-login";
 
 export default function Home() {
   const [notas, setNotas] = useState<Nota[]>([]);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState("");
+  const [dataInicial, setDataInicial] = useState("");
+  const [dataFinal, setDataFinal] = useState("");
   const [tpnf, setTpnf] = useState("");
 
   const toast = useToast();
@@ -57,30 +53,38 @@ export default function Home() {
   }
 
   function requestData() {
-    if (!data)
+    if (!dataInicial || !dataFinal)
       return toast({
         position: "top-right",
         title: "Jumento",
-        description: "Digita uma data caralho",
+        description: "Digita as data ai caralho",
         status: "error",
         duration: 4000,
         isClosable: true,
       });
     setLoading(true);
-    axios.get(`api/omie/notas?data=${data}&tpnf=${tpnf}`).then((response) => {
-      let data: Result = response.data;
-      console.log(data);
-      setNotas(data.result?.nfCadastro);
-      setLoading(false);
-      toast({
-        position: "top-right",
-        title: "Successful request",
-        description: `Received ${data.result?.registros || 0} Notas`,
-        status: "success",
-        duration: 5000,
-        isClosable: true,
+    axios
+      .get(
+        `api/omie/notas?dataInicial=${dataInicial}&dataFinal=${dataFinal}&tpnf=${tpnf}`
+      )
+      .then((response) => {
+        let data: Result = response.data;
+        console.log(data);
+        setNotas(data.result?.nfCadastro);
+        setLoading(false);
+        toast({
+          position: "top-right",
+          title: "Successful request",
+          description: `Received ${data.result?.registros || 0} Notas`,
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
       });
-    });
+  }
+
+  function responseGoogle(response) {
+    console.log(response);
   }
 
   return (
@@ -89,33 +93,41 @@ export default function Home() {
         <Box>
           <Stack spacing={2} mt={5}>
             <Input
-              placeholder={"Me digita"}
-              value={data}
+              width={[150, 200, 250]}
+              placeholder={"Data Inicial"}
+              value={dataInicial}
               onChange={(e) => {
-                setData(e.target.value);
+                setDataInicial(e.target.value);
+              }}
+            />
+            <Input
+              width={[150, 200, 250]}
+              placeholder={"Data Final"}
+              value={dataFinal}
+              onChange={(e) => {
+                setDataFinal(e.target.value);
               }}
             />
 
             <Button
+              width={[150, 200, 250]}
               disabled={loading}
               bg="purple.600"
               _hover={{ bg: "purple.700" }}
+              isLoading={loading}
               onClick={() => {
                 requestData();
               }}
             >
-              {loading ? (
-                <Spinner
-                  thickness="4px"
-                  speed="0.65s"
-                  emptyColor="gray.200"
-                  color="blue.500"
-                  size="md"
-                />
-              ) : (
-                "Me Requesta"
-              )}
+              Buscar Notas
             </Button>
+            <GoogleLogin
+              clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={"single_host_origin"}
+            />
           </Stack>
         </Box>
 
@@ -136,33 +148,6 @@ export default function Home() {
           </Stack>
         </Box>
       </Stack>
-
-      <List spacing={3}>
-        {notas.map((nota) => {
-          return (
-            <ListItem
-              key={nota.ide.nNF}
-              marginTop={5}
-              borderRadius="3xl"
-              d="flex"
-              bg="gray.800"
-              justifyContent="space-around"
-            >
-              {nota.ide.tpNF === "0" ? tagEntrada() : tagSaida()}
-
-              <Tag margin="2" size={"md"} variant="solid" bg="teal">
-                {nota.ide.nNF}
-              </Tag>
-              <Tag margin="2" size={"md"} variant="solid" bg="green">
-                {nota.info.dInc}
-              </Tag>
-              <Tag margin="2" size={"md"} variant="solid" bg="yellow.500">
-                {formatCurrency(nota.total.ICMSTot.vNF)}
-              </Tag>
-            </ListItem>
-          );
-        })}
-      </List>
     </Stack>
   );
 }
