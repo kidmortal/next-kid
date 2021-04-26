@@ -121,13 +121,6 @@ export default function Home() {
             >
               Buscar Notas
             </Button>
-            <GoogleLogin
-              clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
-              buttonText="Login"
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={"single_host_origin"}
-            />
           </Stack>
         </Box>
 
@@ -145,6 +138,13 @@ export default function Home() {
             >
               Saida
             </Checkbox>
+            <GoogleLogin
+              clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={"single_host_origin"}
+            />
           </Stack>
         </Box>
       </Stack>
