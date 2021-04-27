@@ -108,7 +108,7 @@ export function BaixarContaAReceberForm() {
   }
 
   return (
-    <Stack width={[200, 300, 400]}>
+    <Stack>
       <Input
         borderColor="red.600"
         _hover={{ borderColor: "red.400" }}

@@ -24,6 +24,7 @@ import { useAppContext } from "../context/AppContext";
 
 export default function Home() {
   const { user, setUser } = useAppContext();
+  let allowedEmails = ["kidmortal@gmail.com", "deiascully@gmail.com"];
   function formatCurrency(value) {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -35,18 +36,22 @@ export default function Home() {
     console.log(user);
   }, [user]);
 
+  function auth() {
+    if (allowedEmails.includes(user?.email)) return <BaixarContaAReceberForm />;
+    else
+      return <Tag justifyContent="center">Voce num tem permissione 😂😂👌</Tag>;
+  }
+
   return (
     <Stack align="center" spacing={2}>
-      <HStack spacing={10}>
-        <SideMenu />
-        <Profile />
-        <GoogleLoginButton />
-      </HStack>
-      {user?.email === "deiascully@gmail.com" ? (
-        <BaixarContaAReceberForm />
-      ) : (
-        <Tag>Voce nao pode 😂😂😂</Tag>
-      )}
+      <Stack width={[200, 300, 400, 600]}>
+        <HStack justify="space-between" spacing={10}>
+          <SideMenu />
+          <Profile />
+          <GoogleLoginButton />
+        </HStack>
+        {auth()}
+      </Stack>
     </Stack>
   );
 }
