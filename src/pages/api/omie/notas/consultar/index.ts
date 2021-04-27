@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
+import { RequestOmie } from "../../_request";
 
 export interface Nota {
   compl: Compl;
@@ -161,46 +162,23 @@ export interface Result {
   };
 }
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
-  let data = req.query.data?.toString();
-  if (!data)
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  let nota = req.query.nota as string;
+  if (!nota)
     return res
       .status(200)
-      .json({ message: "No date provided, example: notas?data=15/02/2021" });
+      .json({ message: "No NF provided, examle nota=00022293" });
 
-  return requestOmieNotas(req, res);
+  res.status(200).json(await GetOneNfByNumero(nota));
 };
 
-async function requestOmieNotas(req: NextApiRequest, res: NextApiResponse) {
-  let dataInicial = req.query.data?.toString();
-  let dataFinal = req.query.data?.toString();
-  let tpnf = req.query.tpnf?.toString();
-  var params = {
-    call: "ListarNF",
-    app_key: process.env.OMIE_PYRAMID_APP_KEY,
-    app_secret: process.env.OMIE_PYRAMID_APP_SECRET,
-    param: [
-      {
-        pagina: 1,
-        registros_por_pagina: 350,
-        apenas_importado_api: "N",
-        ordenar_por: "CODIGO",
-        dEmiInicial: dataInicial,
-        dEmiFinal: dataFinal,
-        tpNF: tpnf ? tpnf : null,
-      },
-    ],
-  };
-  const response = await fetch(
-    "https://app.omie.com.br/api/v1/produtos/nfconsultar/",
-    {
-      body: JSON.stringify(params),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    }
-  );
-  const result = await response.json();
-  res.status(200).json({ result });
+export async function GetOneNfByNumero(nota: string) {
+  const result: Nota = await RequestOmie({
+    call: "ConsultarNF",
+    path: "produtos/nfconsultar/",
+    param: {
+      nNF: nota,
+    },
+  });
+  return result;
 }

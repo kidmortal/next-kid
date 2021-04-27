@@ -17,21 +17,10 @@ import {
   useToast,
   Avatar,
 } from "@chakra-ui/react";
+import { useAppContext } from "../context/AppContext";
 
-interface GoogleUser {
-  googleId: string;
-  imageUrl: string;
-  email: string;
-  name: string;
-  givenName: string;
-  familyName: string;
-}
-
-interface ProfileProps {
-  user: GoogleUser;
-}
-
-export function Profile({ user }: ProfileProps) {
+export function Profile() {
+  const { user } = useAppContext();
   return (
     <HStack>
       <Avatar
