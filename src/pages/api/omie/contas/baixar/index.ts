@@ -16,16 +16,16 @@ type baixaResponse = {
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  let { dataBaixa, Cc, nota, desconto, juros } = req.body;
+  let { dataBaixa, Cc, nota, desconto, juros, valor } = req.body;
   if (!nota) return res.status(200).json({ message: "Nota sem numero" });
 
-  let notaInfo, titulo, tituloNumero, valor, valorFinal;
+  let notaInfo, titulo, tituloNumero, valorFinal;
 
   try {
     notaInfo = await GetOneNfByNumero(nota);
     titulo = notaInfo.titulos[0];
     tituloNumero = titulo?.nCodTitulo;
-    valor = titulo?.nValorTitulo;
+    valor = valor ? valor : titulo?.nValorTitulo;
     valorFinal = valor - desconto + juros;
   } catch (error) {
     return console.log("erro ao processar nf " + nota);

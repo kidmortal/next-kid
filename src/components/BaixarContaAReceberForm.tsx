@@ -1,10 +1,30 @@
 import { Button } from "@chakra-ui/button";
+import { LinkIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
-import { HStack, Stack, Text, Textarea, useToast } from "@chakra-ui/react";
-
+import {
+  Box,
+  HStack,
+  Icon,
+  List,
+  ListIcon,
+  ListItem,
+  Stack,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Textarea,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+  useToast,
+} from "@chakra-ui/react";
+import TableScrollbar from "react-table-scrollbar";
 import axios from "axios";
 import { format } from "date-fns";
 import { useState } from "react";
+import { FaSignInAlt } from "react-icons/fa";
 import { useAppContext } from "../context/AppContext";
 
 function formatDate(date: string) {
@@ -14,6 +34,7 @@ function formatDate(date: string) {
 
 export function BaixarContaAReceberForm() {
   const { user } = useAppContext();
+  const [history, setHistory] = useState(["um", "dois", "tres"]);
   const [dataBaixa, setDataBaixa] = useState("");
   const [batch, setBatch] = useState("");
   const [observacao, setObservacao] = useState("");
@@ -23,6 +44,7 @@ export function BaixarContaAReceberForm() {
   const [nota, setNota] = useState("");
   const [desconto, setDesconto] = useState("");
   const [juros, setJuros] = useState("");
+  const [valor, setValor] = useState("");
 
   const toast = useToast();
 
@@ -67,6 +89,7 @@ export function BaixarContaAReceberForm() {
           nota: nf,
           desconto: 0,
           juros: 0,
+          valor: 0,
         })
         .then((response) => {
           toast({
@@ -93,6 +116,7 @@ export function BaixarContaAReceberForm() {
         nota,
         desconto,
         juros,
+        valor,
       })
       .then((response) => {
         setLoadingOne(false);
@@ -137,7 +161,6 @@ export function BaixarContaAReceberForm() {
       <HStack>
         <Input
           type="number"
-          width={90}
           placeholder={"Nota"}
           value={nota}
           onChange={(e) => {
@@ -146,7 +169,6 @@ export function BaixarContaAReceberForm() {
         />
         <Input
           type="number"
-          width={110}
           placeholder={"Desconto"}
           value={desconto}
           onChange={(e) => {
@@ -155,14 +177,22 @@ export function BaixarContaAReceberForm() {
         />
         <Input
           type="number"
-          width={110}
           placeholder={"Juros"}
           value={juros}
           onChange={(e) => {
             setJuros(e.target.value);
           }}
         />
+        <Input
+          type="number"
+          placeholder={"Valor - 100%"}
+          value={valor}
+          onChange={(e) => {
+            setValor(e.target.value);
+          }}
+        />
         <Button
+          width={300}
           isLoading={loadingOne}
           onClick={() => handleSubmitBaixaConta()}
           bg="purple.600"
@@ -171,12 +201,48 @@ export function BaixarContaAReceberForm() {
           Baixar 1
         </Button>
       </HStack>
-      <Textarea
-        rows={10}
-        value={batch}
-        onChange={(e) => setBatch(e.target.value)}
-        placeholder={`0000028\n0000027\n0000035\n0000025`}
-      />
+      <HStack>
+        <Textarea
+          rows={6}
+          value={batch}
+          onChange={(e) => setBatch(e.target.value)}
+          placeholder={`0000028\n0000027\n0000035\n0000025`}
+        />
+        <Box width="500">
+          <TableScrollbar rows={5}>
+            <Table size="sm">
+              <Tbody>
+                <Tr>
+                  <Td>inches</Td>
+                  <Td>millimetres (mm)</Td>
+                  <Td isNumeric>25.4</Td>
+                </Tr>
+                <Tr>
+                  <Td>inches</Td>
+                  <Td>millimetres (mm)</Td>
+                  <Td isNumeric>25.4</Td>
+                </Tr>
+                <Tr>
+                  <Td>inches</Td>
+                  <Td>millimetres (mm)</Td>
+                  <Td isNumeric>25.4</Td>
+                </Tr>
+                <Tr>
+                  <Td>inches</Td>
+                  <Td>millimetres (mm)</Td>
+                  <Td isNumeric>25.4</Td>
+                </Tr>
+                <Tr>
+                  <Td>inches</Td>
+                  <Td>millimetres (mm)</Td>
+                  <Td isNumeric>25.4</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </TableScrollbar>
+        </Box>
+      </HStack>
+
       <Button
         isLoading={loadingBatch}
         onClick={() => handleSumbitBaixarTodos()}
