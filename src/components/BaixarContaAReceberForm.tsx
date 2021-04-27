@@ -56,9 +56,10 @@ export function BaixarContaAReceberForm() {
     if (verificarCamposObrigatorios()) return;
     let nfArray = batch.split("\n");
     setLoadingBatch(true);
+    let total = nfArray.length;
+    let contador = 0;
     for (let index = 0; index < nfArray.length; index++) {
       const nf = nfArray[index];
-
       axios
         .post("api/omie/contas/baixar", {
           dataBaixa: formatDate(dataBaixa),
@@ -68,16 +69,17 @@ export function BaixarContaAReceberForm() {
           juros: 0,
         })
         .then((response) => {
-          setLoadingBatch(false);
           toast({
             position: "top-right",
             title: "Dados",
             description: JSON.stringify(response.data),
             status: "success",
             isClosable: true,
+            duration: 20000,
           });
+          contador++;
+          if (contador >= total) setLoadingBatch(false);
         });
-      if (index === nfArray.length - 1) setLoadingBatch(false);
     }
   }
 
