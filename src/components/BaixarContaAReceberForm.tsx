@@ -105,8 +105,6 @@ export function BaixarContaAReceberForm() {
       });
   }
 
-  if (user.email !== "deiascully@gmail.com") return <Text> vc n pode 😂</Text>;
-
   return (
     <Stack width={[200, 300, 400]}>
       <Input

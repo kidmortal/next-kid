@@ -31,6 +31,18 @@ export default function Home() {
     }).format(value);
   }
 
+  function auth() {
+    if (user) {
+      return user.email === "deiascully@gmail.com" ? (
+        <BaixarContaAReceberForm />
+      ) : (
+        <Text>Voce n pode 😂😂</Text>
+      );
+    } else {
+      <Text>Faz login 👀🤔</Text>;
+    }
+  }
+
   return (
     <AppContextProvider>
       <Stack align="center" spacing={2}>
@@ -39,7 +51,7 @@ export default function Home() {
           <Profile />
           <GoogleLoginButton />
         </HStack>
-        <BaixarContaAReceberForm />
+        {auth()}
       </Stack>
     </AppContextProvider>
   );
