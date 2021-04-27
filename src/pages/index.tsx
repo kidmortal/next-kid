@@ -17,10 +17,10 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Profile } from "../components/Profile";
-import { AppContextProvider, useAppContext } from "../context/AppContext";
 import { GoogleLoginButton } from "../components/GoogleLoginButton";
 import { SideMenu } from "../components/SideMenu";
 import { BaixarContaAReceberForm } from "../components/BaixarContaAReceberForm";
+import { useAppContext } from "../context/AppContext";
 
 export default function Home() {
   const { user, setUser } = useAppContext();
@@ -31,20 +31,22 @@ export default function Home() {
     }).format(value);
   }
 
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   return (
-    <AppContextProvider>
-      <Stack align="center" spacing={2}>
-        <HStack spacing={10}>
-          <SideMenu />
-          <Profile />
-          <GoogleLoginButton />
-        </HStack>
-        {user?.email === "deiascully@gmail.com" ? (
-          <BaixarContaAReceberForm />
-        ) : (
-          <Tag>Voce nao pode 😂😂😂</Tag>
-        )}
-      </Stack>
-    </AppContextProvider>
+    <Stack align="center" spacing={2}>
+      <HStack spacing={10}>
+        <SideMenu />
+        <Profile />
+        <GoogleLoginButton />
+      </HStack>
+      {user?.email === "deiascully@gmail.com" ? (
+        <BaixarContaAReceberForm />
+      ) : (
+        <Tag>Voce nao pode 😂😂😂</Tag>
+      )}
+    </Stack>
   );
 }
