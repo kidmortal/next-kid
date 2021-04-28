@@ -1,4 +1,4 @@
-import { useState, ReactNode, useContext } from "react";
+import { useState, ReactNode, useContext, useEffect } from "react";
 import { createContext } from "react";
 
 export type GoogleUser = {
@@ -35,13 +35,17 @@ type appContextType = {
   user: GoogleUser;
   setUser: (user: GoogleUser) => void;
   baixas: BaixaProps[];
-  setBaixas: (baixas: BaixaProps[]) => void;
+  addBaixa: (baixa: BaixaProps) => void;
+  removeBaixa: (baixa: BaixaProps) => void;
+  setBaixas: (baixa: BaixaProps[]) => void;
 };
 
 const appContextDefaultValues: appContextType = {
   user: null,
   setUser: () => {},
   baixas: null,
+  addBaixa: () => {},
+  removeBaixa: () => {},
   setBaixas: () => {},
 };
 
@@ -58,8 +62,36 @@ export function AppContextProvider({ children }: Props) {
     user,
     setUser,
     baixas,
+    addBaixa,
+    removeBaixa,
     setBaixas,
   };
+
+  useEffect(() => {
+    let baixas = JSON.parse(
+      localStorage.getItem("@next-kid:baixas")
+    ) as BaixaProps[];
+    if (baixas) setBaixas(baixas);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("@next-kid:baixas", JSON.stringify(baixas));
+  }, [baixas]);
+
+  function addBaixa(baixa: BaixaProps) {
+    let newBaixas = [...baixas];
+    newBaixas.push(baixa);
+    setBaixas(newBaixas);
+    console.log(baixas);
+  }
+
+  function removeBaixa(baixa: BaixaProps) {
+    setBaixas([
+      ...baixas.filter((e) => {
+        return e.codigo_baixa !== baixa.codigo_baixa;
+      }),
+    ]);
+  }
 
   return (
     <>

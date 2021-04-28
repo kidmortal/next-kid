@@ -21,16 +21,8 @@ import TableScrollbar from "react-table-scrollbar";
 import { BaixaProps, useAppContext } from "../../context/AppContext";
 
 export function BaixasRealizadasTable() {
-  const { baixas, setBaixas } = useAppContext();
+  const { baixas, removeBaixa } = useAppContext();
   const toast = useToast();
-
-  function removeBaixa(baixa: BaixaProps) {
-    let newState = [...baixas];
-    newState = newState.filter((element) => {
-      return element.codigo_baixa !== baixa.codigo_baixa;
-    });
-    setBaixas(newState);
-  }
 
   function handleUndoBaixa(baixa: BaixaProps) {
     axios
@@ -69,7 +61,7 @@ export function BaixasRealizadasTable() {
         <Table size="sm" width={[100, 100, 500]}>
           <Tbody>
             {baixas.map((data) => (
-              <Tr>
+              <Tr key={data.codigo_baixa}>
                 <Td fontSize={12}>{data.nota_fiscal}</Td>
                 <Td fontSize={12}>R$ {data.valor_baixado}</Td>
                 <Td fontSize={12}>{data.data_baixa}</Td>

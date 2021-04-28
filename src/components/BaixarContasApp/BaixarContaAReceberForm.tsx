@@ -8,7 +8,11 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
-import { baixaResponse, useAppContext } from "../../context/AppContext";
+import {
+  BaixaProps,
+  baixaResponse,
+  useAppContext,
+} from "../../context/AppContext";
 import { BaixasRealizadasTable } from "./BaixasRealizadasTable";
 
 function formatDate(date: string) {
@@ -16,8 +20,17 @@ function formatDate(date: string) {
   return `${split[2]}/${split[1]}/${split[0]}`;
 }
 
+type contaProps = {
+  dataBaixa: string;
+  Cc: string;
+  nota: string;
+  desconto: number;
+  juros: number;
+  valor: number;
+};
+
 export function BaixarContaAReceberForm() {
-  const { baixas, setBaixas } = useAppContext();
+  const { baixas, addBaixa, setBaixas } = useAppContext();
   const [dataBaixa, setDataBaixa] = useState("");
   const dataBaixaFormat = formatDate(dataBaixa);
   const [batch, setBatch] = useState("");
@@ -32,8 +45,8 @@ export function BaixarContaAReceberForm() {
 
   const toast = useToast();
 
-  function newBaixa(nota: string, response: baixaResponse) {
-    let newBaixa = {
+  function formatBaixa(nota: string, response: baixaResponse) {
+    let newBaixa: BaixaProps = {
       codigo_baixa: response.codigo_baixa,
       codigo_lancamento: response.codigo_lancamento,
       data_baixa: dataBaixaFormat,
@@ -41,7 +54,7 @@ export function BaixarContaAReceberForm() {
       nota_fiscal: nota,
       valor_baixado: response.valor_baixado,
     };
-    setBaixas([...baixas, newBaixa]);
+    return newBaixa;
   }
 
   function verificarCamposObrigatorios() {
@@ -70,88 +83,85 @@ export function BaixarContaAReceberForm() {
     return false;
   }
 
-  function handleSumbitBaixarTodos() {
+  async function handleSumbitBaixarTodos() {
     if (verificarCamposObrigatorios()) return;
     let nfArray = batch.split("\n");
+    let newState = [...baixas];
     setLoadingBatch(true);
-    let total = nfArray.length;
-    let contador = 0;
+
     for (let index = 0; index < nfArray.length; index++) {
       const nota = nfArray[index];
-      axios
-        .post("api/omie/contas/baixar", {
-          dataBaixa: formatDate(dataBaixa),
-          Cc,
-          nota: nota,
-          desconto: 0,
-          juros: 0,
-          valor: 0,
-        })
-        .then((response) => {
-          if (response.data.descricao_status) {
-            toast({
-              position: "top-right",
-              title: `NF ${nota} Baixada`,
-              description: JSON.stringify(response.data.descricao_status),
-              status: "success",
-              duration: 4000,
-              isClosable: true,
-            });
-            newBaixa(nota, response.data);
-          }
-          if (response.data.faultstring) {
-            toast({
-              position: "top-right",
-              title: `NF ${nota} Erro`,
-              description: JSON.stringify(response.data.faultstring),
-              status: "error",
-              duration: 4000,
-              isClosable: true,
-            });
-          }
-
-          contador++;
-          if (contador >= total) setLoadingBatch(false);
-        });
-    }
-  }
-
-  function handleSubmitBaixaConta() {
-    if (verificarCamposObrigatorios()) return;
-    setLoadingOne(true);
-    axios
-      .post("api/omie/contas/baixar", {
+      let response = await baixarConta({
         dataBaixa: formatDate(dataBaixa),
         Cc,
-        nota,
-        desconto,
-        juros,
-        valor,
-      })
-      .then((response) => {
-        setLoadingOne(false);
-        if (response.data.descricao_status) {
-          toast({
-            position: "top-right",
-            title: `NF ${nota} Baixada`,
-            description: JSON.stringify(response.data.descricao_status),
-            status: "success",
-            duration: 4000,
-            isClosable: true,
-          });
-          newBaixa(nota, response.data);
-        }
-        if (response.data.faultstring) {
-          toast({
-            position: "top-right",
-            title: `NF ${nota} Erro`,
-            description: JSON.stringify(response.data.faultstring),
-            status: "error",
-            duration: 4000,
-            isClosable: true,
-          });
-        }
+        nota: nota,
+        desconto: 0,
+        juros: 0,
+        valor: 0,
       });
+
+      if (response) {
+        newState.unshift(response);
+      }
+
+      if (index + 1 >= nfArray.length) {
+        setLoadingBatch(false);
+      }
+    }
+    setBaixas(newState);
+  }
+
+  async function handleSubmitBaixaConta() {
+    if (verificarCamposObrigatorios()) return;
+    setLoadingOne(true);
+
+    let response = await baixarConta({
+      dataBaixa: formatDate(dataBaixa),
+      Cc,
+      nota,
+      desconto: parseFloat(desconto),
+      juros: parseFloat(desconto),
+      valor: parseFloat(desconto),
+    });
+
+    if (response) {
+      addBaixa(response);
+    }
+
+    setLoadingOne(false);
+  }
+
+  async function baixarConta(conta: contaProps) {
+    let response = await axios.post("api/omie/contas/baixar", {
+      dataBaixa: formatDate(dataBaixa),
+      Cc: conta.Cc,
+      nota: conta.nota,
+      desconto: conta.desconto,
+      juros: conta.juros,
+      valor: conta.valor,
+    });
+    if (response.data.descricao_status) {
+      toast({
+        position: "top-right",
+        title: `NF ${conta.nota} Baixada`,
+        description: JSON.stringify(response.data.descricao_status),
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+      return formatBaixa(conta.nota, response.data);
+    }
+    if (response.data.faultstring) {
+      toast({
+        position: "top-right",
+        title: `NF ${conta.nota} Erro`,
+        description: JSON.stringify(response.data.faultstring),
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      return null;
+    }
   }
 
   return (
