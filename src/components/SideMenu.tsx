@@ -10,7 +10,6 @@ import {
   DrawerCloseButton,
   Icon,
 } from "@chakra-ui/react";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 
@@ -21,7 +20,6 @@ export function SideMenu() {
     <>
       <Button
         disabled={!!!user}
-        leftIcon={<GiHamburgerMenu />}
         bgColor="gray.500"
         onClick={() => setIsOpen(!isOpen)}
       />

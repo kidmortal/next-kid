@@ -1,22 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { MdCheckCircle, MdError } from "react-icons/md";
-import {
-  Button,
-  Input,
-  Container,
-  List,
-  ListItem,
-  ListIcon,
-  Tag,
-  Stack,
-  VStack,
-  Box,
-  HStack,
-  Checkbox,
-  Text,
-  useToast,
-  Avatar,
-} from "@chakra-ui/react";
+import { HStack, Text, Avatar } from "@chakra-ui/react";
 import { useAppContext } from "../context/AppContext";
 
 export function Profile() {

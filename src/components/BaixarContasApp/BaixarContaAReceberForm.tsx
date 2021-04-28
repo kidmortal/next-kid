@@ -1,31 +1,14 @@
-import { Button } from "@chakra-ui/button";
-import { LinkIcon } from "@chakra-ui/icons";
-import { Input } from "@chakra-ui/input";
 import {
-  Box,
   HStack,
-  Icon,
-  List,
-  ListIcon,
-  ListItem,
+  Button,
+  Input,
   Stack,
-  Table,
-  Tbody,
-  Td,
-  Text,
   Textarea,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
   useToast,
 } from "@chakra-ui/react";
-import TableScrollbar from "react-table-scrollbar";
 import axios from "axios";
-import { format } from "date-fns";
 import { useState } from "react";
-import { FaSignInAlt } from "react-icons/fa";
-import { useAppContext } from "../context/AppContext";
+import { BaixasRealizadasTable } from "./BaixasRealizadasTable";
 
 function formatDate(date: string) {
   let split = date.split("-");
@@ -33,8 +16,6 @@ function formatDate(date: string) {
 }
 
 export function BaixarContaAReceberForm() {
-  const { user } = useAppContext();
-  const [history, setHistory] = useState(["um", "dois", "tres"]);
   const [dataBaixa, setDataBaixa] = useState("");
   const [batch, setBatch] = useState("");
   const [observacao, setObservacao] = useState("");
@@ -203,44 +184,12 @@ export function BaixarContaAReceberForm() {
       </HStack>
       <HStack>
         <Textarea
-          rows={6}
+          rows={11}
           value={batch}
           onChange={(e) => setBatch(e.target.value)}
           placeholder={`0000028\n0000027\n0000035\n0000025`}
         />
-        <Box width="500">
-          <TableScrollbar rows={5}>
-            <Table size="sm">
-              <Tbody>
-                <Tr>
-                  <Td>inches</Td>
-                  <Td>millimetres (mm)</Td>
-                  <Td isNumeric>25.4</Td>
-                </Tr>
-                <Tr>
-                  <Td>inches</Td>
-                  <Td>millimetres (mm)</Td>
-                  <Td isNumeric>25.4</Td>
-                </Tr>
-                <Tr>
-                  <Td>inches</Td>
-                  <Td>millimetres (mm)</Td>
-                  <Td isNumeric>25.4</Td>
-                </Tr>
-                <Tr>
-                  <Td>inches</Td>
-                  <Td>millimetres (mm)</Td>
-                  <Td isNumeric>25.4</Td>
-                </Tr>
-                <Tr>
-                  <Td>inches</Td>
-                  <Td>millimetres (mm)</Td>
-                  <Td isNumeric>25.4</Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </TableScrollbar>
-        </Box>
+        <BaixasRealizadasTable />
       </HStack>
 
       <Button

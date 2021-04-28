@@ -4,8 +4,6 @@ import {
   GoogleLoginResponse,
   GoogleLogout,
 } from "react-google-login";
-import { FaSignInAlt } from "react-icons/fa";
-import { GoSignOut } from "react-icons/go";
 import { useAppContext } from "../context/AppContext";
 
 export function GoogleLoginButton() {
@@ -32,9 +30,7 @@ export function GoogleLoginButton() {
         style={{ backgroundColor: "#4A5568", color: "#4A5568" }}
         clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
         onLogoutSuccess={googleLogoutSuccess}
-      >
-        <GoSignOut />
-      </GoogleLogout>
+      ></GoogleLogout>
     );
 
   if (!user)
@@ -46,8 +42,6 @@ export function GoogleLoginButton() {
         onFailure={googleLoginError}
         isSignedIn={true}
         cookiePolicy={"single_host_origin"}
-      >
-        <FaSignInAlt />
-      </GoogleLogin>
+      ></GoogleLogin>
     );
 }
