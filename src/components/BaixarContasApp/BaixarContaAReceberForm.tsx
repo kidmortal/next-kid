@@ -235,7 +235,7 @@ export function BaixarContaAReceberForm() {
           Baixar 1
         </Button>
       </HStack>
-      <Stack direction={["column", "row"]}>
+      <Stack direction={["column", "column", "row"]}>
         <Stack>
           <Textarea
             rows={11}
