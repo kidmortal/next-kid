@@ -102,13 +102,14 @@ export function BaixarContaAReceberForm() {
 
       if (response) {
         newState.unshift(response);
+        console.log(newState);
+        setBaixas([...newState]);
       }
 
       if (index + 1 >= nfArray.length) {
         setLoadingBatch(false);
       }
     }
-    setBaixas(newState);
   }
 
   async function handleSubmitBaixaConta() {
