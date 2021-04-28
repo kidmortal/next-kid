@@ -60,6 +60,7 @@ export function AppContextProvider({ children }: Props) {
     baixas,
     setBaixas,
   };
+
   return (
     <>
       <AppContext.Provider value={value}>{children}</AppContext.Provider>

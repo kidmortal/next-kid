@@ -15,36 +15,52 @@ import {
   IconButton,
   Tooltip,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { useState } from "react";
 import TableScrollbar from "react-table-scrollbar";
-import { useAppContext } from "../../context/AppContext";
+import { BaixaProps, useAppContext } from "../../context/AppContext";
 
 export function BaixasRealizadasTable() {
-  const { baixas, user } = useAppContext();
-  const [history, setHistory] = useState([
-    "um",
-    "dois",
-    "tres",
-    "quatro",
-    "cinco",
-    "dois",
-    "tres",
-    "quatro",
-    "cinco",
-    "seis",
-  ]);
-
+  const { baixas, setBaixas } = useAppContext();
   const toast = useToast();
 
-  function handleUndoBaixa(codigoBaixa: number) {
-    toast({
-      position: "top-right",
-      title: "Removido",
-      description: "Baixa desfeita",
-      status: "success",
-      duration: 2000,
-      isClosable: true,
+  function removeBaixa(baixa: BaixaProps) {
+    let newState = [...baixas];
+    newState = newState.filter((element) => {
+      return element.codigo_baixa !== baixa.codigo_baixa;
     });
+    setBaixas(newState);
+  }
+
+  function handleUndoBaixa(baixa: BaixaProps) {
+    axios
+      .post("api/omie/contas/cancelarbaixa", {
+        codigo_baixa: baixa.codigo_baixa,
+      })
+      .then((response) => {
+        if (response.data.descricao_status) {
+          toast({
+            position: "top-right",
+            title: `NF ${baixa.nota_fiscal}`,
+            description: `${response.data.descricao_status}`,
+            status: "success",
+            duration: 8000,
+            isClosable: true,
+          });
+          removeBaixa(baixa);
+        }
+        if (response.data.faultstring) {
+          toast({
+            position: "top-right",
+            title: `NF ${baixa.nota_fiscal}`,
+            description: `${response.data.faultstring}`,
+            status: "error",
+            duration: 8000,
+            isClosable: true,
+          });
+          removeBaixa(baixa);
+        }
+      });
   }
 
   return (
@@ -68,7 +84,7 @@ export function BaixasRealizadasTable() {
                         color="pink.300"
                         aria-label="Send email"
                         icon={<RepeatClockIcon />}
-                        onClick={() => handleUndoBaixa(43843743)}
+                        onClick={() => handleUndoBaixa(data)}
                       />
                     </Tooltip>
                   </HStack>

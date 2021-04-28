@@ -33,7 +33,6 @@ export function BaixarContaAReceberForm() {
   const toast = useToast();
 
   function newBaixa(nota: string, response: baixaResponse) {
-    let newState = baixas;
     let newBaixa = {
       codigo_baixa: response.codigo_baixa,
       codigo_lancamento: response.codigo_lancamento,
@@ -42,8 +41,7 @@ export function BaixarContaAReceberForm() {
       nota_fiscal: nota,
       valor_baixado: response.valor_baixado,
     };
-    newState.push(newBaixa);
-    setBaixas(newState);
+    setBaixas([...baixas, newBaixa]);
   }
 
   function verificarCamposObrigatorios() {
