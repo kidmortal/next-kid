@@ -1,0 +1,24 @@
+{
+  "name": "Next-kid",
+  "short_name": "Next-kid",
+  "theme_color": "#2c714e",
+  "background_color": "#2196f3",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "public/icon.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "public/icon.png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "public/icon.png",
+      "sizes": "128x128"
+    }
+  ]
+}
