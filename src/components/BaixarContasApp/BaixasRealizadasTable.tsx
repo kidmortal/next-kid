@@ -17,8 +17,10 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import TableScrollbar from "react-table-scrollbar";
+import { useAppContext } from "../../context/AppContext";
 
 export function BaixasRealizadasTable() {
+  const { baixas, user } = useAppContext();
   const [history, setHistory] = useState([
     "um",
     "dois",
@@ -48,16 +50,18 @@ export function BaixasRealizadasTable() {
   return (
     <Box width="500" borderRadius="sm" border="1px" borderColor="gray.300">
       <TableScrollbar rows={10}>
-        <Table size="sm" width={[200, 300, 500]}>
+        <Table size="sm" width={[100, 100, 500]}>
           <Tbody>
-            {history.map((e) => (
+            {baixas.map((data) => (
               <Tr>
-                <Td fontSize={12}>8441</Td>
-                <Td fontSize={12}>R$ 223,25</Td>
-                <Td fontSize={12}>14/12/2021</Td>
+                <Td fontSize={12}>{data.nota_fiscal}</Td>
+                <Td fontSize={12}>R$ {data.valor_baixado}</Td>
+                <Td fontSize={12}>{data.data_baixa}</Td>
                 <Td>
                   <HStack justify="space-around">
-                    <Text fontSize={12}>✔ Sucesso</Text>
+                    <Text fontSize={12}>
+                      Liquidado: {data.liquidado === "S" ? "✔" : "❌"}{" "}
+                    </Text>
                     <Tooltip label="Desfazer Lançamento">
                       <IconButton
                         variant="unstyled"

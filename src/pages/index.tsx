@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <Stack align="center" spacing={2}>
-      <Stack width={[200, 500, 700]}>
+      <Stack width={[350, 500, 700]}>
         <HStack justify="space-between" spacing={10}>
           <SideMenu />
           <Profile />

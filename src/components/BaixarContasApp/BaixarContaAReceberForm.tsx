@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
+import { baixaResponse, useAppContext } from "../../context/AppContext";
 import { BaixasRealizadasTable } from "./BaixasRealizadasTable";
 
 function formatDate(date: string) {
@@ -16,7 +17,9 @@ function formatDate(date: string) {
 }
 
 export function BaixarContaAReceberForm() {
+  const { baixas, setBaixas } = useAppContext();
   const [dataBaixa, setDataBaixa] = useState("");
+  const dataBaixaFormat = formatDate(dataBaixa);
   const [batch, setBatch] = useState("");
   const [observacao, setObservacao] = useState("");
   const [loadingOne, setLoadingOne] = useState(false);
@@ -28,6 +31,20 @@ export function BaixarContaAReceberForm() {
   const [valor, setValor] = useState("");
 
   const toast = useToast();
+
+  function newBaixa(nota: string, response: baixaResponse) {
+    let newState = baixas;
+    let newBaixa = {
+      codigo_baixa: response.codigo_baixa,
+      codigo_lancamento: response.codigo_lancamento,
+      data_baixa: dataBaixaFormat,
+      liquidado: response.liquidado,
+      nota_fiscal: nota,
+      valor_baixado: response.valor_baixado,
+    };
+    newState.push(newBaixa);
+    setBaixas(newState);
+  }
 
   function verificarCamposObrigatorios() {
     if (!dataBaixa) {
@@ -62,25 +79,39 @@ export function BaixarContaAReceberForm() {
     let total = nfArray.length;
     let contador = 0;
     for (let index = 0; index < nfArray.length; index++) {
-      const nf = nfArray[index];
+      const nota = nfArray[index];
       axios
         .post("api/omie/contas/baixar", {
           dataBaixa: formatDate(dataBaixa),
           Cc,
-          nota: nf,
+          nota: nota,
           desconto: 0,
           juros: 0,
           valor: 0,
         })
         .then((response) => {
-          toast({
-            position: "top-right",
-            title: "Dados",
-            description: JSON.stringify(response.data),
-            status: "success",
-            isClosable: true,
-            duration: 20000,
-          });
+          if (response.data.descricao_status) {
+            toast({
+              position: "top-right",
+              title: `NF ${nota} Baixada`,
+              description: JSON.stringify(response.data.descricao_status),
+              status: "success",
+              duration: 4000,
+              isClosable: true,
+            });
+            newBaixa(nota, response.data);
+          }
+          if (response.data.faultstring) {
+            toast({
+              position: "top-right",
+              title: `NF ${nota} Erro`,
+              description: JSON.stringify(response.data.faultstring),
+              status: "error",
+              duration: 4000,
+              isClosable: true,
+            });
+          }
+
           contador++;
           if (contador >= total) setLoadingBatch(false);
         });
@@ -101,14 +132,27 @@ export function BaixarContaAReceberForm() {
       })
       .then((response) => {
         setLoadingOne(false);
-        toast({
-          position: "top-right",
-          title: "Dados",
-          description: JSON.stringify(response.data),
-          status: "success",
-          duration: 4000,
-          isClosable: true,
-        });
+        if (response.data.descricao_status) {
+          toast({
+            position: "top-right",
+            title: `NF ${nota} Baixada`,
+            description: JSON.stringify(response.data.descricao_status),
+            status: "success",
+            duration: 4000,
+            isClosable: true,
+          });
+          newBaixa(nota, response.data);
+        }
+        if (response.data.faultstring) {
+          toast({
+            position: "top-right",
+            title: `NF ${nota} Erro`,
+            description: JSON.stringify(response.data.faultstring),
+            status: "error",
+            duration: 4000,
+            isClosable: true,
+          });
+        }
       });
   }
 
@@ -182,24 +226,26 @@ export function BaixarContaAReceberForm() {
           Baixar 1
         </Button>
       </HStack>
-      <HStack>
-        <Textarea
-          rows={11}
-          value={batch}
-          onChange={(e) => setBatch(e.target.value)}
-          placeholder={`0000028\n0000027\n0000035\n0000025`}
-        />
-        <BaixasRealizadasTable />
-      </HStack>
+      <Stack direction={["column", "row"]}>
+        <Stack>
+          <Textarea
+            rows={11}
+            value={batch}
+            onChange={(e) => setBatch(e.target.value)}
+            placeholder={`0000028\n0000027\n0000035\n0000025`}
+          />
+          <Button
+            isLoading={loadingBatch}
+            onClick={() => handleSumbitBaixarTodos()}
+            bg="purple.600"
+            _hover={{ bg: "purple.700" }}
+          >
+            Baixar Todos
+          </Button>
+        </Stack>
 
-      <Button
-        isLoading={loadingBatch}
-        onClick={() => handleSumbitBaixarTodos()}
-        bg="purple.600"
-        _hover={{ bg: "purple.700" }}
-      >
-        Baixar Todos
-      </Button>
+        <BaixasRealizadasTable />
+      </Stack>
     </Stack>
   );
 }

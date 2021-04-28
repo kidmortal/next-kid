@@ -27,6 +27,7 @@ export function GoogleLoginButton() {
   if (user)
     return (
       <GoogleLogout
+        buttonText=""
         style={{ backgroundColor: "#4A5568", color: "#4A5568" }}
         clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
         onLogoutSuccess={googleLogoutSuccess}
@@ -36,6 +37,7 @@ export function GoogleLoginButton() {
   if (!user)
     return (
       <GoogleLogin
+        buttonText=""
         style={{ backgroundColor: "#4A5568", color: "#4A5568" }}
         clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
         onSuccess={googleLoginSuccess}

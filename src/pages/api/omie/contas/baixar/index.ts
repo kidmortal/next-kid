@@ -1,19 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
+import { baixaResponse } from "../../../../../context/AppContext";
 import { GetOneNfByNumero } from "../../notas/consultar";
 import { RequestOmie } from "../../_request";
-
-type baixaResponse = {
-  codigo_lancamento: number;
-  codigo_lancamento_integracao: string;
-  codigo_baixa: number;
-  codigo_baixa_integracao: string;
-  liquidado: string;
-  valor_baixado: number;
-  codigo_status: string;
-  descricao_status: string;
-  faultstring: string;
-};
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   let { dataBaixa, Cc, nota, desconto, juros, valor } = req.body;
@@ -41,17 +30,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       desconto: desconto,
       juros: juros,
       data: dataBaixa,
-      observacao: "Ooi deiaaaaaaaaa",
+      observacao: "Baixa via Web app",
     },
   });
-
-  res
-    .status(200)
-    .json(
-      `NF: ${parseInt(nota)} - ${
-        response.descricao_status
-          ? response.descricao_status
-          : response.faultstring
-      }`
-    );
+  console.log(response);
+  res.status(200).json(response);
 };
