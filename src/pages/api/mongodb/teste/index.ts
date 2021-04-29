@@ -7,3 +7,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     body: { data: req.query },
   };
 };
+
+export function handler(event, context) {
+  return {
+    statusCode: 201,
+    body: { data: event.queryStringParameters.name || "World" },
+  };
+}
