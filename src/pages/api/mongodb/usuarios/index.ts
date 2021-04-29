@@ -7,13 +7,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json(user);
 };
 
-exports.handler = async function (event, context, callback) {
+exports.handler = async function (event, context) {
   const { email } = event.queryStringParameters;
   let user = await GetOneUser(email);
-  callback(null, {
+  return {
     statusCode: 200,
     body: user,
-  });
+  };
 };
 
 async function GetOneUser(email) {
@@ -23,10 +23,12 @@ async function GetOneUser(email) {
     Client = await connectToCachedDb();
     user = await Client.db().collection("usuarios").findOne({ email });
     console.log("Using Cached Connection");
+    console.log(user);
   } catch (error) {
     Client = await connectToNewDb();
     user = await Client.db().collection("usuarios").findOne({ email });
     console.log("Created new connection");
+    console.log(user);
   }
   return user;
 }
