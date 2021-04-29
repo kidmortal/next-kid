@@ -9,6 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 exports.handler = async function (event, context) {
   const { email } = event.queryStringParameters;
+  context.callbackWaitsForEmptyEventLoop = false;
   let user = await GetOneUser(email);
   return {
     statusCode: 200,
