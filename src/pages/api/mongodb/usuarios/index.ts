@@ -4,7 +4,11 @@ import { connectToCachedDb, connectToNewDb } from "../../../../util/mongodb";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { email } = req.query;
   let user = await GetOneUser(email);
-  return res.status(200).json(user);
+  res.status(200).json(user);
+  return {
+    statusCode: 201,
+    body: { data: req.query },
+  };
 };
 
 async function GetOneUser(email) {
