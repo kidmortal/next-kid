@@ -7,13 +7,9 @@ import {
   Box,
   Text,
   HStack,
-  Button,
-  Input,
-  Stack,
   Table,
   Tbody,
   Td,
-  Textarea,
   Tr,
   useToast,
   IconButton,
@@ -21,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
-import TableScrollbar from "react-table-scrollbar";
 import { BaixaProps, useAppContext } from "../../context/AppContext";
 
 function paginate(array, page_size, page_number) {
