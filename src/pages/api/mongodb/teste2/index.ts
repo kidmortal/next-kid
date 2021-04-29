@@ -8,9 +8,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   };
 };
 
-export function handler(event, context) {
+export async function handler(event, context) {
   return {
-    statusCode: 201,
-    body: { data: event.queryStringParameters.name || "World" },
+    statusCode: 200,
+    body: { data: event.queryStringParameters },
   };
 }
