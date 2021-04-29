@@ -1,14 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connectToCachedDb, connectToNewDb } from "../../../../util/mongodb";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse, callback) => {
   const { email } = req.query;
   let user = await GetOneUser(email);
   res.status(200).json(user);
-  return {
+  callback(null, {
+    isBase64Encoded: false,
     statusCode: 200,
     body: JSON.stringify(user),
-  };
+  });
 };
 
 async function GetOneUser(email) {
