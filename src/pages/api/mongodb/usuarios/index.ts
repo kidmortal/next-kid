@@ -4,8 +4,7 @@ import { client } from "websocket";
 import { connectToCachedDb, connectToNewDb } from "../../../../util/mongodb";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  let user = await GetOneUser(req, res);
-  res.status(200).json(user);
+  await GetOneUser(req, res);
 };
 
 async function GetOneUser(req: NextApiRequest, res: NextApiResponse) {
@@ -16,11 +15,10 @@ async function GetOneUser(req: NextApiRequest, res: NextApiResponse) {
     Client = await connectToCachedDb();
     user = await Client.db().collection("usuarios").findOne({ email });
     console.log("Using Cached Connection");
-    return user;
   } catch (error) {
     Client = await connectToNewDb();
     user = await Client.db().collection("usuarios").findOne({ email });
     console.log("Created new connection");
-    return user;
   }
+  res.status(200).json(user);
 }
