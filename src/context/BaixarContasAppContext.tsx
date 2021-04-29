@@ -1,7 +1,5 @@
 import { useState, ReactNode, useContext, useEffect } from "react";
 import { createContext } from "react";
-import { GoogleUser } from "../models/googleUser";
-import { MongoUser } from "../models/mongoUser";
 
 export type baixaResponse = {
   codigo_lancamento: number;
@@ -24,22 +22,14 @@ export type BaixaProps = {
   valor_baixado: number;
 };
 
-type appContextType = {
-  googleUser: GoogleUser;
-  setGoogleUser: (user: GoogleUser) => void;
-  mongoUser: MongoUser;
-  setMongoUser: (user: MongoUser) => void;
+type BaixarContasContextType = {
   baixas: BaixaProps[];
   addBaixa: (baixa: BaixaProps) => void;
   removeBaixa: (baixa: BaixaProps) => void;
   setBaixas: (baixa: BaixaProps[]) => void;
 };
 
-const appContextDefaultValues: appContextType = {
-  googleUser: null,
-  setGoogleUser: () => {},
-  mongoUser: null,
-  setMongoUser: () => {},
+const BaixarContasContextDefaultValues: BaixarContasContextType = {
   baixas: null,
   addBaixa: () => {},
   removeBaixa: () => {},
@@ -50,17 +40,13 @@ interface Props {
   children: ReactNode;
 }
 
-const AppContext = createContext<appContextType>(appContextDefaultValues);
+const BaixarContasContext = createContext<BaixarContasContextType>(
+  BaixarContasContextDefaultValues
+);
 
-export function AppContextProvider({ children }: Props) {
-  const [googleUser, setGoogleUser] = useState<GoogleUser>();
-  const [mongoUser, setMongoUser] = useState<MongoUser>();
+export function BaixarContasContextProvider({ children }: Props) {
   const [baixas, setBaixas] = useState<BaixaProps[]>([]);
   const value = {
-    googleUser,
-    setGoogleUser,
-    mongoUser,
-    setMongoUser,
     baixas,
     addBaixa,
     removeBaixa,
@@ -95,11 +81,13 @@ export function AppContextProvider({ children }: Props) {
 
   return (
     <>
-      <AppContext.Provider value={value}>{children}</AppContext.Provider>
+      <BaixarContasContext.Provider value={value}>
+        {children}
+      </BaixarContasContext.Provider>
     </>
   );
 }
 
-export function useAppContext() {
-  return useContext(AppContext);
+export function useBaixarContasContext() {
+  return useContext(BaixarContasContext);
 }

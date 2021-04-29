@@ -1,30 +1,41 @@
+import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
   GoogleLogin,
   GoogleLoginResponse,
   GoogleLogout,
 } from "react-google-login";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../../context/AppContext";
 
 export function GoogleLoginButton() {
-  const { user, setUser } = useAppContext();
+  const { googleUser, setGoogleUser, setMongoUser } = useAppContext();
 
-  function googleLoginSuccess(response: GoogleLoginResponse) {
-    console.log(response);
-    if (response.profileObj) {
-      setUser(response.profileObj);
+  async function getMongoUser(email: string) {
+    let response = await axios.get(`/api/mongodb/usuarios?email=${email}`);
+    return response.data;
+  }
+
+  async function googleLoginSuccess(response: GoogleLoginResponse) {
+    let googleUser = response.profileObj;
+    if (googleUser) {
+      let mongoUser = await getMongoUser(googleUser.email);
+      setGoogleUser(googleUser);
+      setMongoUser(mongoUser);
+      console.log(googleUser);
+      console.log(mongoUser);
     }
   }
 
   function googleLogoutSuccess() {
-    setUser(null);
+    setGoogleUser(null);
+    setMongoUser(null);
   }
 
   function googleLoginError(response: GoogleLoginResponse) {
     console.log(response);
   }
 
-  if (user)
+  if (googleUser)
     return (
       <GoogleLogout
         buttonText=""
@@ -34,7 +45,7 @@ export function GoogleLoginButton() {
       ></GoogleLogout>
     );
 
-  if (!user)
+  if (!googleUser)
     return (
       <GoogleLogin
         buttonText=""

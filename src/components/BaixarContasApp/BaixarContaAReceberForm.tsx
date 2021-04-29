@@ -7,6 +7,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { format } from "date-fns";
 import { useState } from "react";
 import {
   BaixaProps,
@@ -31,7 +32,7 @@ type contaProps = {
 
 export function BaixarContaAReceberForm() {
   const { baixas, addBaixa, setBaixas } = useAppContext();
-  const [dataBaixa, setDataBaixa] = useState("");
+  const [dataBaixa, setDataBaixa] = useState(format(new Date(), "yyyy-MM-dd"));
   const dataBaixaFormat = formatDate(dataBaixa);
   const [batch, setBatch] = useState("");
   const [observacao, setObservacao] = useState("");
@@ -194,6 +195,7 @@ export function BaixarContaAReceberForm() {
 
       <HStack>
         <Input
+          fontSize={["smaller", "sm", "md"]}
           type="number"
           placeholder={"Nota"}
           value={nota}
@@ -202,6 +204,7 @@ export function BaixarContaAReceberForm() {
           }}
         />
         <Input
+          fontSize={["smaller", "sm", "md"]}
           type="number"
           placeholder={"Desconto"}
           value={desconto}
@@ -210,6 +213,7 @@ export function BaixarContaAReceberForm() {
           }}
         />
         <Input
+          fontSize={["smaller", "sm", "md"]}
           type="number"
           placeholder={"Juros"}
           value={juros}
@@ -218,6 +222,7 @@ export function BaixarContaAReceberForm() {
           }}
         />
         <Input
+          fontSize={["smaller", "sm", "md"]}
           type="number"
           placeholder={"Valor - 100%"}
           value={valor}
