@@ -12,8 +12,7 @@ export function GoogleLoginButton() {
 
   async function getMongoUser(email: string) {
     let { data } = await axios.get(`/api/mongodb/usuarios?email=${email}`);
-    if (data.isBase64Encoded) data.body = atob(data.body);
-    return data.body;
+    return data;
   }
 
   async function googleLoginSuccess(response: GoogleLoginResponse) {
