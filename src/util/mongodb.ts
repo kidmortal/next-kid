@@ -1,4 +1,6 @@
 import { Db, MongoClient } from "mongodb";
+import "saslprep";
+
 // Connection string to the database
 const uri = process.env.MONGODB_URI;
 // Validate that the database connection string has been configured.
