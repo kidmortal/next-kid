@@ -13,13 +13,6 @@ if (!MONGODB_DB) {
     "Please define the MONGODB_DB environment variable inside .env.local"
   );
 }
-declare global {
-  namespace NodeJS {
-    interface Global {
-      mongo: any;
-    }
-  }
-}
 
 type MongoConnection = {
   client: MongoClient;
@@ -31,30 +24,15 @@ type MongoConnection = {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-let cached = global.mongo;
-
-if (!cached) {
-  cached = global.mongo = { conn: null, promise: null };
-}
 
 export async function connectToDatabase(): Promise<MongoConnection> {
-  if (cached.conn) {
-    return cached.conn;
-  }
-
-  if (!cached.promise) {
-    const opts = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    };
-
-    cached.promise = MongoClient.connect(MONGODB_URI, opts).then((client) => {
-      return {
-        client,
-        db: client.db(MONGODB_DB),
-      };
-    });
-  }
-  cached.conn = await cached.promise;
-  return cached.conn;
+  const opts = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  };
+  const client = await MongoClient.connect(MONGODB_URI, opts);
+  return {
+    client,
+    db: client.db(MONGODB_DB),
+  } as MongoConnection;
 }

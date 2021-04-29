@@ -7,9 +7,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 async function GetOneUser(req: NextApiRequest, res: NextApiResponse) {
-  const { db } = await connectToDatabase();
+  const { client, db } = await connectToDatabase();
   const { email } = req.query;
   if (!email) return { erro: "Email nao foi informado" };
   let user = await db.collection("usuarios").findOne({ email });
+  client.close();
   return user;
 }
