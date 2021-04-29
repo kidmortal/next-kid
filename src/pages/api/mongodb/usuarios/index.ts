@@ -7,6 +7,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   let user = await GetOneUser(email);
   console.log("user ok");
   res.status(200).json(user);
+  res.end();
   console.log("response ok");
 };
 
