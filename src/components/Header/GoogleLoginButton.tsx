@@ -11,11 +11,9 @@ export function GoogleLoginButton() {
   const { googleUser, setGoogleUser, setMongoUser } = useAppContext();
 
   async function getMongoUser(email: string) {
-    let { body } = await (
-      await axios.get(`/api/mongodb/usuarios?email=${email}`)
-    ).data;
-    if (body.isBase64Encoded) body.body = atob(body.body);
-    return body;
+    let { data } = await axios.get(`/api/mongodb/usuarios?email=${email}`);
+    if (data.isBase64Encoded) data.body = atob(data.body);
+    return data.body;
   }
 
   async function googleLoginSuccess(response: GoogleLoginResponse) {
