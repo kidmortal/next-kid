@@ -14,11 +14,13 @@ export default async (
     statusCode: 200,
     body: user,
   });
-  if (callback) {
+  try {
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(user),
     });
+  } catch (error) {
+    console.log("erro no callback, mas blz");
   }
 };
 
