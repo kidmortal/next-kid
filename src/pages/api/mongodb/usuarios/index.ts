@@ -14,14 +14,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 async function GetOneUser(email) {
   let Client, user;
   if (!email) return { erro: "Email nao foi informado" };
-  try {
-    Client = await connectToCachedDb();
+  /*
+     Client = await connectToCachedDb();
     user = await Client.db().collection("usuarios").findOne({ email });
     console.log("Using Cached Connection");
-  } catch (error) {
-    Client = await connectToNewDb();
-    user = await Client.db().collection("usuarios").findOne({ email });
-    console.log("Created new connection");
-  }
+    */
+  Client = await connectToNewDb();
+  user = await Client.db().collection("usuarios").findOne({ email });
+  console.log("Created new connection");
   return user;
 }
