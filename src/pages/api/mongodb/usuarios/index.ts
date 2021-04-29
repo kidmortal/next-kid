@@ -6,17 +6,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { email } = req.query;
   let user = await GetOneUser(email);
   res.status(200).json(user);
-};
-
-exports.handler = async function (event, context, callback) {
-  console.log("Request Netlify");
-  const { email } = event.queryStringParameters;
-  context.callbackWaitsForEmptyEventLoop = false;
-  let user = await GetOneUser(email);
-  callback(null, {
+  return {
     statusCode: 200,
     body: user,
-  });
+  };
 };
 
 async function GetOneUser(email) {
