@@ -13,4 +13,13 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
+export async function getServerSideProps({ req }) {
+  // Get event and context from Netlify Function
+  const { context } = req.netlifyFunctionParams || {};
+  if (context) {
+    console.log("Setting callbackWaitsForEmptyEventLoop: false");
+    context.callbackWaitsForEmptyEventLoop = false;
+  }
+}
+
 export default MyApp;
