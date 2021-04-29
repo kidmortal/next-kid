@@ -1,3 +1,4 @@
+import { Db } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../../util/mongodb";
 
@@ -7,10 +8,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 async function GetOneUser(req: NextApiRequest, res: NextApiResponse) {
-  const { client, db } = await connectToDatabase();
+  const Client = await connectToDatabase();
+  const db: Db = Client.db();
   const { email } = req.query;
   if (!email) return { erro: "Email nao foi informado" };
   let user = await db.collection("usuarios").findOne({ email });
-  client.close();
   return user;
 }

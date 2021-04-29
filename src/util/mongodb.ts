@@ -1,38 +1,30 @@
 import { Db, MongoClient } from "mongodb";
-
-const { MONGODB_URI, MONGODB_DB } = process.env;
-
-if (!MONGODB_URI) {
+// Connection string to the database
+const uri = process.env.MONGODB_URI;
+// Validate that the database connection string has been configured.
+if (!uri) {
   throw new Error(
-    "Please define the MONGODB_URI environment variable inside .env.local"
+    "The MONGODB_URI environment variable must be configured with the connection string " +
+      "to the database."
   );
 }
 
-if (!MONGODB_DB) {
-  throw new Error(
-    "Please define the MONGODB_DB environment variable inside .env.local"
-  );
-}
-
-type MongoConnection = {
-  client: MongoClient;
-  db: Db;
-};
-
-/**
- * Global is used here to maintain a cached connection across hot reloads
- * in development. This prevents connections growing exponentially
- * during API Route usage.
- */
-
-export async function connectToDatabase(): Promise<MongoConnection> {
-  const opts = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  };
-  const client = await MongoClient.connect(MONGODB_URI, opts);
-  return {
-    client,
-    db: client.db(MONGODB_DB),
-  } as MongoConnection;
+// Cached connection promise
+let cachedPromise = null;
+// Function for connecting to MongoDB, returning a new or cached database connection
+export async function connectToDatabase() {
+  if (!cachedPromise) {
+    const opts = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    };
+    // If no connection promise is cached, create a new one. We cache the promise instead
+    // of the connection itself to prevent race conditions where connect is called more than
+    // once. The promise will resolve only once.
+    // Node.js driver docs can be found at http://mongodb.github.io/node-mongodb-native/.
+    cachedPromise = MongoClient.connect(uri, opts);
+  }
+  // await on the promise. This resolves only once.
+  const client = await cachedPromise;
+  return client;
 }
