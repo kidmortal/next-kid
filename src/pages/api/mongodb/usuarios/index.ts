@@ -9,18 +9,17 @@ export default async (
 ) => {
   const { email } = req.query;
   let user = await GetOneUser(email);
-  console.log("conseguiu user");
-  console.log(user);
-  res.status(200).json(user);
-  console.log("respondeu res status 200");
-  context.callbackWaitsForEmptyEventLoop = false;
-  console.log("context");
-  callback(null, {
+  res.status(200).json({
     isBase64Encoded: false,
     statusCode: 200,
-    body: JSON.stringify(user),
+    body: user,
   });
-  console.log("callback");
+  if (callback) {
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify(user),
+    });
+  }
 };
 
 async function GetOneUser(email) {
