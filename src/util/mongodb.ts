@@ -1,6 +1,4 @@
 import { Db, MongoClient } from "mongodb";
-import "saslprep";
-
 // Connection string to the database
 const uri = process.env.MONGODB_URI;
 // Validate that the database connection string has been configured.
@@ -14,7 +12,7 @@ if (!uri) {
 // Cached connection promise
 let cachedPromise = null;
 // Function for connecting to MongoDB, returning a new or cached database connection
-export async function connectToDatabase() {
+export async function connectToCachedDb() {
   if (!cachedPromise) {
     const opts = {
       useNewUrlParser: true,
@@ -28,5 +26,14 @@ export async function connectToDatabase() {
   }
   // await on the promise. This resolves only once.
   const client = await cachedPromise;
+  return client;
+}
+
+export async function connectToNewDb() {
+  const opts = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  };
+  const client = MongoClient.connect(uri, opts);
   return client;
 }
