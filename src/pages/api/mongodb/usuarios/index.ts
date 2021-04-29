@@ -1,26 +1,20 @@
+import { MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { connectToCachedDb, connectToNewDb } from "../../../../util/mongodb";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { email } = req.query;
-  console.log("email ok");
   let user = await GetOneUser(email);
-  console.log("user ok");
   res.status(200).json(user);
-  res.end();
-  console.log("response ok");
 };
 
 async function GetOneUser(email) {
-  let Client, user;
+  let user;
   if (!email) return { erro: "Email nao foi informado" };
-  /*
-     Client = await connectToCachedDb();
-    user = await Client.db().collection("usuarios").findOne({ email });
-    console.log("Using Cached Connection");
-    */
-  Client = await connectToNewDb();
+
+  let Client: MongoClient = await connectToNewDb();
   user = await Client.db().collection("usuarios").findOne({ email });
-  console.log("Created new connection");
+  console.log("Using New Connection");
+  Client.close();
   return user;
 }
