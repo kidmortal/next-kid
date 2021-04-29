@@ -14,14 +14,10 @@ export default async (
     statusCode: 200,
     body: user,
   });
-  try {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(user),
-    });
-  } catch (error) {
-    console.log("erro no callback, mas blz");
-  }
+  callback(null, {
+    statusCode: 200,
+    body: JSON.stringify(user),
+  });
 };
 
 async function GetOneUser(email) {
