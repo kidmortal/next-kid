@@ -19,13 +19,13 @@ import axios from "axios";
 import { useState } from "react";
 import { BaixaProps, useAppContext } from "../../context/AppContext";
 
-function paginate(array, page_size, page_number) {
+function paginate(array: BaixaProps[], page_size, page_number) {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
   return array.slice((page_number - 1) * page_size, page_number * page_size);
 }
 
 export function BaixasRealizadasTable() {
-  const { baixas, removeBaixa } = useAppContext();
+  const { baixas, removeBaixa, setBaixas } = useAppContext();
   const [page, setPage] = useState(1);
   const filteredBaixas = paginate(baixas, 5, page);
   const toast = useToast();
@@ -61,6 +61,14 @@ export function BaixasRealizadasTable() {
       });
   }
 
+  function handleNextPage() {
+    Math.floor(baixas?.length / 5) > page + 1 ? setPage(page + 1) : "";
+  }
+
+  function handlePreviousPage() {
+    page > 1 ? setPage(page - 1) : "";
+  }
+
   return (
     <Box width="500" borderRadius="sm" border="1px" borderColor="gray.300">
       <HStack bg="blue.800" justify="space-between">
@@ -71,8 +79,11 @@ export function BaixasRealizadasTable() {
           color="pink.300"
           aria-label="Send email"
           icon={<ChevronLeftIcon />}
-          onClick={() => (page > 1 ? setPage(page - 1) : "")}
+          onClick={() => handlePreviousPage()}
         />
+        <Text>
+          Pagina {page} / {Math.floor(baixas?.length / 5 + 1)}
+        </Text>
         <IconButton
           size="sm"
           fontSize="larger"
@@ -80,7 +91,7 @@ export function BaixasRealizadasTable() {
           color="pink.300"
           aria-label="Send email"
           icon={<ChevronRightIcon />}
-          onClick={() => setPage(page + 1)}
+          onClick={() => handleNextPage()}
         />
       </HStack>
       <Table size="sm" width={[100, 100, 500]}>
@@ -101,7 +112,11 @@ export function BaixasRealizadasTable() {
                       color="pink.300"
                       aria-label="Send email"
                       icon={<RepeatClockIcon />}
-                      onClick={() => handleUndoBaixa(data)}
+                      isLoading={data.loading}
+                      onClick={() => {
+                        handleUndoBaixa(data);
+                        data.loading = true;
+                      }}
                     />
                   </Tooltip>
                 </HStack>

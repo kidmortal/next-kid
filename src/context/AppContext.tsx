@@ -22,6 +22,7 @@ export type BaixaProps = {
   codigo_baixa: number;
   liquidado: string;
   valor_baixado: number;
+  loading?: boolean;
 };
 
 type appContextType = {

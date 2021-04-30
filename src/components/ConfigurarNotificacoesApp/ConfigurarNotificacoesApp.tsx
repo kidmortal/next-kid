@@ -8,7 +8,7 @@ import { NotificacoesDados } from "./NotificacoesDados";
 export function ConfigurarNotificacoesApp() {
   const { mongoUser } = useAppContext();
 
-  return mongoUser?.apps.NOTIFICACOES ? (
+  return mongoUser?.apps?.NOTIFICACOES ? (
     <Stack justify="center" align="center" spacing={4}>
       <NotificacoesDados />
       <NotificacoesCheckBox />

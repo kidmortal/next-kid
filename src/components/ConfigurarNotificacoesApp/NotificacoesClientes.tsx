@@ -10,30 +10,79 @@ import {
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useAppContext } from "../../context/AppContext";
 import { useState } from "react";
+import axios from "axios";
 
 export function NotificacoesClientes() {
-  const { mongoUser } = useAppContext();
+  const { mongoUser, setMongoUser } = useAppContext();
+  const [loading, setLoading] = useState(false);
   const [cliente, setCliente] = useState("");
 
   const toast = useToast();
 
-  function handleAddCliente() {
-    toast({
-      title: "Calma la amigao",
-      description: "Eu to com preguiça",
-      duration: 5000,
-      isClosable: true,
-      position: "top-right",
+  async function handleAddCliente() {
+    setLoading(true);
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "addNewNotificationClient",
+      name: cliente,
+      email: mongoUser?.email,
     });
+    if (response.data) {
+      let newMongoUser = { ...mongoUser };
+      newMongoUser.notificar?.SEPARADO?.push(cliente);
+      setMongoUser(newMongoUser);
+      toast({
+        title: "Cadastrado Notificacao",
+        status: "success",
+        description: cliente,
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+      setLoading(false);
+    } else {
+      toast({
+        title: "Erro",
+        status: "error",
+        description: cliente,
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+      setLoading(false);
+    }
   }
-  function handleRemoveCliente(cliente: string) {
-    toast({
-      title: "Calma la amigao",
-      description: "Eu to com preguiça",
-      duration: 5000,
-      isClosable: true,
-      position: "top-right",
+  async function handleRemoveCliente(cliente: string) {
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "removeNotificationClient",
+      name: cliente,
+      email: mongoUser?.email,
     });
+
+    if (response.data) {
+      let newMongoUser = { ...mongoUser };
+      let index = newMongoUser.notificar?.SEPARADO?.findIndex(
+        (c) => c === cliente
+      );
+      if (index >= 0) newMongoUser.notificar?.SEPARADO?.splice(index, 1);
+      setMongoUser(newMongoUser);
+      toast({
+        title: "Removido Notificacao",
+        status: "info",
+        description: cliente,
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+    } else {
+      toast({
+        title: "Erro",
+        status: "error",
+        description: cliente,
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
   }
 
   return (
@@ -51,6 +100,7 @@ export function NotificacoesClientes() {
           aria-label="Add Cliente"
           icon={<AddIcon />}
           onClick={() => handleAddCliente()}
+          isLoading={loading}
         />
       </HStack>
       <List spacing={3}>

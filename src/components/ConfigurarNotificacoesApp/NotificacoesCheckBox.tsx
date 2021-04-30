@@ -10,19 +10,19 @@ export function NotificacoesCheckBox() {
   return (
     <Stack pl={6} mt={1} spacing={1}>
       <Checkbox
-        isChecked={mongoUser?.notificar.DATA_INCORRETA}
+        isChecked={mongoUser?.notificar?.DATA_INCORRETA}
         onChange={(e) => setCheckedItems([e.target.checked, checkedItems[1]])}
       >
         Pedido Concluido sem Data de Saida
       </Checkbox>
       <Checkbox
-        isChecked={mongoUser?.notificar.SEM_CONDICAO}
+        isChecked={mongoUser?.notificar?.SEM_CONDICAO}
         onChange={(e) => setCheckedItems([checkedItems[0], e.target.checked])}
       >
         Pedido Concluido sem Condição de pagamento
       </Checkbox>
       <Checkbox
-        isChecked={mongoUser?.notificar.RELATORIO_DIARIO}
+        isChecked={mongoUser?.notificar?.RELATORIO_DIARIO}
         onChange={(e) => setCheckedItems([checkedItems[0], e.target.checked])}
       >
         Relatorio Diario

@@ -5,7 +5,7 @@ import { GetOneNfByNumero } from "../../notas/consultar";
 import { RequestOmie } from "../../_request";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  let { dataBaixa, Cc, nota, desconto, juros, valor } = req.body;
+  let { dataBaixa, Cc, nota, desconto, juros, valor, observacao } = req.body;
   if (!nota) return res.status(200).json({ message: "Nota sem numero" });
 
   let notaInfo, titulo, tituloNumero, valorFinal;
@@ -30,7 +30,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       desconto: desconto,
       juros: juros,
       data: dataBaixa,
-      observacao: "Baixa via Web app",
+      observacao: observacao ? observacao : "Baixa via Web app",
     },
   });
   console.log(response);

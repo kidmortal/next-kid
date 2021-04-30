@@ -38,7 +38,7 @@ export function SideMenu() {
               <Stack>
                 <Link href="/baixarcontas">
                   <MenuButton
-                    disabled={!mongoUser?.apps.BAIXAR_CONTAS}
+                    disabled={!mongoUser?.apps?.BAIXAR_CONTAS}
                     leftIcon={<ArrowUpDownIcon />}
                   >
                     Baixar Contas a Receber - OMIE
@@ -46,7 +46,7 @@ export function SideMenu() {
                 </Link>
                 <Link href="/notificacoes">
                   <MenuButton
-                    disabled={!mongoUser?.apps.NOTIFICACOES}
+                    disabled={!mongoUser?.apps?.NOTIFICACOES}
                     leftIcon={<BellIcon />}
                   >
                     Configurar Notificacoes

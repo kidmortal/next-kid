@@ -24,6 +24,7 @@ function formatDate(date: string) {
 type contaProps = {
   dataBaixa: string;
   Cc: string;
+  observacao: string;
   nota: string;
   desconto: number;
   juros: number;
@@ -90,26 +91,30 @@ export function BaixarContaAReceberForm() {
     let newState = [...baixas];
     setLoadingBatch(true);
 
+    let finishedProcessing = 0;
+
     for (let index = 0; index < nfArray.length; index++) {
       const nota = nfArray[index];
-      let response = await baixarConta({
+      baixarConta({
         dataBaixa: formatDate(dataBaixa),
         Cc,
+        observacao,
         nota: nota,
         desconto: 0,
         juros: 0,
         valor: 0,
+      }).then((response) => {
+        finishedProcessing++;
+        if (response) {
+          newState.push(response);
+          console.log(newState);
+          setBaixas([...newState]);
+        }
+
+        if (finishedProcessing >= nfArray.length) {
+          setLoadingBatch(false);
+        }
       });
-
-      if (response) {
-        newState.unshift(response);
-        console.log(newState);
-        setBaixas([...newState]);
-      }
-
-      if (index + 1 >= nfArray.length) {
-        setLoadingBatch(false);
-      }
     }
   }
 
@@ -120,6 +125,7 @@ export function BaixarContaAReceberForm() {
     let response = await baixarConta({
       dataBaixa: formatDate(dataBaixa),
       Cc,
+      observacao,
       nota,
       desconto: parseFloat(desconto),
       juros: parseFloat(desconto),
@@ -137,6 +143,7 @@ export function BaixarContaAReceberForm() {
     let response = await axios.post("api/omie/contas/baixar", {
       dataBaixa: formatDate(dataBaixa),
       Cc: conta.Cc,
+      observacao: conta.observacao,
       nota: conta.nota,
       desconto: conta.desconto,
       juros: conta.juros,
