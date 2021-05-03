@@ -19,6 +19,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       await RemoveNotificationClient(req, res);
       break;
 
+    case "relatorioDiarioNotification":
+      await RelatorioDiarioNotification(req, res);
+      break;
+
+    case "pedidoSemDataNotification":
+      await PedidoSemDataNotification(req, res);
+      break;
+
+    case "pedidoSemCondicaoNotification":
+      await PedidoSemCondicaoNotification(req, res);
+      break;
+
     default:
       break;
   }
@@ -67,6 +79,58 @@ async function RemoveNotificationClient(
   let Client = await connectToNewDb();
   let filter = { email };
   let update = { $pull: { "notificar.SEPARADO": name } };
+  let response = await Client.db()
+    .collection("usuarios")
+    .findOneAndUpdate(filter, update, { upsert: true, returnOriginal: false });
+  Client.close();
+  res.status(200).json(response.ok);
+}
+
+async function RelatorioDiarioNotification(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { active, email } = req.body;
+  if (!email)
+    return res.status(200).json({ erro: "Email do usuario não informado" });
+
+  let Client = await connectToNewDb();
+  let filter = { email };
+  let update = { $set: { "notificar.RELATORIO_DIARIO": !!active } };
+  let response = await Client.db()
+    .collection("usuarios")
+    .findOneAndUpdate(filter, update, { upsert: true, returnOriginal: false });
+  Client.close();
+  res.status(200).json(response.ok);
+}
+async function PedidoSemDataNotification(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { active, email } = req.body;
+  if (!email)
+    return res.status(200).json({ erro: "Email do usuario não informado" });
+
+  let Client = await connectToNewDb();
+  let filter = { email };
+  let update = { $set: { "notificar.DATA_INCORRETA": !!active } };
+  let response = await Client.db()
+    .collection("usuarios")
+    .findOneAndUpdate(filter, update, { upsert: true, returnOriginal: false });
+  Client.close();
+  res.status(200).json(response.ok);
+}
+async function PedidoSemCondicaoNotification(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { active, email } = req.body;
+  if (!email)
+    return res.status(200).json({ erro: "Email do usuario não informado" });
+
+  let Client = await connectToNewDb();
+  let filter = { email };
+  let update = { $set: { "notificar.SEM_CONDICAO": !!active } };
   let response = await Client.db()
     .collection("usuarios")
     .findOneAndUpdate(filter, update, { upsert: true, returnOriginal: false });

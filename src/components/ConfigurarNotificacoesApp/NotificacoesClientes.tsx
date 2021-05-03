@@ -11,6 +11,7 @@ import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useAppContext } from "../../context/AppContext";
 import { useState } from "react";
 import axios from "axios";
+import { MongoUser } from "../../models/mongoUser";
 
 export function NotificacoesClientes() {
   const { mongoUser, setMongoUser } = useAppContext();
@@ -39,6 +40,7 @@ export function NotificacoesClientes() {
         position: "top-right",
       });
       setLoading(false);
+      setCliente("");
     } else {
       toast({
         title: "Erro",
@@ -105,7 +107,7 @@ export function NotificacoesClientes() {
       </HStack>
       <List spacing={3}>
         {mongoUser?.notificar.SEPARADO.map((cliente) => (
-          <ListItem>
+          <ListItem key={cliente}>
             {cliente}
             <IconButton
               variant="unstyled"

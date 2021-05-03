@@ -113,6 +113,7 @@ export function BaixarContaAReceberForm() {
 
         if (finishedProcessing >= nfArray.length) {
           setLoadingBatch(false);
+          setBatch("");
         }
       });
     }
@@ -137,6 +138,7 @@ export function BaixarContaAReceberForm() {
     }
 
     setLoadingOne(false);
+    setNota("");
   }
 
   async function baixarConta(conta: contaProps) {
