@@ -110,6 +110,12 @@ export function NotificacoesCheckBox() {
   return (
     <Stack pl={6} mt={1} spacing={1}>
       <Checkbox
+        isChecked={mongoUser?.notificar?.RELATORIO_DIARIO}
+        onChange={(e) => handleRelatorioDiario()}
+      >
+        Relatorio Diario
+      </Checkbox>
+      <Checkbox
         isChecked={mongoUser?.notificar?.DATA_INCORRETA}
         onChange={(e) => handleSemData()}
       >
@@ -120,12 +126,6 @@ export function NotificacoesCheckBox() {
         onChange={(e) => handleSemCodicao()}
       >
         Pedido Concluido sem Condição de pagamento
-      </Checkbox>
-      <Checkbox
-        isChecked={mongoUser?.notificar?.RELATORIO_DIARIO}
-        onChange={(e) => handleRelatorioDiario()}
-      >
-        Relatorio Diario
       </Checkbox>
     </Stack>
   );

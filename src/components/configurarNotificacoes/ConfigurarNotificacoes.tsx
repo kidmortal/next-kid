@@ -5,7 +5,7 @@ import { NotificacoesCheckBox } from "./NotificacoesCheckBox";
 import { NotificacoesClientes } from "./NotificacoesClientes";
 import { NotificacoesDados } from "./NotificacoesDados";
 
-export function ConfigurarNotificacoesApp() {
+export function ConfigurarNotificacoes() {
   const { mongoUser } = useAppContext();
 
   return mongoUser?.apps?.NOTIFICACOES ? (

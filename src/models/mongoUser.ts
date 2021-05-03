@@ -8,6 +8,8 @@ export interface Notificar {
 export interface Apps {
   BAIXAR_CONTAS: boolean;
   NOTIFICACOES: boolean;
+  CHEQUE_DEVOLVIDO: boolean;
+  USUARIOS: boolean;
 }
 
 export interface MongoUser {

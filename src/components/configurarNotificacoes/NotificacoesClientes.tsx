@@ -6,6 +6,7 @@ import {
   Stack,
   HStack,
   useToast,
+  Text,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useAppContext } from "../../context/AppContext";
@@ -108,7 +109,9 @@ export function NotificacoesClientes() {
       <List spacing={3}>
         {mongoUser?.notificar.SEPARADO.map((cliente) => (
           <ListItem key={cliente}>
-            {cliente}
+            <Text fontSize="small" as="span">
+              {cliente}
+            </Text>
             <IconButton
               variant="unstyled"
               color="red.400"

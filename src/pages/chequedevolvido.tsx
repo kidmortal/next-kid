@@ -1,13 +1,13 @@
-import { Tag, Stack, HStack } from "@chakra-ui/react";
-import { BaixarContas } from "../components/baixarContas/BaixarContas";
+import { Stack } from "@chakra-ui/react";
+import { ChequeDevolvido } from "../components/chequeDevolvido/ChequeDevolvido";
 import { Header } from "../components/header/Header";
 
-export default function baixarcontas() {
+export default function chequedevolvido() {
   return (
     <Stack align="center" spacing={2}>
       <Stack width={[350, 500, 700]}>
         <Header />
-        <BaixarContas />
+        <ChequeDevolvido />
       </Stack>
     </Stack>
   );

@@ -11,6 +11,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       await GetOneUser(req, res);
       break;
 
+    case "getAllUsers":
+      await GetAllUsers(req, res);
+      break;
+
     case "addNewNotificationClient":
       await AddNewNotificationClient(req, res);
       break;
@@ -45,6 +49,14 @@ async function GetOneUser(req: NextApiRequest, res: NextApiResponse) {
   console.log("Using New Connection");
   Client.close();
   res.status(200).json(user);
+}
+
+async function GetAllUsers(req: NextApiRequest, res: NextApiResponse) {
+  let Client = await connectToNewDb();
+  let users = await Client.db().collection("usuarios").find({}).toArray();
+  console.log("Using New Connection");
+  Client.close();
+  res.status(200).json(users);
 }
 
 async function AddNewNotificationClient(

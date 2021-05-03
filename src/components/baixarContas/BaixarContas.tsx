@@ -2,7 +2,7 @@ import { Tag } from "@chakra-ui/tag";
 import { useAppContext } from "../../context/AppContext";
 import { BaixarContaAReceberForm } from "./BaixarContaAReceberForm";
 
-export function BaixarContasApp() {
+export function BaixarContas() {
   const { mongoUser } = useAppContext();
   return mongoUser?.apps.BAIXAR_CONTAS ? (
     <BaixarContaAReceberForm />

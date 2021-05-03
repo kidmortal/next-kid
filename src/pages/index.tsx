@@ -1,6 +1,5 @@
 import { Tag, Stack, HStack } from "@chakra-ui/react";
-import { BaixarContasApp } from "../components/BaixarContasApp/BaixarContasApp";
-import { Header } from "../components/Header/Header";
+import { Header } from "../components/header/Header";
 
 export default function Home() {
   return (

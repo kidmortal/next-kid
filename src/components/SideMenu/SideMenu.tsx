@@ -1,5 +1,6 @@
 import { ArrowUpDownIcon, BellIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
+  Text,
   Button,
   Drawer,
   DrawerBody,
@@ -9,7 +10,13 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Stack,
+  Icon,
+  HStack,
 } from "@chakra-ui/react";
+
+import { RiUserSettingsLine, RiWhatsappLine } from "react-icons/ri";
+import { BsCardHeading } from "react-icons/bs";
+import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import Link from "next/link";
 import { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
@@ -32,24 +39,46 @@ export function SideMenu() {
         <DrawerOverlay>
           <DrawerContent bg="gray.600">
             <DrawerCloseButton />
-            <DrawerHeader>Aplicativos</DrawerHeader>
+            <DrawerHeader>
+              <HStack spacing={5}>
+                <Icon as={AiOutlineAppstoreAdd} color="blue.100" />
+                <Text as="span">Aplicativos</Text>
+              </HStack>
+            </DrawerHeader>
 
             <DrawerBody>
               <Stack>
                 <Link href="/baixarcontas">
                   <MenuButton
                     disabled={!mongoUser?.apps?.BAIXAR_CONTAS}
-                    leftIcon={<ArrowUpDownIcon />}
+                    leftIcon={<ArrowUpDownIcon color="blue.100" />}
                   >
                     Baixar Contas a Receber - OMIE
                   </MenuButton>
                 </Link>
-                <Link href="/notificacoes">
+                <Link href="/chequedevolvido">
+                  <MenuButton
+                    disabled={!mongoUser?.apps?.CHEQUE_DEVOLVIDO}
+                    leftIcon={<Icon as={BsCardHeading} color="blue.100" />}
+                  >
+                    Cheque Devolvido
+                  </MenuButton>
+                </Link>
+                <Link href="/configurarnotificacoes">
                   <MenuButton
                     disabled={!mongoUser?.apps?.NOTIFICACOES}
-                    leftIcon={<BellIcon />}
+                    leftIcon={<BellIcon color="blue.100" />}
+                    rightIcon={<Icon as={RiWhatsappLine} color="green.200" />}
                   >
                     Configurar Notificacoes
+                  </MenuButton>
+                </Link>
+                <Link href="/configurarusuarios">
+                  <MenuButton
+                    disabled={!mongoUser?.apps?.USUARIOS}
+                    leftIcon={<Icon as={RiUserSettingsLine} color="blue.100" />}
+                  >
+                    Configurar Usuarios
                   </MenuButton>
                 </Link>
               </Stack>
