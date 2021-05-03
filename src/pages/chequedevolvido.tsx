@@ -1,6 +1,6 @@
 import { Stack } from "@chakra-ui/react";
 import { ChequeDevolvido } from "../components/chequeDevolvido/ChequeDevolvido";
-import { Header } from "../components/header/Header";
+import { Header } from "../components/Header/Header";
 
 export default function chequedevolvido() {
   return (

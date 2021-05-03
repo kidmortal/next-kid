@@ -1,5 +1,5 @@
 import { Tag, Stack, HStack } from "@chakra-ui/react";
-import { Header } from "../components/header/Header";
+import { Header } from "../components/Header/Header";
 
 export default function Home() {
   return (

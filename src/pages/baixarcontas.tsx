@@ -1,6 +1,6 @@
 import { Tag, Stack, HStack } from "@chakra-ui/react";
 import { BaixarContas } from "../components/baixarContas/BaixarContas";
-import { Header } from "../components/header/Header";
+import { Header } from "../components/Header/Header";
 
 export default function baixarcontas() {
   return (

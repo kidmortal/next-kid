@@ -1,6 +1,6 @@
 import { Stack } from "@chakra-ui/react";
 import { ConfigurarNotificacoes } from "../components/configurarNotificacoes/ConfigurarNotificacoes";
-import { Header } from "../components/header/Header";
+import { Header } from "../components/Header/Header";
 
 export default function Notificacoes() {
   return (
