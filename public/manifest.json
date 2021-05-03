@@ -5,8 +5,8 @@
   "background_color": "#2196f3",
   "display": "standalone",
   "orientation": "portrait",
-  "scope": "/",
-  "start_url": "/",
+  "scope": "https://next-kid.netlify.app/",
+  "start_url": "https://next-kid.netlify.app/",
   "icons": [
     {
       "src": "/icon72.png",
