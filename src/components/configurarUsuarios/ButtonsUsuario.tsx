@@ -11,6 +11,7 @@ interface ButtonsUsuarioProps {
   isOpen: boolean;
   onClose: () => void;
   onOpen: () => void;
+  fetchUsers: () => void;
 }
 
 export function ButtonsUsuario({
@@ -20,6 +21,7 @@ export function ButtonsUsuario({
   isOpen,
   onClose,
   onOpen,
+  fetchUsers,
 }: ButtonsUsuarioProps) {
   function handleEditUser() {
     setSelectedUser(user);
@@ -36,33 +38,25 @@ export function ButtonsUsuario({
         setSelectedUser={setSelectedUser}
         isOpen={isOpen}
         onClose={onClose}
+        fetchUsers={fetchUsers}
       />
       <IconButton
         variant="solid"
         bg="green.400"
         _hover={{ bg: "green.300" }}
+        _focus={{ border: "none" }}
         aria-label="Edit User"
-        icon={
-          <Icon
-            as={AiOutlineEdit}
-            fontSize="x-large"
-            onClick={handleEditUser}
-          />
-        }
+        onClick={handleEditUser}
+        icon={<Icon as={AiOutlineEdit} fontSize="x-large" />}
       />
       <IconButton
         variant="solid"
         bg="blue.600"
         _hover={{ bg: "blue.500" }}
+        _focus={{ border: "none" }}
         aria-label="Send Message"
-        icon={
-          <Icon
-            color="green.200"
-            fontSize="x-large"
-            as={RiWhatsappLine}
-            onClick={handleSendMessage}
-          />
-        }
+        onClick={handleSendMessage}
+        icon={<Icon color="green.200" fontSize="x-large" as={RiWhatsappLine} />}
       />
     </ButtonGroup>
   );

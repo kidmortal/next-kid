@@ -1,5 +1,6 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
+import { MongoUser } from "../../../../models/mongoUser";
 import { connectToCachedDb, connectToNewDb } from "../../../../util/mongodb";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -9,6 +10,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (call) {
     case "getUserByEmail":
       await GetOneUser(req, res);
+      break;
+
+    case "updateUserById":
+      await UpdateUserById(req, res);
       break;
 
     case "getAllUsers":
@@ -49,6 +54,21 @@ async function GetOneUser(req: NextApiRequest, res: NextApiResponse) {
   console.log("Using New Connection");
   Client.close();
   res.status(200).json(user);
+}
+
+async function UpdateUserById(req: NextApiRequest, res: NextApiResponse) {
+  const { id, nome, email, celular, callmebotKey } = req.body;
+  if (!id) return res.status(200).json({ erro: "ID nao foi informado" });
+  let Client = await connectToNewDb();
+  let filter = { _id: new ObjectId(id) };
+  let update: MongoUser = { nome, email, celular, callmebotKey };
+  let options = { upsert: true, returnOriginal: false };
+  let response = await Client.db()
+    .collection("usuarios")
+    .findOneAndUpdate(filter, { $set: update }, options);
+  console.log("Using New Connection");
+  Client.close();
+  res.status(200).json(response.ok);
 }
 
 async function GetAllUsers(req: NextApiRequest, res: NextApiResponse) {

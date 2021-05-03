@@ -12,7 +12,9 @@ import {
   ModalOverlay,
   Stack,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { MongoUser } from "../../models/mongoUser";
 
 interface ConfigurarUsuarioProps {
@@ -20,6 +22,7 @@ interface ConfigurarUsuarioProps {
   setSelectedUser: (user: MongoUser) => void;
   isOpen: boolean;
   onClose: () => void;
+  fetchUsers: () => void;
 }
 
 export function ConfigurarUsuarioModal({
@@ -27,7 +30,33 @@ export function ConfigurarUsuarioModal({
   setSelectedUser,
   isOpen,
   onClose,
+  fetchUsers,
 }: ConfigurarUsuarioProps) {
+  const toast = useToast();
+
+  function handleSave() {
+    axios
+      .post("/api/mongodb/usuarios", {
+        call: "updateUserById",
+        id: selectedUser._id,
+        ...selectedUser,
+      })
+      .then((response) => {
+        if (response) {
+          toast({
+            title: "Successo",
+            description: "Usuario foi alterado",
+            status: "success",
+            isClosable: true,
+            duration: 4000,
+            position: "top-right",
+          });
+          fetchUsers();
+          onClose();
+        }
+      });
+  }
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -38,7 +67,14 @@ export function ConfigurarUsuarioModal({
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>Nome</FormLabel>
-              <Input placeholder="Nome" value={selectedUser?.nome} />
+              <Input
+                placeholder="Nome"
+                type="text"
+                value={selectedUser?.nome}
+                onChange={(e) =>
+                  setSelectedUser({ ...selectedUser, nome: e.target.value })
+                }
+              />
             </FormControl>
 
             <FormControl mt={4}>
@@ -47,23 +83,40 @@ export function ConfigurarUsuarioModal({
                 type="email"
                 placeholder="Email"
                 value={selectedUser?.email}
+                onChange={(e) =>
+                  setSelectedUser({ ...selectedUser, email: e.target.value })
+                }
               />
             </FormControl>
             <FormControl mt={4}>
               <FormLabel>Celular</FormLabel>
               <Input
+                type="tel"
                 placeholder="+5511992331232"
                 value={selectedUser?.celular}
+                onChange={(e) =>
+                  setSelectedUser({ ...selectedUser, celular: e.target.value })
+                }
               />
             </FormControl>
             <FormControl mt={4}>
               <FormLabel>Callmebot Key</FormLabel>
-              <Input placeholder="key" value={selectedUser?.callmebotKey} />
+              <Input
+                placeholder="key"
+                type="number"
+                value={selectedUser?.callmebotKey}
+                onChange={(e) =>
+                  setSelectedUser({
+                    ...selectedUser,
+                    callmebotKey: e.target.value,
+                  })
+                }
+              />
             </FormControl>
           </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
+          <ModalFooter justifyContent="space-between">
+            <Button colorScheme="blue" mr={3} onClick={handleSave}>
               Save
             </Button>
             <Button

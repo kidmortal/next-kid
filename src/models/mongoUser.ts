@@ -13,13 +13,13 @@ export interface Apps {
 }
 
 export interface MongoUser {
-  _id: string;
-  notificacoes: string[];
-  nome: string;
-  notificar: Notificar;
-  apps: Apps;
-  celular: string;
-  email: string;
-  callmebotKey: string;
-  __v: number;
+  _id?: string;
+  notificacoes?: string[];
+  nome?: string;
+  notificar?: Notificar;
+  apps?: Apps;
+  celular?: string;
+  email?: string;
+  callmebotKey?: string;
+  __v?: number;
 }

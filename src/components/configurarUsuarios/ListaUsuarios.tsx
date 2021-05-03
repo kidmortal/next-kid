@@ -31,7 +31,7 @@ export function ListaUsuarios() {
   const [selectedUser, setSelectedUser] = useState<MongoUser>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  useEffect(() => {
+  function fetchUsers() {
     axios
       .post("/api/mongodb/usuarios", {
         call: "getAllUsers",
@@ -39,6 +39,10 @@ export function ListaUsuarios() {
       .then((response) => {
         setUsers(response.data);
       });
+  }
+
+  useEffect(() => {
+    fetchUsers();
   }, []);
 
   return (
@@ -65,6 +69,7 @@ export function ListaUsuarios() {
               />
             </Box>
             <ButtonsUsuario
+              fetchUsers={fetchUsers}
               user={u}
               selectedUser={selectedUser}
               setSelectedUser={setSelectedUser}
