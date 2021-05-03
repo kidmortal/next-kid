@@ -1,7 +1,9 @@
 import {
   Box,
   Button,
+  ButtonGroup,
   Icon,
+  IconButton,
   List,
   ListIcon,
   ListItem,
@@ -20,6 +22,8 @@ import {
   AiOutlineEdit,
 } from "react-icons/ai";
 import { MongoUser } from "../../models/mongoUser";
+import { ButtonsUsuario } from "./ButtonsUsuario";
+import { CampoLista } from "./CampoLista";
 import { ConfigurarUsuarioModal } from "./ConfigurarUsuarioModal";
 
 export function ListaUsuarios() {
@@ -37,54 +41,38 @@ export function ListaUsuarios() {
       });
   }, []);
 
-  function handleEditUser(user: MongoUser) {
-    setSelectedUser(user);
-    onOpen();
-  }
-
   return (
     <Stack>
-      <ConfigurarUsuarioModal
-        selectedUser={selectedUser}
-        setSelectedUser={setSelectedUser}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
       <SimpleGrid columns={[1, 2, 3]} spacing="80px">
         {users.map((u) => (
-          <Box>
-            <Stack>
-              <Box minW="250">
-                <Text>
-                  <Icon as={AiOutlineUser} />
-                  Usuario: {u.nome || "Sem nome"}
-                </Text>
-                <Text>
-                  <Icon as={AiOutlineMail} />
-                  Email: {u.email || "Sem Email"}
-                </Text>
-                <Text>
-                  <Icon as={AiOutlineMobile} />
-                  Celular: {u.celular || "Sem Celular"}
-                </Text>
-                <Text>
-                  <Icon as={AiOutlineAliwangwang} />
-                  Callmebot Key: {u.callmebotKey || "Sem chave"}
-                </Text>
-              </Box>
-              <Button
-                _hover={{ bg: "gray.500" }}
-                variant="outline"
-                size="sm"
-                leftIcon={<Icon as={AiOutlineEdit} />}
-                onClick={() => {
-                  handleEditUser(u);
-                }}
-              >
-                Editar
-              </Button>
-            </Stack>
-          </Box>
+          <Stack>
+            <Box>
+              <CampoLista
+                icon={AiOutlineUser}
+                name={"Usuario"}
+                value={u.nome}
+              />
+              <CampoLista icon={AiOutlineMail} name={"Email"} value={u.email} />
+              <CampoLista
+                icon={AiOutlineMobile}
+                name={"Celular"}
+                value={u.celular}
+              />
+              <CampoLista
+                icon={AiOutlineAliwangwang}
+                name={"Chave"}
+                value={u.callmebotKey}
+              />
+            </Box>
+            <ButtonsUsuario
+              user={u}
+              selectedUser={selectedUser}
+              setSelectedUser={setSelectedUser}
+              isOpen={isOpen}
+              onClose={onClose}
+              onOpen={onOpen}
+            />
+          </Stack>
         ))}
       </SimpleGrid>
     </Stack>
