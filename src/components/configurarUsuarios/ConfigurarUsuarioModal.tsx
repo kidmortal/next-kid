@@ -13,20 +13,23 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
+import { MongoUser } from "../../models/mongoUser";
 
-export function ConfigurarUsuarioModal() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+interface ConfigurarUsuarioProps {
+  selectedUser: MongoUser;
+  setSelectedUser: (user: MongoUser) => void;
+  isOpen: boolean;
+  onClose: () => void;
+}
 
+export function ConfigurarUsuarioModal({
+  selectedUser,
+  setSelectedUser,
+  isOpen,
+  onClose,
+}: ConfigurarUsuarioProps) {
   return (
     <>
-      <Button
-        variant="outline"
-        bg="gray.600"
-        _hover={{ bg: "gray.500" }}
-        onClick={onOpen}
-      >
-        Open Modal
-      </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.600">
@@ -35,20 +38,27 @@ export function ConfigurarUsuarioModal() {
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>Nome</FormLabel>
-              <Input placeholder="Nome" />
+              <Input placeholder="Nome" value={selectedUser?.nome} />
             </FormControl>
 
             <FormControl mt={4}>
               <FormLabel>Email</FormLabel>
-              <Input type="email" placeholder="Email" />
+              <Input
+                type="email"
+                placeholder="Email"
+                value={selectedUser?.email}
+              />
             </FormControl>
             <FormControl mt={4}>
               <FormLabel>Celular</FormLabel>
-              <Input placeholder="+5511992331232" />
+              <Input
+                placeholder="+5511992331232"
+                value={selectedUser?.celular}
+              />
             </FormControl>
             <FormControl mt={4}>
               <FormLabel>Callmebot Key</FormLabel>
-              <Input placeholder="key" />
+              <Input placeholder="key" value={selectedUser?.callmebotKey} />
             </FormControl>
           </ModalBody>
 

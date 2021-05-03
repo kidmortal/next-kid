@@ -5,7 +5,7 @@ import { ListaUsuarios } from "./ListaUsuarios";
 export function ConfigurarUsuarios() {
   return (
     <Stack justify="center" align="center">
-      <Text>Configurar usuarios - N FIZ AINDA</Text>
+      <Text>Configurar usuarios</Text>
       <ListaUsuarios />
     </Stack>
   );
