@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AppContextProvider } from "../context/AppContext";
 import { theme } from "../styles/theme";
