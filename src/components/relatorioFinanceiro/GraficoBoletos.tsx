@@ -1,7 +1,12 @@
 import { Stack, Text } from "@chakra-ui/react";
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
-import { useRelatorioFinanceiroContext } from "../../context/RelatorioFinanceiroContext";
+import {
+  ContaAReceber,
+  useRelatorioFinanceiroContext,
+} from "../../context/RelatorioFinanceiroContext";
+import groupArray from "group-array";
+import { useEffect } from "react";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -12,9 +17,28 @@ var formatter = new Intl.NumberFormat("pt-BR", {
 
 export function GraficoBoletos() {
   const { contaAReceber, setContaAReceber } = useRelatorioFinanceiroContext();
-  const total = Math.round(
-    contaAReceber?.reduce((a, b) => a + b.valor_documento, 0)
-  );
+  const filteredContas = filterContas();
+  const lists = groupArray(filteredContas, "data");
+  const categorias = Object.keys(lists) || ["nothing"];
+  const dadosArray = (() => {
+    let array = [];
+    for (const [key, value] of Object.entries(lists)) {
+      console.log(key, value);
+    }
+    return array;
+  })();
+
+  function filterContas() {
+    let filtered = [...contaAReceber];
+    filtered.forEach((conta) => {
+      conta.data = conta.data.slice(3, conta.data.length);
+    });
+    return filtered;
+  }
+
+  useEffect(() => {
+    console.log(lists);
+  }, [contaAReceber]);
 
   const options: ApexOptions = {
     dataLabels: {
@@ -29,7 +53,7 @@ export function GraficoBoletos() {
       background: "#2D3748",
     },
     xaxis: {
-      categories: [2021],
+      categories: categorias,
     },
     yaxis: {
       labels: {
@@ -50,7 +74,7 @@ export function GraficoBoletos() {
   const series = [
     {
       name: "Entrada",
-      data: [total],
+      data: dadosArray,
       type: "numeric",
     },
   ];

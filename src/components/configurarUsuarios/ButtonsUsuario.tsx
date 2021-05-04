@@ -2,6 +2,7 @@ import { ButtonGroup, Icon, IconButton, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { AiOutlineEdit } from "react-icons/ai";
 import { RiWhatsappLine } from "react-icons/ri";
+import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import { MongoUser } from "../../models/mongoUser";
 import { ConfigurarUsuarioModal } from "./ConfigurarUsuarioModal";
 
@@ -73,6 +74,21 @@ export function ButtonsUsuario({
         aria-label="Send Message"
         onClick={handleSendMessage}
         icon={<Icon color="green.200" fontSize="x-large" as={RiWhatsappLine} />}
+      />
+      <IconButton
+        variant="solid"
+        bg="pink.600"
+        _hover={{ bg: "pink.500" }}
+        _focus={{ border: "none" }}
+        aria-label="Apps"
+        onClick={handleSendMessage}
+        icon={
+          <Icon
+            color="green.200"
+            fontSize="x-large"
+            as={AiOutlineAppstoreAdd}
+          />
+        }
       />
     </ButtonGroup>
   );

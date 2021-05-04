@@ -10,7 +10,10 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import { BiRefresh } from "react-icons/bi";
-import { useRelatorioFinanceiroContext } from "../../context/RelatorioFinanceiroContext";
+import {
+  useRelatorioFinanceiroContext,
+  ContaAReceber,
+} from "../../context/RelatorioFinanceiroContext";
 import {
   ContaReceberCadastro,
   ListaContaAReceberRetorno,
@@ -22,6 +25,19 @@ export function ButtonGroup() {
   const progress = Math.round((contaAReceber.length / totalRegistros) * 100);
   const [visibility, setVisibility] = useState<VisibilityState>("hidden");
 
+  async function formatArray(array: ContaReceberCadastro[]) {
+    const formatArray: ContaAReceber[] = [];
+    array.forEach((e) => {
+      formatArray.push({
+        data: e.data_previsao,
+        empresa: "PYRAMID",
+        nota: e.numero_documento_fiscal,
+        valor: e.valor_documento,
+      });
+    });
+    return formatArray;
+  }
+
   async function fetchData(pagina: number) {
     let response = await axios.post("api/omie/contas/listar", {
       tipo: "receber",
@@ -31,18 +47,22 @@ export function ButtonGroup() {
   }
 
   async function handleUpdateData() {
-    let newState = [];
+    let newState: ContaAReceber[] = [];
+    setVisibility("visible");
     let retorno: ListaContaAReceberRetorno = await fetchData(1);
     console.log(retorno.conta_receber_cadastro);
-    setVisibility("visible");
     setTotalRegistros(retorno.total_de_registros);
-    newState = [...retorno.conta_receber_cadastro];
+    let array = await formatArray(retorno.conta_receber_cadastro);
+    newState = [...array];
     if (retorno.total_de_paginas > 1) {
       for (let index = 1; index < retorno.total_de_paginas; index++) {
-        let retorno: ListaContaAReceberRetorno = await fetchData(index + 1);
-        console.log(retorno.conta_receber_cadastro);
-        newState = [...newState, ...retorno.conta_receber_cadastro];
         setContaAReceber([...newState]);
+        let retorno: ListaContaAReceberRetorno = await fetchData(index + 1);
+        let array = await formatArray(retorno.conta_receber_cadastro);
+        newState = [...newState, ...array];
+        if (index + 1 >= retorno.total_de_paginas) {
+          setContaAReceber([...newState]);
+        }
       }
     }
   }

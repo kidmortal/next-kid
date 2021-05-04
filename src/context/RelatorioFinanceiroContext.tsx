@@ -2,9 +2,16 @@ import { useState, ReactNode, useContext, useEffect } from "react";
 import { createContext } from "react";
 import { ContaReceberCadastro } from "../models/omieContaAReceber";
 
+export type ContaAReceber = {
+  data: string;
+  empresa: string;
+  nota: string;
+  valor: number;
+};
+
 type RelatorioFinanceiroContextType = {
-  contaAReceber: ContaReceberCadastro[];
-  setContaAReceber: (contas: ContaReceberCadastro[]) => void;
+  contaAReceber: ContaAReceber[];
+  setContaAReceber: (contas: ContaAReceber[]) => void;
 };
 
 const RelatorioFinanceiroContextDefaultValues: RelatorioFinanceiroContextType = {
@@ -21,13 +28,28 @@ const RelatorioFinanceiroContext = createContext<RelatorioFinanceiroContextType>
 );
 
 export function RelatorioFinanceiroContextProvider({ children }: Props) {
-  const [contaAReceber, setContaAReceber] = useState<ContaReceberCadastro[]>(
-    []
-  );
+  const [contaAReceber, setContaAReceber] = useState<ContaAReceber[]>([]);
   const value = {
     contaAReceber,
     setContaAReceber,
   };
+
+  useEffect(() => {
+    if (contaAReceber.length > 1) {
+      localStorage.setItem(
+        "@next-kid:contaareceber",
+        JSON.stringify(contaAReceber)
+      );
+    }
+  }, [contaAReceber]);
+
+  useEffect(() => {
+    let data = localStorage.getItem("@next-kid:contaareceber");
+    if (data) {
+      let contas = JSON.parse(data) as ContaAReceber[];
+      setContaAReceber(contas);
+    }
+  }, []);
 
   return (
     <>

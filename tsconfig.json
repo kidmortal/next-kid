@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "noImplicitAny": false,
+    "types": ["node"],
     "target": "es5",
     "lib": [
       "dom",
