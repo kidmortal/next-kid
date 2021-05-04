@@ -16,6 +16,7 @@ import {
 
 import { RiUserSettingsLine, RiWhatsappLine } from "react-icons/ri";
 import { BsCardHeading } from "react-icons/bs";
+import { GoGraph } from "react-icons/go";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import Link from "next/link";
 import { useState } from "react";
@@ -56,6 +57,14 @@ export function SideMenu() {
                     Baixar Contas a Receber - OMIE
                   </MenuButton>
                 </Link>
+                <Link href="/relatoriofinanceiro">
+                  <MenuButton
+                    disabled={!mongoUser?.apps?.CHEQUE_DEVOLVIDO}
+                    leftIcon={<Icon as={GoGraph} color="blue.100" />}
+                  >
+                    Relatorio Financeiro
+                  </MenuButton>
+                </Link>
                 <Link href="/chequedevolvido">
                   <MenuButton
                     disabled={!mongoUser?.apps?.CHEQUE_DEVOLVIDO}
@@ -79,6 +88,14 @@ export function SideMenu() {
                     leftIcon={<Icon as={RiUserSettingsLine} color="blue.100" />}
                   >
                     Configurar Usuarios
+                  </MenuButton>
+                </Link>
+                <Link href="/funcoesadministrativas">
+                  <MenuButton
+                    disabled={!mongoUser?.apps?.USUARIOS}
+                    leftIcon={<Icon as={RiUserSettingsLine} color="blue.100" />}
+                  >
+                    Funçoes Administrativas
                   </MenuButton>
                 </Link>
               </Stack>

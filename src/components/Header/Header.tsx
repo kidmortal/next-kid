@@ -1,7 +1,7 @@
 import { HStack } from "@chakra-ui/layout";
 import { Profile } from "./Profile";
 import { GoogleLoginButton } from "./GoogleLoginButton";
-import { SideMenu } from "../SideMenu/SideMenu";
+import { SideMenu } from "../sideMenu/SideMenu";
 
 export function Header() {
   return (

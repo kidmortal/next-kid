@@ -1,4 +1,5 @@
 import { ButtonGroup, Icon, IconButton, useToast } from "@chakra-ui/react";
+import axios from "axios";
 import { AiOutlineEdit } from "react-icons/ai";
 import { RiWhatsappLine } from "react-icons/ri";
 import { MongoUser } from "../../models/mongoUser";
@@ -23,12 +24,27 @@ export function ButtonsUsuario({
   onOpen,
   fetchUsers,
 }: ButtonsUsuarioProps) {
+  const toast = useToast();
   function handleEditUser() {
     setSelectedUser(user);
     onOpen();
   }
-  function handleSendMessage() {
-    alert("fiz n bixo");
+  async function handleSendMessage() {
+    let message = `Mensagem no zap zap 😂👌`;
+    let messageEncoded = encodeURI(message);
+    fetch(
+      `https://api.callmebot.com/whatsapp.php?phone=${user.celular}&text=${messageEncoded}&apikey=${user.callmebotKey}`,
+      { mode: "no-cors" }
+    ).then((response) => {
+      toast({
+        title: "Mensagem enviada",
+        description: `Enviado zap para ${user.nome}`,
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+        position: "top-right",
+      });
+    });
   }
 
   return (

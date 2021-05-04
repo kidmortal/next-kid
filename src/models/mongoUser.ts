@@ -9,6 +9,8 @@ export interface Apps {
   BAIXAR_CONTAS: boolean;
   NOTIFICACOES: boolean;
   CHEQUE_DEVOLVIDO: boolean;
+  FUNCOES_ADMINISTRATIVAS: boolean;
+  RELATORIO_FINANCEIRO: boolean;
   USUARIOS: boolean;
 }
 

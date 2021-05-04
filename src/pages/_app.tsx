@@ -1,5 +1,6 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Stack } from "@chakra-ui/react";
 import { useEffect } from "react";
+import { Header } from "../components/header/Header";
 import { AppContextProvider } from "../context/AppContext";
 import { theme } from "../styles/theme";
 
@@ -25,7 +26,12 @@ function MyApp({ Component, pageProps }) {
   return (
     <AppContextProvider>
       <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
+        <Stack align="center" spacing={2}>
+          <Stack width={[350, 500, 700]}>
+            <Header />
+            <Component {...pageProps} />
+          </Stack>
+        </Stack>
       </ChakraProvider>
     </AppContextProvider>
   );
