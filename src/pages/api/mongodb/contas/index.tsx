@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ContaAReceber } from "../../../../context/RelatorioFinanceiroContext";
-import { connectToNewDb } from "../../../../util/mongodb";
+import { connectToCachedDb } from "../../../../util/mongodb";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { dados } = req.body;
   if (!dados) return res.status(200).json({ erro: "Sem dados" });
   let contas: ContaAReceber[] = dados;
-  let Client = await connectToNewDb();
+  let Client = await connectToCachedDb();
   await Client.db().collection("contas_a_receber").drop();
   let bulk = Client.db()
     .collection("contas_a_receber")
@@ -20,6 +20,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
   });
   await bulk.execute();
-  Client.close();
   res.status(200).json({ resultado: "ok" });
 };

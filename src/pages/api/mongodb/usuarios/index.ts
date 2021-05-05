@@ -57,7 +57,7 @@ async function GetOneUser(req: NextApiRequest, res: NextApiResponse) {
 async function UpdateUserById(req: NextApiRequest, res: NextApiResponse) {
   const { id, nome, email, celular, callmebotKey } = req.body;
   if (!id) return res.status(200).json({ erro: "ID nao foi informado" });
-  let Client = await connectToNewDb();
+  let Client = await connectToCachedDb();
   let filter = { _id: new ObjectId(id) };
   let update: MongoUser = { nome, email, celular, callmebotKey };
   let options = { upsert: true, returnOriginal: false };
@@ -65,15 +65,13 @@ async function UpdateUserById(req: NextApiRequest, res: NextApiResponse) {
     .collection("usuarios")
     .findOneAndUpdate(filter, { $set: update }, options);
   console.log("Using New Connection");
-  Client.close();
   res.status(200).json(response.ok);
 }
 
 async function GetAllUsers(req: NextApiRequest, res: NextApiResponse) {
-  let Client = await connectToNewDb();
+  let Client = await connectToCachedDb();
   let users = await Client.db().collection("usuarios").find({}).toArray();
   console.log("Using New Connection");
-  Client.close();
   res.status(200).json(users);
 }
 
@@ -87,13 +85,12 @@ async function AddNewNotificationClient(
   if (!email)
     return res.status(200).json({ erro: "Email do usuario não informado" });
 
-  let Client = await connectToNewDb();
+  let Client = await connectToCachedDb();
   let filter = { email };
   let update = { $push: { "notificar.SEPARADO": name } };
   let response = await Client.db()
     .collection("usuarios")
     .findOneAndUpdate(filter, update, { upsert: true, returnOriginal: false });
-  Client.close();
   res.status(200).json(response.ok);
 }
 async function RemoveNotificationClient(
@@ -106,13 +103,12 @@ async function RemoveNotificationClient(
   if (!email)
     return res.status(200).json({ erro: "Email do usuario não informado" });
 
-  let Client = await connectToNewDb();
+  let Client = await connectToCachedDb();
   let filter = { email };
   let update = { $pull: { "notificar.SEPARADO": name } };
   let response = await Client.db()
     .collection("usuarios")
     .findOneAndUpdate(filter, update, { upsert: true, returnOriginal: false });
-  Client.close();
   res.status(200).json(response.ok);
 }
 
@@ -124,13 +120,12 @@ async function RelatorioDiarioNotification(
   if (!email)
     return res.status(200).json({ erro: "Email do usuario não informado" });
 
-  let Client = await connectToNewDb();
+  let Client = await connectToCachedDb();
   let filter = { email };
   let update = { $set: { "notificar.RELATORIO_DIARIO": !!active } };
   let response = await Client.db()
     .collection("usuarios")
     .findOneAndUpdate(filter, update, { upsert: true, returnOriginal: false });
-  Client.close();
   res.status(200).json(response.ok);
 }
 async function PedidoSemDataNotification(
@@ -141,13 +136,12 @@ async function PedidoSemDataNotification(
   if (!email)
     return res.status(200).json({ erro: "Email do usuario não informado" });
 
-  let Client = await connectToNewDb();
+  let Client = await connectToCachedDb();
   let filter = { email };
   let update = { $set: { "notificar.DATA_INCORRETA": !!active } };
   let response = await Client.db()
     .collection("usuarios")
     .findOneAndUpdate(filter, update, { upsert: true, returnOriginal: false });
-  Client.close();
   res.status(200).json(response.ok);
 }
 async function PedidoSemCondicaoNotification(
@@ -158,12 +152,11 @@ async function PedidoSemCondicaoNotification(
   if (!email)
     return res.status(200).json({ erro: "Email do usuario não informado" });
 
-  let Client = await connectToNewDb();
+  let Client = await connectToCachedDb();
   let filter = { email };
   let update = { $set: { "notificar.SEM_CONDICAO": !!active } };
   let response = await Client.db()
     .collection("usuarios")
     .findOneAndUpdate(filter, update, { upsert: true, returnOriginal: false });
-  Client.close();
   res.status(200).json(response.ok);
 }
