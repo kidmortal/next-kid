@@ -32,6 +32,7 @@ export function AtualizarContas() {
   const [contaAPagar, setContaAPagar] = useState<Conta[]>([]);
   const [totalRegistrosReceber, setTotalRegistrosReceber] = useState(1);
   const [totalRegistrosPagar, setTotalRegistrosPagar] = useState(1);
+  const [loading, setLoading] = useState(false);
   const progressReceber = Math.round(
     (contaAReceber.length / totalRegistrosReceber) * 100
   );
@@ -69,6 +70,7 @@ export function AtualizarContas() {
   }
 
   async function updateDatabaseReceber() {
+    console.log(contaAReceber);
     axios
       .post("/api/mongodb/contas/inserir", {
         dados: contaAReceber,
@@ -78,6 +80,7 @@ export function AtualizarContas() {
       });
   }
   async function updateDatabasePagar() {
+    console.log(contaAPagar);
     axios
       .post("/api/mongodb/contas/inserir", {
         dados: contaAPagar,
@@ -91,14 +94,12 @@ export function AtualizarContas() {
     let response = await axios.post("api/omie/contas/listar/receber", {
       pagina,
     });
-    console.log(response.data);
     return response.data;
   }
   async function fetchPagar(pagina: number) {
     let response = await axios.post("api/omie/contas/listar/pagar", {
       pagina,
     });
-    console.log(response.data);
     return response.data;
   }
 
@@ -143,34 +144,32 @@ export function AtualizarContas() {
   }
 
   async function handleUpdateData() {
+    setLoading(true);
     setVisibility("visible");
-    updateReceber();
-    updatePagar();
+    await updatePagar();
+    await updateReceber();
+    setLoading(false);
   }
 
   return (
     <HStack justify="space-between">
-      <Button
-        variant="outline"
-        _hover={{ bg: "blue.600" }}
-        _focus={{ border: "none" }}
-        leftIcon={<Icon as={BiRefresh} />}
-        onClick={handleUpdateData}
-      >
-        Atualizar dados
-      </Button>
       <Stack justify="center" align="center">
-        <Stack>
-          <Text visibility={visibility}>
-            Importando {contaAReceber.length} / {totalRegistrosReceber} Contas a
-            Receber
-          </Text>
-          <Progress
-            visibility={visibility}
-            minW={[100, 200, 300]}
-            value={progressReceber}
-          />
-        </Stack>
+        <Text fontStyle="italic" color="blue.300" fontSize="x-large">
+          Boletos
+        </Text>
+        <Button
+          variant="outline"
+          _hover={{ bg: "blue.600" }}
+          _focus={{ border: "none" }}
+          leftIcon={<Icon as={BiRefresh} fontSize="large" />}
+          onClick={handleUpdateData}
+          isLoading={loading}
+        >
+          Atualizar
+        </Button>
+      </Stack>
+
+      <Stack justify="center" align="center">
         <Stack>
           <Text visibility={visibility}>
             Importando {contaAPagar.length} / {totalRegistrosPagar} Contas a
@@ -180,6 +179,17 @@ export function AtualizarContas() {
             visibility={visibility}
             minW={[100, 200, 300]}
             value={progressPagar}
+          />
+        </Stack>
+        <Stack>
+          <Text visibility={visibility}>
+            Importando {contaAReceber.length} / {totalRegistrosReceber} Contas a
+            Receber
+          </Text>
+          <Progress
+            visibility={visibility}
+            minW={[100, 200, 300]}
+            value={progressReceber}
           />
         </Stack>
       </Stack>
