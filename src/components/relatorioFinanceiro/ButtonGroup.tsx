@@ -38,18 +38,28 @@ export function ButtonGroup() {
     return formatArray;
   }
 
-  async function fetchData(pagina: number) {
-    let response = await axios.post("api/omie/contas/listar", {
-      tipo: "receber",
+  async function fetchReceber(pagina: number) {
+    let response = await axios.post("api/omie/contas/listar/receber", {
       pagina,
     });
+    console.log(response.data);
+    return response.data;
+  }
+  async function fetchPagar(pagina: number) {
+    let response = await axios.post("api/omie/contas/listar/pagar", {
+      pagina,
+    });
+    console.log(response.data);
     return response.data;
   }
 
   async function handleUpdateData() {
+    await fetchReceber(1);
+    await fetchPagar(1);
+    return;
     let newState: ContaAReceber[] = [];
     setVisibility("visible");
-    let retorno: ListaContaAReceberRetorno = await fetchData(1);
+    let retorno: ListaContaAReceberRetorno = await fetchReceber(1);
     console.log(retorno.conta_receber_cadastro);
     setTotalRegistros(retorno.total_de_registros);
     let array = await formatArray(retorno.conta_receber_cadastro);
@@ -57,7 +67,7 @@ export function ButtonGroup() {
     if (retorno.total_de_paginas > 1) {
       for (let index = 1; index < retorno.total_de_paginas; index++) {
         setContaAReceber([...newState]);
-        let retorno: ListaContaAReceberRetorno = await fetchData(index + 1);
+        let retorno: ListaContaAReceberRetorno = await fetchReceber(index + 1);
         let array = await formatArray(retorno.conta_receber_cadastro);
         newState = [...newState, ...array];
         if (index + 1 >= retorno.total_de_paginas) {

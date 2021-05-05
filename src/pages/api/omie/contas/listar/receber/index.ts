@@ -1,15 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { baixaResponse } from "../../../../../context/AppContext";
-import { GetOneNfByNumero } from "../../notas/consultar";
-import { RequestOmie } from "../../_request";
+import { baixaResponse } from "../../../../../../context/AppContext";
+import { GetOneNfByNumero } from "../../../notas/consultar";
+import { RequestOmie } from "../../../_request";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  let { tipo } = req.body;
-  if (!tipo)
-    return res.status(200).json({ message: "Sem tipo (pagar / receber)" });
-
-  if (tipo === "receber") await GetContasAReceber(req, res);
+  await GetContasAReceber(req, res);
 };
 
 async function GetContasAReceber(req: NextApiRequest, res: NextApiResponse) {
