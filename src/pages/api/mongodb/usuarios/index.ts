@@ -49,10 +49,8 @@ async function GetOneUser(req: NextApiRequest, res: NextApiResponse) {
   const { email } = req.body;
   let user;
   if (!email) return res.status(200).json({ erro: "Email nao foi informado" });
-  let Client = await connectToNewDb();
+  let Client = await connectToCachedDb();
   user = await Client.db().collection("usuarios").findOne({ email });
-  console.log("Using New Connection");
-  Client.close();
   res.status(200).json(user);
 }
 
