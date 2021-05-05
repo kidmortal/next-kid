@@ -11,7 +11,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   let bulk = Client.db().collection("contas").initializeUnorderedBulkOp();
   await contas.forEach(({ valor, empresa, data, nota, tipo }) => {
     bulk.insert({
-      data: new Date(data),
+      data,
       tipo,
       nota,
       empresa,
