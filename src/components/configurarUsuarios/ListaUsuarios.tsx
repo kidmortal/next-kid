@@ -47,9 +47,9 @@ export function ListaUsuarios() {
 
   return (
     <Stack>
-      <SimpleGrid columns={[1, 2, 3]} spacing="80px">
+      <SimpleGrid columns={[1, 1, 2]}>
         {users.map((u) => (
-          <Stack>
+          <Stack padding={10}>
             <Box>
               <CampoLista
                 icon={AiOutlineUser}

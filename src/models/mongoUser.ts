@@ -3,6 +3,8 @@ export interface Notificar {
   RELATORIO_DIARIO: boolean;
   DATA_INCORRETA: boolean;
   SEM_CONDICAO: boolean;
+  CLIENTE_COM_PENDENCIA: boolean;
+  ERRO_SUSPEITO: boolean;
 }
 
 export interface Apps {

@@ -2,7 +2,6 @@ import { Checkbox } from "@chakra-ui/checkbox";
 import { Stack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import { MongoUser } from "../../models/mongoUser";
 
@@ -10,23 +9,12 @@ export function NotificacoesCheckBox() {
   const { mongoUser, setMongoUser } = useAppContext();
   const toast = useToast();
 
-  async function handleRelatorioDiario() {
-    let active = !mongoUser?.notificar.RELATORIO_DIARIO;
-    let response = await axios.post("/api/mongodb/usuarios", {
-      call: "relatorioDiarioNotification",
-      email: mongoUser?.email,
-      active,
-    });
-    if (response.data) {
-      let newMongoUser: MongoUser = {
-        ...mongoUser,
-      };
-      newMongoUser.notificar.RELATORIO_DIARIO = active;
-      setMongoUser(newMongoUser);
+  async function toastNotify(success: boolean) {
+    if (success) {
       toast({
         title: "Cadastrado Notificacao",
         status: "success",
-        description: "Relatorio diario",
+        description: "Sem data",
         duration: 5000,
         isClosable: true,
         position: "top-right",
@@ -35,11 +23,28 @@ export function NotificacoesCheckBox() {
       toast({
         title: "Erro",
         status: "error",
-        description: "Relatorio diario",
+        description: "Sem data",
         duration: 5000,
         isClosable: true,
         position: "top-right",
       });
+    }
+  }
+
+  async function handleRelatorioDiario() {
+    let active = !mongoUser?.notificar.RELATORIO_DIARIO;
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "relatorioDiarioNotification",
+      email: mongoUser?.email,
+      active,
+    });
+    toastNotify(response.data);
+    if (response.data) {
+      let newMongoUser: MongoUser = {
+        ...mongoUser,
+      };
+      newMongoUser.notificar.RELATORIO_DIARIO = active;
+      setMongoUser(newMongoUser);
     }
   }
   async function handleSemData() {
@@ -49,29 +54,13 @@ export function NotificacoesCheckBox() {
       email: mongoUser?.email,
       active,
     });
+    toastNotify(response.data);
     if (response.data) {
       let newMongoUser: MongoUser = {
         ...mongoUser,
       };
       newMongoUser.notificar.DATA_INCORRETA = active;
       setMongoUser(newMongoUser);
-      toast({
-        title: "Cadastrado Notificacao",
-        status: "success",
-        description: "Sem data",
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
-    } else {
-      toast({
-        title: "Erro",
-        status: "error",
-        description: "Sem data",
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
     }
   }
   async function handleSemCodicao() {
@@ -81,29 +70,46 @@ export function NotificacoesCheckBox() {
       email: mongoUser?.email,
       active,
     });
+    toastNotify(response.data);
     if (response.data) {
       let newMongoUser: MongoUser = {
         ...mongoUser,
       };
       newMongoUser.notificar.SEM_CONDICAO = active;
       setMongoUser(newMongoUser);
-      toast({
-        title: "Cadastrado Notificacao",
-        status: "success",
-        description: "Sem Condição",
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
-    } else {
-      toast({
-        title: "Erro",
-        status: "error",
-        description: "Sem Condição",
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
+    }
+  }
+
+  async function handleComPendencia() {
+    let active = !mongoUser?.notificar.CLIENTE_COM_PENDENCIA;
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "pedidoSemCondicaoNotification",
+      email: mongoUser?.email,
+      active,
+    });
+    toastNotify(response.data);
+    if (response.data) {
+      let newMongoUser: MongoUser = {
+        ...mongoUser,
+      };
+      newMongoUser.notificar.CLIENTE_COM_PENDENCIA = active;
+      setMongoUser(newMongoUser);
+    }
+  }
+  async function handleErroSuspeito() {
+    let active = !mongoUser?.notificar.ERRO_SUSPEITO;
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "pedidoSemCondicaoNotification",
+      email: mongoUser?.email,
+      active,
+    });
+    toastNotify(response.data);
+    if (response.data) {
+      let newMongoUser: MongoUser = {
+        ...mongoUser,
+      };
+      newMongoUser.notificar.ERRO_SUSPEITO = active;
+      setMongoUser(newMongoUser);
     }
   }
 
@@ -126,6 +132,18 @@ export function NotificacoesCheckBox() {
         onChange={(e) => handleSemCodicao()}
       >
         Pedido Concluido sem Condição de pagamento
+      </Checkbox>
+      <Checkbox
+        isChecked={mongoUser?.notificar?.CLIENTE_COM_PENDENCIA}
+        onChange={(e) => handleComPendencia()}
+      >
+        Pedido de Cliente Com pendencia
+      </Checkbox>
+      <Checkbox
+        isChecked={mongoUser?.notificar?.ERRO_SUSPEITO}
+        onChange={(e) => handleErroSuspeito()}
+      >
+        Pedido com Suspeita de Erro
       </Checkbox>
     </Stack>
   );
