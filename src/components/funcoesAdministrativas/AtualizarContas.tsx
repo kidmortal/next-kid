@@ -4,6 +4,7 @@ import {
   HStack,
   Icon,
   Progress,
+  Select,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -39,7 +40,6 @@ export function AtualizarContas() {
   const progressPagar = Math.round(
     (contaAPagar.length / totalRegistrosPagar) * 100
   );
-  const [visibility, setVisibility] = useState<VisibilityState>("hidden");
 
   async function formatArrayReceber(array: ContaReceberCadastro[]) {
     const formatArray: Conta[] = [];
@@ -145,7 +145,6 @@ export function AtualizarContas() {
 
   async function handleUpdateData() {
     setLoading(true);
-    setVisibility("visible");
     await updatePagar();
     await updateReceber();
     setLoading(false);
@@ -171,26 +170,22 @@ export function AtualizarContas() {
 
       <Stack justify="center" align="center">
         <Stack>
-          <Text visibility={visibility}>
-            Importando {contaAPagar.length} / {totalRegistrosPagar} Contas a
-            Pagar
+          <Text>
+            {loading
+              ? `Importando ${contaAPagar.length} / ${totalRegistrosPagar} Contas a
+            Pagar`
+              : "Contas a pagar"}
           </Text>
-          <Progress
-            visibility={visibility}
-            minW={[100, 200, 300]}
-            value={progressPagar}
-          />
+          <Progress minW={[100, 200, 300]} value={progressPagar} />
         </Stack>
         <Stack>
-          <Text visibility={visibility}>
-            Importando {contaAReceber.length} / {totalRegistrosReceber} Contas a
-            Receber
+          <Text>
+            {loading
+              ? ` Importando ${contaAReceber.length} / ${totalRegistrosReceber} Contas a
+            Receber`
+              : "Contas a receber"}
           </Text>
-          <Progress
-            visibility={visibility}
-            minW={[100, 200, 300]}
-            value={progressReceber}
-          />
+          <Progress minW={[100, 200, 300]} value={progressReceber} />
         </Stack>
       </Stack>
     </HStack>

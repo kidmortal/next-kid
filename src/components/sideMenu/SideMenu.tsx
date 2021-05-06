@@ -57,12 +57,12 @@ export function SideMenu() {
                     Baixar Contas a Receber - OMIE
                   </MenuButton>
                 </Link>
-                <Link href="/relatoriofinanceiro">
+                <Link href="/relatoriovendas">
                   <MenuButton
                     disabled={!mongoUser?.apps?.CHEQUE_DEVOLVIDO}
                     leftIcon={<Icon as={GoGraph} color="blue.100" />}
                   >
-                    Relatorio Financeiro
+                    Relatorio Vendas
                   </MenuButton>
                 </Link>
                 <Link href="/chequedevolvido">

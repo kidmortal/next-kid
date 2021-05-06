@@ -1,11 +1,11 @@
 import { Text } from "@chakra-ui/react";
-import { RelatorioFinanceiro } from "../components/relatorioFinanceiro/RelatorioFinanceiro";
+import { RelatorioVendas } from "../components/relatorioVendas/RelatorioVendas";
 import { useAppContext } from "../context/AppContext";
 
-export default function relatoriofinanceiro() {
+export default function relatoriovendas() {
   const { mongoUser } = useAppContext();
   return mongoUser?.apps?.RELATORIO_FINANCEIRO ? (
-    <RelatorioFinanceiro />
+    <RelatorioVendas />
   ) : (
     <Text>Sem Permissao</Text>
   );
