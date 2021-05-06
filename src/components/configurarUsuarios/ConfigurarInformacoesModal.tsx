@@ -15,7 +15,7 @@ import {
 import axios from "axios";
 import { MongoUser } from "../../models/mongoUser";
 
-interface ConfigurarUsuarioProps {
+interface ConfigurarInformacoesProps {
   selectedUser: MongoUser;
   setSelectedUser: (user: MongoUser) => void;
   isOpen: boolean;
@@ -23,13 +23,13 @@ interface ConfigurarUsuarioProps {
   fetchUsers: () => void;
 }
 
-export function ConfigurarUsuarioModal({
+export function ConfigurarInformacoesModal({
   selectedUser,
   setSelectedUser,
   isOpen,
   onClose,
   fetchUsers,
-}: ConfigurarUsuarioProps) {
+}: ConfigurarInformacoesProps) {
   const toast = useToast();
 
   function handleSave() {
@@ -60,7 +60,7 @@ export function ConfigurarUsuarioModal({
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.600">
-          <ModalHeader>User Edition</ModalHeader>
+          <ModalHeader>Edit User Informations</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>

@@ -1,18 +1,23 @@
-import { ButtonGroup, Icon, IconButton, useToast } from "@chakra-ui/react";
+import {
+  ButtonGroup,
+  Icon,
+  IconButton,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { AiOutlineEdit } from "react-icons/ai";
 import { RiWhatsappLine } from "react-icons/ri";
-import { AiOutlineAppstoreAdd } from "react-icons/ai";
+import { AiOutlineAppstoreAdd, AiOutlineClockCircle } from "react-icons/ai";
 import { MongoUser } from "../../models/mongoUser";
-import { ConfigurarUsuarioModal } from "./ConfigurarUsuarioModal";
+import { ConfigurarInformacoesModal } from "./ConfigurarInformacoesModal";
+import { ConfigurarNotificacoesModal } from "./ConfigurarNotificacoesModal";
+import { ConfigurarAppsModal } from "./ConfigurarAppsModal";
 
 interface ButtonsUsuarioProps {
   user: MongoUser;
   selectedUser: MongoUser;
   setSelectedUser: (user: MongoUser) => void;
-  isOpen: boolean;
-  onClose: () => void;
-  onOpen: () => void;
   fetchUsers: () => void;
 }
 
@@ -20,15 +25,35 @@ export function ButtonsUsuario({
   user,
   selectedUser,
   setSelectedUser,
-  isOpen,
-  onClose,
-  onOpen,
   fetchUsers,
 }: ButtonsUsuarioProps) {
+  const {
+    isOpen: isOpenInfo,
+    onOpen: onOpenInfo,
+    onClose: onCloseInfo,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenApps,
+    onOpen: onOpenApps,
+    onClose: onCloseApps,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenNotif,
+    onOpen: onOpenNotif,
+    onClose: onCloseNotif,
+  } = useDisclosure();
   const toast = useToast();
-  function handleEditUser() {
+  function handleEditUserInfo() {
     setSelectedUser(user);
-    onOpen();
+    onOpenInfo();
+  }
+  function handleEditUserNotif() {
+    setSelectedUser(user);
+    onOpenNotif();
+  }
+  function handleEditUserApps() {
+    setSelectedUser(user);
+    onOpenApps();
   }
   async function handleSendMessage() {
     let message = `Mensagem no zap zap 😂👌`;
@@ -50,11 +75,25 @@ export function ButtonsUsuario({
 
   return (
     <ButtonGroup>
-      <ConfigurarUsuarioModal
+      <ConfigurarInformacoesModal
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isOpenInfo}
+        onClose={onCloseInfo}
+        fetchUsers={fetchUsers}
+      />
+      <ConfigurarNotificacoesModal
+        selectedUser={selectedUser}
+        setSelectedUser={setSelectedUser}
+        isOpen={isOpenNotif}
+        onClose={onCloseNotif}
+        fetchUsers={fetchUsers}
+      />
+      <ConfigurarAppsModal
+        selectedUser={selectedUser}
+        setSelectedUser={setSelectedUser}
+        isOpen={isOpenApps}
+        onClose={onCloseApps}
         fetchUsers={fetchUsers}
       />
       <IconButton
@@ -63,8 +102,38 @@ export function ButtonsUsuario({
         _hover={{ bg: "green.300" }}
         _focus={{ border: "none" }}
         aria-label="Edit User"
-        onClick={handleEditUser}
+        onClick={handleEditUserInfo}
         icon={<Icon as={AiOutlineEdit} fontSize="x-large" />}
+      />
+      <IconButton
+        variant="solid"
+        bg="pink.600"
+        _hover={{ bg: "pink.500" }}
+        _focus={{ border: "none" }}
+        aria-label="Apps"
+        onClick={handleEditUserApps}
+        icon={
+          <Icon
+            color="green.200"
+            fontSize="x-large"
+            as={AiOutlineAppstoreAdd}
+          />
+        }
+      />
+      <IconButton
+        variant="solid"
+        bg="yellow.600"
+        _hover={{ bg: "yellow.500" }}
+        _focus={{ border: "none" }}
+        aria-label="Manage Notifs"
+        onClick={handleEditUserNotif}
+        icon={
+          <Icon
+            color="green.200"
+            fontSize="x-large"
+            as={AiOutlineClockCircle}
+          />
+        }
       />
       <IconButton
         variant="solid"
@@ -74,21 +143,6 @@ export function ButtonsUsuario({
         aria-label="Send Message"
         onClick={handleSendMessage}
         icon={<Icon color="green.200" fontSize="x-large" as={RiWhatsappLine} />}
-      />
-      <IconButton
-        variant="solid"
-        bg="pink.600"
-        _hover={{ bg: "pink.500" }}
-        _focus={{ border: "none" }}
-        aria-label="Apps"
-        onClick={handleSendMessage}
-        icon={
-          <Icon
-            color="green.200"
-            fontSize="x-large"
-            as={AiOutlineAppstoreAdd}
-          />
-        }
       />
     </ButtonGroup>
   );

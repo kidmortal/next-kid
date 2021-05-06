@@ -1,17 +1,4 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Icon,
-  IconButton,
-  List,
-  ListIcon,
-  ListItem,
-  SimpleGrid,
-  Stack,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, SimpleGrid, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {
@@ -24,12 +11,10 @@ import {
 import { MongoUser } from "../../models/mongoUser";
 import { ButtonsUsuario } from "./ButtonsUsuario";
 import { CampoLista } from "./CampoLista";
-import { ConfigurarUsuarioModal } from "./ConfigurarUsuarioModal";
 
 export function ListaUsuarios() {
   const [users, setUsers] = useState<MongoUser[]>([]);
   const [selectedUser, setSelectedUser] = useState<MongoUser>();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   function fetchUsers() {
     axios
@@ -73,9 +58,6 @@ export function ListaUsuarios() {
               user={u}
               selectedUser={selectedUser}
               setSelectedUser={setSelectedUser}
-              isOpen={isOpen}
-              onClose={onClose}
-              onOpen={onOpen}
             />
           </Stack>
         ))}

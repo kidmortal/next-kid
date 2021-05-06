@@ -1,5 +1,4 @@
 import { Stack, Text } from "@chakra-ui/react";
-import { ConfigurarUsuarioModal } from "./ConfigurarUsuarioModal";
 import { ListaUsuarios } from "./ListaUsuarios";
 
 export function ConfigurarUsuarios() {
