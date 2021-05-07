@@ -19,8 +19,8 @@ export function NotificacoesCheckBox({
 }: NotificacoesCheckBoxProps) {
   const toast = useToast();
 
-  async function toastNotify(success: boolean) {
-    if (success) {
+  async function toastNotify(success) {
+    if (success === 1) {
       toast({
         title: "Notificação Atualizada",
         status: "success",
@@ -31,6 +31,7 @@ export function NotificacoesCheckBox({
     } else {
       toast({
         title: "Erro Ao Atualizar",
+        description: JSON.stringify(success),
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -47,7 +48,7 @@ export function NotificacoesCheckBox({
       active,
     });
     toastNotify(response.data);
-    if (response.data) {
+    if (response.data === 1) {
       let newMongoUser: MongoUser = {
         ...mongoUser,
       };
@@ -63,7 +64,7 @@ export function NotificacoesCheckBox({
       active,
     });
     toastNotify(response.data);
-    if (response.data) {
+    if (response.data === 1) {
       let newMongoUser: MongoUser = {
         ...mongoUser,
       };
@@ -79,7 +80,7 @@ export function NotificacoesCheckBox({
       active,
     });
     toastNotify(response.data);
-    if (response.data) {
+    if (response.data === 1) {
       let newMongoUser: MongoUser = {
         ...mongoUser,
       };
@@ -96,7 +97,7 @@ export function NotificacoesCheckBox({
       active,
     });
     toastNotify(response.data);
-    if (response.data) {
+    if (response.data === 1) {
       let newMongoUser: MongoUser = {
         ...mongoUser,
       };
@@ -112,7 +113,7 @@ export function NotificacoesCheckBox({
       active,
     });
     toastNotify(response.data);
-    if (response.data) {
+    if (response.data === 1) {
       let newMongoUser: MongoUser = {
         ...mongoUser,
       };

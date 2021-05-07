@@ -119,7 +119,6 @@ async function RelatorioDiarioNotification(
   const { active, email } = req.body;
   if (!email)
     return res.status(200).json({ erro: "Email do usuario não informado" });
-
   let Client = await connectToCachedDb();
   let filter = { email };
   let update = { $set: { "notificar.RELATORIO_DIARIO": !!active } };
