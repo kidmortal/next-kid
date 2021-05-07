@@ -1,3 +1,5 @@
+import { Button } from "@chakra-ui/button";
+import Icon from "@chakra-ui/icon";
 import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
@@ -5,6 +7,7 @@ import {
   GoogleLoginResponse,
   GoogleLogout,
 } from "react-google-login";
+import { FcGoogle } from "react-icons/fc";
 import { useAppContext } from "../../context/AppContext";
 
 export function GoogleLoginButton() {
@@ -46,6 +49,18 @@ export function GoogleLoginButton() {
         style={{ backgroundColor: "#4A5568", color: "#4A5568" }}
         clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
         onLogoutSuccess={googleLogoutSuccess}
+        render={(renderProps) => (
+          <Button
+            leftIcon={<Icon as={FcGoogle} />}
+            bg="gray.600"
+            _hover={{ bg: "gray.500" }}
+            _focus={{ border: "none" }}
+            variant="outline"
+            onClick={renderProps.onClick}
+          >
+            Sign Out
+          </Button>
+        )}
       ></GoogleLogout>
     );
 
@@ -53,12 +68,23 @@ export function GoogleLoginButton() {
     return (
       <GoogleLogin
         buttonText=""
-        style={{ backgroundColor: "#4A5568", color: "#4A5568" }}
         clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
         onSuccess={googleLoginSuccess}
         onFailure={googleLoginError}
         isSignedIn={true}
         cookiePolicy={"single_host_origin"}
+        render={(renderProps) => (
+          <Button
+            leftIcon={<Icon as={FcGoogle} />}
+            bg="gray.600"
+            _hover={{ bg: "gray.500" }}
+            _focus={{ border: "none" }}
+            variant="outline"
+            onClick={renderProps.onClick}
+          >
+            Sign In
+          </Button>
+        )}
       ></GoogleLogin>
     );
 }
