@@ -1,29 +1,37 @@
+import { IconButton } from "@chakra-ui/button";
 import { Checkbox } from "@chakra-ui/checkbox";
-import { Stack } from "@chakra-ui/layout";
+import Icon from "@chakra-ui/icon";
+import { BellIcon } from "@chakra-ui/icons";
+import { HStack, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import { useAppContext } from "../../context/AppContext";
+import { BiBell, BiBellOff } from "react-icons/bi";
 import { MongoUser } from "../../models/mongoUser";
 
-export function NotificacoesCheckBox() {
-  const { mongoUser, setMongoUser } = useAppContext();
+interface NotificacoesCheckBoxProps {
+  mongoUser: MongoUser;
+  setMongoUser: (user: MongoUser) => void;
+}
+
+export function NotificacoesCheckBox({
+  mongoUser,
+  setMongoUser,
+}: NotificacoesCheckBoxProps) {
   const toast = useToast();
 
   async function toastNotify(success: boolean) {
     if (success) {
       toast({
-        title: "Cadastrado Notificacao",
+        title: "Notificação Atualizada",
         status: "success",
-        description: "Sem data",
         duration: 5000,
         isClosable: true,
         position: "top-right",
       });
     } else {
       toast({
-        title: "Erro",
+        title: "Erro Ao Atualizar",
         status: "error",
-        description: "Sem data",
         duration: 5000,
         isClosable: true,
         position: "top-right",
@@ -114,37 +122,96 @@ export function NotificacoesCheckBox() {
   }
 
   return (
-    <Stack pl={6} mt={1} spacing={1}>
-      <Checkbox
-        isChecked={mongoUser?.notificar?.RELATORIO_DIARIO}
-        onChange={(e) => handleRelatorioDiario()}
-      >
-        Relatorio Diario
-      </Checkbox>
-      <Checkbox
-        isChecked={mongoUser?.notificar?.DATA_INCORRETA}
-        onChange={(e) => handleSemData()}
-      >
-        Pedido Concluido sem Data de Saida
-      </Checkbox>
-      <Checkbox
-        isChecked={mongoUser?.notificar?.SEM_CONDICAO}
-        onChange={(e) => handleSemCodicao()}
-      >
-        Pedido Concluido sem Condição de pagamento
-      </Checkbox>
-      <Checkbox
-        isChecked={mongoUser?.notificar?.CLIENTE_COM_PENDENCIA}
-        onChange={(e) => handleComPendencia()}
-      >
-        Pedido de Cliente Com pendencia
-      </Checkbox>
-      <Checkbox
-        isChecked={mongoUser?.notificar?.ERRO_SUSPEITO}
-        onChange={(e) => handleErroSuspeito()}
-      >
-        Pedido com Suspeita de Erro
-      </Checkbox>
+    <Stack>
+      <HStack>
+        <IconButton
+          variant="unstyled"
+          _hover={{ bg: "blue.600" }}
+          _focus={{ border: "none" }}
+          aria-label=""
+          icon={
+            mongoUser?.notificar?.RELATORIO_DIARIO ? (
+              <Icon as={BiBell} fontSize="x-large" color="green.400" />
+            ) : (
+              <Icon as={BiBellOff} fontSize="x-large" color="red.400" />
+            )
+          }
+          onClick={(e) => handleRelatorioDiario()}
+        />
+        <Text>Relatorio Diario</Text>
+      </HStack>
+      <HStack>
+        <IconButton
+          variant="unstyled"
+          _hover={{ bg: "blue.600" }}
+          _focus={{ border: "none" }}
+          aria-label=""
+          icon={
+            mongoUser?.notificar?.DATA_INCORRETA ? (
+              <Icon as={BiBell} fontSize="x-large" color="green.400" />
+            ) : (
+              <Icon as={BiBellOff} fontSize="x-large" color="red.400" />
+            )
+          }
+          onClick={(e) => handleSemData()}
+        />
+        <Text>Pedido Concluido sem Data de Saida</Text>
+      </HStack>
+      <HStack>
+        <IconButton
+          variant="unstyled"
+          _hover={{ bg: "blue.600" }}
+          _focus={{ border: "none" }}
+          aria-label=""
+          icon={
+            mongoUser?.notificar?.SEM_CONDICAO ? (
+              <Icon as={BiBell} fontSize="x-large" color="green.400" />
+            ) : (
+              <Icon as={BiBellOff} fontSize="x-large" color="red.400" />
+            )
+          }
+          onClick={(e) => handleSemCodicao()}
+        />
+
+        <Text>Pedido Concluido sem Condição de pagamento</Text>
+      </HStack>
+      <HStack>
+        <IconButton
+          variant="unstyled"
+          _hover={{ bg: "blue.600" }}
+          _focus={{ border: "none" }}
+          aria-label=""
+          icon={
+            mongoUser?.notificar?.CLIENTE_COM_PENDENCIA ? (
+              <Icon as={BiBell} fontSize="x-large" color="green.400" />
+            ) : (
+              <Icon as={BiBellOff} fontSize="x-large" color="red.400" />
+            )
+          }
+          onClick={(e) => handleComPendencia()}
+        />
+
+        <Text>Pedido de Cliente Com pendencia</Text>
+      </HStack>
+
+      <HStack>
+        <IconButton
+          variant="unstyled"
+          _hover={{ bg: "blue.600" }}
+          _focus={{ border: "none" }}
+          aria-label=""
+          icon={
+            mongoUser?.notificar?.ERRO_SUSPEITO ? (
+              <Icon as={BiBell} fontSize="x-large" color="green.400" />
+            ) : (
+              <Icon as={BiBellOff} fontSize="x-large" color="red.400" />
+            )
+          }
+          onClick={(e) => handleErroSuspeito()}
+        />
+
+        <Text>Pedido com Suspeita de Erro</Text>
+      </HStack>
     </Stack>
   );
 }

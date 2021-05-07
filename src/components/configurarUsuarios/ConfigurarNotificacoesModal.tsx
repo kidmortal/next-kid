@@ -1,7 +1,10 @@
 import {
+  Box,
   Button,
+  Checkbox,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -10,10 +13,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Stack,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { MongoUser } from "../../models/mongoUser";
+import { NotificacoesCheckBox } from "../configurarNotificacoes/NotificacoesCheckBox";
 
 interface ConfigurarNotificacoesProps {
   selectedUser: MongoUser;
@@ -32,27 +38,108 @@ export function ConfigurarNotificacoesModal({
 }: ConfigurarNotificacoesProps) {
   const toast = useToast();
 
-  function handleSave() {
-    axios
-      .post("/api/mongodb/usuarios", {
-        call: "updateUserById",
-        id: selectedUser._id,
-        ...selectedUser,
-      })
-      .then((response) => {
-        if (response) {
-          toast({
-            title: "Successo",
-            description: "Usuario foi alterado",
-            status: "success",
-            isClosable: true,
-            duration: 4000,
-            position: "top-right",
-          });
-          fetchUsers();
-          onClose();
-        }
+  async function toastNotify(success: boolean) {
+    if (success) {
+      toast({
+        title: "Cadastrado Notificacao",
+        status: "success",
+        description: "Sem data",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
       });
+    } else {
+      toast({
+        title: "Erro",
+        status: "error",
+        description: "Sem data",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
+  }
+
+  async function handleRelatorioDiario() {
+    let active = !selectedUser?.notificar.RELATORIO_DIARIO;
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "relatorioDiarioNotification",
+      email: selectedUser?.email,
+      active,
+    });
+    toastNotify(response.data);
+    if (response.data) {
+      let newMongoUser: MongoUser = {
+        ...selectedUser,
+      };
+      newMongoUser.notificar.RELATORIO_DIARIO = active;
+      setSelectedUser(newMongoUser);
+    }
+  }
+  async function handleSemData() {
+    let active = !selectedUser?.notificar.DATA_INCORRETA;
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "pedidoSemDataNotification",
+      email: selectedUser?.email,
+      active,
+    });
+    toastNotify(response.data);
+    if (response.data) {
+      let newMongoUser: MongoUser = {
+        ...selectedUser,
+      };
+      newMongoUser.notificar.DATA_INCORRETA = active;
+      setSelectedUser(newMongoUser);
+    }
+  }
+  async function handleSemCodicao() {
+    let active = !selectedUser?.notificar.SEM_CONDICAO;
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "pedidoSemCondicaoNotification",
+      email: selectedUser?.email,
+      active,
+    });
+    toastNotify(response.data);
+    if (response.data) {
+      let newMongoUser: MongoUser = {
+        ...selectedUser,
+      };
+      newMongoUser.notificar.SEM_CONDICAO = active;
+      setSelectedUser(newMongoUser);
+    }
+  }
+
+  async function handleComPendencia() {
+    let active = !selectedUser?.notificar.CLIENTE_COM_PENDENCIA;
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "pedidoSemCondicaoNotification",
+      email: selectedUser?.email,
+      active,
+    });
+    toastNotify(response.data);
+    if (response.data) {
+      let newMongoUser: MongoUser = {
+        ...selectedUser,
+      };
+      newMongoUser.notificar.CLIENTE_COM_PENDENCIA = active;
+      setSelectedUser(newMongoUser);
+    }
+  }
+  async function handleErroSuspeito() {
+    let active = !selectedUser?.notificar.ERRO_SUSPEITO;
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "pedidoSemCondicaoNotification",
+      email: selectedUser?.email,
+      active,
+    });
+    toastNotify(response.data);
+    if (response.data) {
+      let newMongoUser: MongoUser = {
+        ...selectedUser,
+      };
+      newMongoUser.notificar.ERRO_SUSPEITO = active;
+      setSelectedUser(newMongoUser);
+    }
   }
 
   return (
@@ -63,69 +150,11 @@ export function ConfigurarNotificacoesModal({
           <ModalHeader>Edit User Notifications</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>Nome</FormLabel>
-              <Input
-                placeholder="Nome"
-                type="text"
-                value={selectedUser?.nome}
-                onChange={(e) =>
-                  setSelectedUser({ ...selectedUser, nome: e.target.value })
-                }
-              />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type="email"
-                placeholder="Email"
-                value={selectedUser?.email}
-                onChange={(e) =>
-                  setSelectedUser({ ...selectedUser, email: e.target.value })
-                }
-              />
-            </FormControl>
-            <FormControl mt={4}>
-              <FormLabel>Celular</FormLabel>
-              <Input
-                type="tel"
-                placeholder="+5511992331232"
-                value={selectedUser?.celular}
-                onChange={(e) =>
-                  setSelectedUser({ ...selectedUser, celular: e.target.value })
-                }
-              />
-            </FormControl>
-            <FormControl mt={4}>
-              <FormLabel>Callmebot Key</FormLabel>
-              <Input
-                placeholder="key"
-                type="number"
-                value={selectedUser?.callmebotKey}
-                onChange={(e) =>
-                  setSelectedUser({
-                    ...selectedUser,
-                    callmebotKey: e.target.value,
-                  })
-                }
-              />
-            </FormControl>
+            <NotificacoesCheckBox
+              mongoUser={selectedUser}
+              setMongoUser={setSelectedUser}
+            />
           </ModalBody>
-
-          <ModalFooter justifyContent="space-between">
-            <Button colorScheme="blue" mr={3} onClick={handleSave}>
-              Save
-            </Button>
-            <Button
-              variant="outline"
-              bg="gray.600"
-              _hover={{ bg: "gray.500" }}
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

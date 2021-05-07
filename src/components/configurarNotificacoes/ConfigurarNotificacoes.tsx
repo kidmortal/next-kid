@@ -6,12 +6,12 @@ import { NotificacoesClientes } from "./NotificacoesClientes";
 import { NotificacoesDados } from "./NotificacoesDados";
 
 export function ConfigurarNotificacoes() {
-  const { mongoUser } = useAppContext();
+  const { mongoUser, setMongoUser } = useAppContext();
 
   return mongoUser?.apps?.NOTIFICACOES ? (
     <Stack justify="center" align="center" spacing={4}>
       <NotificacoesDados />
-      <NotificacoesCheckBox />
+      <NotificacoesCheckBox mongoUser={mongoUser} setMongoUser={setMongoUser} />
       <Text>Alteração de Status - SEPARADO</Text>
       <NotificacoesClientes />
     </Stack>
