@@ -37,7 +37,12 @@ export function ConfigurarInformacoesModal({
       .post("/api/mongodb/usuarios", {
         call: "updateUserById",
         id: selectedUser._id,
-        ...selectedUser,
+        props: {
+          nome: selectedUser.nome,
+          email: selectedUser.email,
+          celular: selectedUser.celular,
+          callmebotKey: selectedUser.callmebotKey,
+        },
       })
       .then((response) => {
         if (response) {

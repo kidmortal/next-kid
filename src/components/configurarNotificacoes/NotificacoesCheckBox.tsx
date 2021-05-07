@@ -43,9 +43,9 @@ export function NotificacoesCheckBox({
   async function handleRelatorioDiario() {
     let active = !mongoUser?.notificar.RELATORIO_DIARIO;
     let response = await axios.post("/api/mongodb/usuarios", {
-      call: "relatorioDiarioNotification",
-      email: mongoUser?.email,
-      active,
+      call: "updateUserById",
+      id: mongoUser._id,
+      props: { "notificar.RELATORIO_DIARIO": active },
     });
     toastNotify(response.data);
     if (response.data === 1) {
@@ -59,9 +59,9 @@ export function NotificacoesCheckBox({
   async function handleSemData() {
     let active = !mongoUser?.notificar.DATA_INCORRETA;
     let response = await axios.post("/api/mongodb/usuarios", {
-      call: "pedidoSemDataNotification",
-      email: mongoUser?.email,
-      active,
+      call: "updateUserById",
+      id: mongoUser._id,
+      props: { "notificar.DATA_INCORRETA": active },
     });
     toastNotify(response.data);
     if (response.data === 1) {
@@ -75,9 +75,9 @@ export function NotificacoesCheckBox({
   async function handleSemCodicao() {
     let active = !mongoUser?.notificar.SEM_CONDICAO;
     let response = await axios.post("/api/mongodb/usuarios", {
-      call: "pedidoSemCondicaoNotification",
-      email: mongoUser?.email,
-      active,
+      call: "updateUserById",
+      id: mongoUser._id,
+      props: { "notificar.SEM_CONDICAO": active },
     });
     toastNotify(response.data);
     if (response.data === 1) {
@@ -92,9 +92,9 @@ export function NotificacoesCheckBox({
   async function handleComPendencia() {
     let active = !mongoUser?.notificar.CLIENTE_COM_PENDENCIA;
     let response = await axios.post("/api/mongodb/usuarios", {
-      call: "pedidoSemCondicaoNotification",
-      email: mongoUser?.email,
-      active,
+      call: "updateUserById",
+      id: mongoUser._id,
+      props: { "notificar.CLIENTE_COM_PENDENCIA": active },
     });
     toastNotify(response.data);
     if (response.data === 1) {
@@ -108,9 +108,9 @@ export function NotificacoesCheckBox({
   async function handleErroSuspeito() {
     let active = !mongoUser?.notificar.ERRO_SUSPEITO;
     let response = await axios.post("/api/mongodb/usuarios", {
-      call: "pedidoSemCondicaoNotification",
-      email: mongoUser?.email,
-      active,
+      call: "updateUserById",
+      id: mongoUser._id,
+      props: { "notificar.ERRO_SUSPEITO": active },
     });
     toastNotify(response.data);
     if (response.data === 1) {
