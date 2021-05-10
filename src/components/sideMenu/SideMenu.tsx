@@ -92,7 +92,7 @@ export function SideMenu() {
                 </Link>
                 <Link href="/funcoesadministrativas">
                   <MenuButton
-                    disabled={!mongoUser?.apps?.USUARIOS}
+                    disabled={!mongoUser?.apps?.FUNCOES_ADMINISTRATIVAS}
                     leftIcon={<Icon as={RiUserSettingsLine} color="blue.100" />}
                   >
                     Funçoes Administrativas
