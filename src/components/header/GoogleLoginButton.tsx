@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/button";
+import { Button, ButtonProps } from "@chakra-ui/button";
 import Icon from "@chakra-ui/icon";
 import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -24,10 +24,12 @@ export function GoogleLoginButton() {
 
   async function googleLoginSuccess(response: GoogleLoginResponse) {
     let googleUser = response.profileObj;
+
     if (googleUser) {
       let mongoUser = await getMongoUser(googleUser.email);
       setGoogleUser(googleUser);
       setMongoUser(mongoUser);
+
       console.log(googleUser);
       console.log(mongoUser);
     }
