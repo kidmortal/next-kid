@@ -5,7 +5,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { email } = req.body;
   if (!email) return res.status(200).json({ erro: "Usuario não possui email" });
   await axios.get(
-    `http://localhost:3333/syncContas?key=${process.env.API_KEY}&email=${email}`
+    `${process.env.API_URL}/syncContas?key=${process.env.API_KEY}&email=${email}`
   );
   res
     .status(200)
