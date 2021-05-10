@@ -9,7 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     .json(
       "Solicitado com sucesso, você ira receber em breve uma notificação no WhatsApp"
     );
-  await axios.get(
+  axios.get(
     `${process.env.API_URL}/syncContas?key=${process.env.API_KEY}&email=${email}`
   );
 };
