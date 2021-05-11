@@ -13,10 +13,11 @@ import {
   Icon,
   HStack,
 } from "@chakra-ui/react";
-
+import { Router } from "next/router";
 import { RiUserSettingsLine, RiWhatsappLine } from "react-icons/ri";
 import { BsCardHeading } from "react-icons/bs";
 import { GoGraph } from "react-icons/go";
+import { TiArrowShuffle } from "react-icons/ti";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import Link from "next/link";
 import { useState } from "react";
@@ -26,10 +27,15 @@ import { MenuButton } from "./MenuButton";
 export function SideMenu() {
   const { googleUser, mongoUser } = useAppContext();
   const [isOpen, setIsOpen] = useState(false);
+
+  Router.events.on("routeChangeComplete", (url) => {
+    setIsOpen(false);
+  });
+
   return (
     <>
       <Button
-        disabled={!!!googleUser}
+        disabled={!googleUser}
         bg="gray.500"
         _hover={{ bg: "gray.400" }}
         onClick={() => setIsOpen(!isOpen)}
@@ -63,6 +69,14 @@ export function SideMenu() {
                     leftIcon={<Icon as={GoGraph} color="blue.100" />}
                   >
                     Relatorio Vendas
+                  </MenuButton>
+                </Link>
+                <Link href="/fluxocaixa">
+                  <MenuButton
+                    disabled={!mongoUser?.apps?.CHEQUE_DEVOLVIDO}
+                    leftIcon={<Icon as={TiArrowShuffle} color="blue.100" />}
+                  >
+                    Fluxo de Caixa
                   </MenuButton>
                 </Link>
                 <Link href="/chequedevolvido">
