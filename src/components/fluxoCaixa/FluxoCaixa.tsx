@@ -68,10 +68,7 @@ export function FluxoCaixa() {
   }, 0);
   const totalCheques = contas.reduce((acc, conta) => {
     if (conta.tipo === "CHEQUE") {
-      if (
-        conta.dataFormat.valueOf() > inicioFormat.valueOf() &&
-        conta.dataFormat.valueOf() < finalFormat.valueOf()
-      ) {
+      if (conta.dataFormat.valueOf() < finalFormat.valueOf()) {
         return acc + conta.valor;
       }
     }
