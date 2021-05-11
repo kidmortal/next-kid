@@ -9,6 +9,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import {
   RiArrowRightUpLine,
@@ -38,9 +39,9 @@ function formatDate(data: string) {
 
 export function FluxoCaixa() {
   const { googleUser } = useAppContext();
-  const [inicio, setInicio] = useState("");
+  const [inicio, setInicio] = useState(format(new Date(), "yyyy-MM-dd"));
   const inicioFormat = formatDate(inicio);
-  const [final, setFinal] = useState("");
+  const [final, setFinal] = useState(format(new Date(), "yyyy-MM-dd"));
   const finalFormat = formatDate(final);
   const [contas, setContas] = useState<MongoConta[]>([]);
   const totalPagar = contas.reduce((acc, conta) => {
@@ -80,11 +81,6 @@ export function FluxoCaixa() {
   useEffect(() => {
     fetchContas();
   }, []);
-
-  useEffect(() => {
-    let data = new Date(inicio);
-    let testData = new Date("17/05/2021");
-  }, [inicio]);
 
   return (
     <Stack justify="center" align="center">
