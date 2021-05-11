@@ -66,7 +66,18 @@ export function FluxoCaixa() {
     }
     return acc;
   }, 0);
-  const balance = totalReceber - totalPagar;
+  const totalCheques = contas.reduce((acc, conta) => {
+    if (conta.tipo === "CHEQUE") {
+      if (
+        conta.dataFormat.valueOf() > inicioFormat.valueOf() &&
+        conta.dataFormat.valueOf() < finalFormat.valueOf()
+      ) {
+        return acc + conta.valor;
+      }
+    }
+    return acc;
+  }, 0);
+  const balance = totalReceber + totalCheques - totalPagar;
 
   async function fetchContas() {
     let response = await axios.post<MongoConta[]>("/api/mongodb/contas", {
@@ -108,7 +119,11 @@ export function FluxoCaixa() {
       <Stack>
         <Tag size="lg" variant="outline" colorScheme="blue">
           <TagLeftIcon fontSize="large" as={RiArrowRightUpLine} />
-          <TagLabel>Receber: {formatter.format(totalReceber)}</TagLabel>
+          <TagLabel>Boletos: {formatter.format(totalReceber)}</TagLabel>
+        </Tag>
+        <Tag size="lg" variant="outline" colorScheme="blue">
+          <TagLeftIcon fontSize="large" as={RiArrowRightUpLine} />
+          <TagLabel>Cheques: {formatter.format(totalCheques)}</TagLabel>
         </Tag>
         <Tag size="lg" variant="outline" colorScheme="red">
           <TagLeftIcon fontSize="large" as={RiArrowRightDownLine} />
