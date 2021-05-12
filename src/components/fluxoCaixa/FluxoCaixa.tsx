@@ -7,9 +7,11 @@ import {
   TagRightIcon,
   TagLeftIcon,
   HStack,
+  Button,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { format } from "date-fns";
+import { isBefore } from "date-fns";
 import { useEffect, useState } from "react";
 import {
   RiArrowRightUpLine,
@@ -33,7 +35,7 @@ function formatDateString(data: string) {
 function formatDate(data: string) {
   let format = new Date(data);
   format.setDate(format.getDate() + 1);
-  format.setMonth(format.getMonth() + 1);
+  format.setMonth(format.getMonth());
   return format;
 }
 
@@ -68,7 +70,7 @@ export function FluxoCaixa() {
   }, 0);
   const totalCheques = contas.reduce((acc, conta) => {
     if (conta.tipo === "CHEQUE") {
-      if (conta.dataFormat.valueOf() < finalFormat.valueOf()) {
+      if (isBefore(conta.dataFormat, finalFormat)) {
         return acc + conta.valor;
       }
     }
