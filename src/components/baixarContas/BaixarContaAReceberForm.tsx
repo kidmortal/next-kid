@@ -165,7 +165,7 @@ export function BaixarContaAReceberForm() {
     if (response.data.faultstring) {
       toast({
         position: "top-right",
-        title: `NF ${conta.nota} Erro`,
+        title: `NF ${conta.nota} Erro no omie`,
         description: JSON.stringify(response.data.faultstring),
         status: "error",
         duration: 4000,
@@ -173,6 +173,16 @@ export function BaixarContaAReceberForm() {
       });
       return null;
     }
+
+    toast({
+      position: "top-right",
+      title: `NF ${conta.nota} Erro Desconhecido`,
+      description: JSON.stringify(response.data),
+      status: "error",
+      duration: 4000,
+      isClosable: true,
+    });
+    return null;
   }
 
   return (
