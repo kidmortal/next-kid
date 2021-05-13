@@ -11,6 +11,7 @@ import {
 import { MongoUser } from "../../models/mongoUser";
 import { ButtonsUsuario } from "./ButtonsUsuario";
 import { CampoLista } from "./CampoLista";
+import { Usuario } from "./Usuario";
 
 export function ListaUsuarios() {
   const [users, setUsers] = useState<MongoUser[]>([]);
@@ -33,27 +34,7 @@ export function ListaUsuarios() {
     <Stack>
       <SimpleGrid columns={[1, 1, 2]}>
         {users.map((u) => (
-          <Stack padding={10}>
-            <Box>
-              <CampoLista
-                icon={AiOutlineUser}
-                name={"Usuario"}
-                value={u.nome}
-              />
-              <CampoLista icon={AiOutlineMail} name={"Email"} value={u.email} />
-              <CampoLista
-                icon={AiOutlineMobile}
-                name={"Celular"}
-                value={u.celular}
-              />
-              <CampoLista
-                icon={AiOutlineAliwangwang}
-                name={"Chave"}
-                value={u.callmebotKey}
-              />
-            </Box>
-            <ButtonsUsuario fetchUsers={fetchUsers} user={u} />
-          </Stack>
+          <Usuario user={u} fetchUsers={fetchUsers} />
         ))}
       </SimpleGrid>
     </Stack>

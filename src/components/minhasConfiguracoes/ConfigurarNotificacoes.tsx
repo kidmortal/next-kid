@@ -7,6 +7,7 @@ import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { BiBell, BiBellOff } from "react-icons/bi";
 import { MongoUser } from "../../models/mongoUser";
+import { ConfigurarNotificacoesHeader } from "./ConfigurarNotificacoesHeader";
 
 interface ConfigurarNotificacoesProps {
   mongoUser: MongoUser;
@@ -45,7 +46,7 @@ export function ConfigurarNotificacoes({
     let response = await axios.post("/api/mongodb/usuarios", {
       call: "updateUserById",
       id: mongoUser._id,
-      props: { "notificar.RELATORIO_DIARIO": active },
+      props: { $set: { "notificar.RELATORIO_DIARIO": active } },
     });
     toastNotify(response.data);
     if (response.data === 1) {
@@ -61,7 +62,7 @@ export function ConfigurarNotificacoes({
     let response = await axios.post("/api/mongodb/usuarios", {
       call: "updateUserById",
       id: mongoUser._id,
-      props: { "notificar.DATA_INCORRETA": active },
+      props: { $set: { "notificar.DATA_INCORRETA": active } },
     });
     toastNotify(response.data);
     if (response.data === 1) {
@@ -77,7 +78,7 @@ export function ConfigurarNotificacoes({
     let response = await axios.post("/api/mongodb/usuarios", {
       call: "updateUserById",
       id: mongoUser._id,
-      props: { "notificar.SEM_CONDICAO": active },
+      props: { $set: { "notificar.SEM_CONDICAO": active } },
     });
     toastNotify(response.data);
     if (response.data === 1) {
@@ -94,7 +95,7 @@ export function ConfigurarNotificacoes({
     let response = await axios.post("/api/mongodb/usuarios", {
       call: "updateUserById",
       id: mongoUser._id,
-      props: { "notificar.CLIENTE_COM_PENDENCIA": active },
+      props: { $set: { "notificar.CLIENTE_COM_PENDENCIA": active } },
     });
     toastNotify(response.data);
     if (response.data === 1) {
@@ -110,7 +111,7 @@ export function ConfigurarNotificacoes({
     let response = await axios.post("/api/mongodb/usuarios", {
       call: "updateUserById",
       id: mongoUser._id,
-      props: { "notificar.ERRO_SUSPEITO": active },
+      props: { $set: { "notificar.ERRO_SUSPEITO": active } },
     });
     toastNotify(response.data);
     if (response.data === 1) {
@@ -124,6 +125,7 @@ export function ConfigurarNotificacoes({
 
   return (
     <Stack>
+      <ConfigurarNotificacoesHeader />
       <HStack>
         <IconButton
           variant="unstyled"

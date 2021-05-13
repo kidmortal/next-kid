@@ -68,7 +68,7 @@ export function GoogleLoginButton() {
             leftIcon={<Icon as={FcGoogle} />}
             bg="gray.600"
             _hover={{ bg: "gray.500" }}
-            _focus={{ border: "none" }}
+            _focus={{ border: "none", bg: "gray.500" }}
             variant="outline"
             onClick={renderProps.onClick}
           >

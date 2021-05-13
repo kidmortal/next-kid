@@ -14,8 +14,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { Router } from "next/router";
-import { RiUserSettingsLine, RiWhatsappLine } from "react-icons/ri";
-import { BsCardHeading } from "react-icons/bs";
+import { RiUserSettingsLine, RiListSettingsLine } from "react-icons/ri";
 import { GoGraph } from "react-icons/go";
 import { TiArrowShuffle } from "react-icons/ti";
 import { VscSettingsGear } from "react-icons/vsc";
@@ -99,7 +98,7 @@ export function SideMenu() {
                 <Link href="/funcoesadministrativas">
                   <MenuButton
                     disabled={!mongoUser?.apps?.FUNCOES_ADMINISTRATIVAS}
-                    leftIcon={<Icon as={RiUserSettingsLine} color="blue.100" />}
+                    leftIcon={<Icon as={RiListSettingsLine} color="blue.100" />}
                   >
                     Funçoes Administrativas
                   </MenuButton>
