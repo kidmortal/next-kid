@@ -1,6 +1,7 @@
 import { useState, ReactNode, useContext, useEffect } from "react";
 import { createContext } from "react";
 import { GoogleUser } from "../models/googleUser";
+import { MongoEmpresa } from "../models/mongoEmpresa";
 import { MongoUser } from "../models/mongoUser";
 
 export type baixaResponse = {
@@ -30,6 +31,8 @@ type appContextType = {
   setGoogleUser: (user: GoogleUser) => void;
   mongoUser: MongoUser;
   setMongoUser: (user: MongoUser) => void;
+  mongoEmpresa: MongoEmpresa;
+  setMongoEmpresa: (user: MongoEmpresa) => void;
   baixas: BaixaProps[];
   addBaixa: (baixa: BaixaProps) => void;
   removeBaixa: (baixa: BaixaProps) => void;
@@ -41,6 +44,8 @@ const appContextDefaultValues: appContextType = {
   setGoogleUser: () => {},
   mongoUser: null,
   setMongoUser: () => {},
+  mongoEmpresa: null,
+  setMongoEmpresa: () => {},
   baixas: null,
   addBaixa: () => {},
   removeBaixa: () => {},
@@ -56,12 +61,15 @@ const AppContext = createContext<appContextType>(appContextDefaultValues);
 export function AppContextProvider({ children }: Props) {
   const [googleUser, setGoogleUser] = useState<GoogleUser>();
   const [mongoUser, setMongoUser] = useState<MongoUser>();
+  const [mongoEmpresa, setMongoEmpresa] = useState<MongoEmpresa>();
   const [baixas, setBaixas] = useState<BaixaProps[]>([]);
   const value = {
     googleUser,
     setGoogleUser,
     mongoUser,
     setMongoUser,
+    mongoEmpresa,
+    setMongoEmpresa,
     baixas,
     addBaixa,
     removeBaixa,

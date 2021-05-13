@@ -24,6 +24,7 @@ export interface MongoUser {
   apps?: Apps;
   celular?: string;
   email?: string;
+  empresa?: string;
   callmebotKey?: string;
   __v?: number;
 }

@@ -9,22 +9,26 @@ import {
 } from "react-google-login";
 import { FcGoogle } from "react-icons/fc";
 import { useAppContext } from "../../context/AppContext";
+import { MongoEmpresa } from "../../models/mongoEmpresa";
+import { MongoUser } from "../../models/mongoUser";
 
 export function GoogleLoginButton() {
-  const { googleUser, setGoogleUser, setMongoUser } = useAppContext();
+  const { googleUser, setGoogleUser, setMongoUser, setMongoEmpresa } =
+    useAppContext();
 
   async function getMongoUser(email: string) {
     let call = "getUserByEmail";
-    let { data } = await axios.post(`/api/mongodb/usuarios`, {
+    let { data } = await axios.post<MongoUser>(`/api/mongodb/usuarios`, {
       call,
       email,
     });
     return data;
   }
 
-  async function getEmpresa(empresa: string) {
-    let { data } = await axios.post(`/api/mongodb/empresas`, {
-      empresa,
+  async function getMongoEmpresa(nome: string) {
+    let { data } = await axios.post<MongoEmpresa>(`/api/mongodb/empresas`, {
+      call: "getEmpresa",
+      props: { nome },
     });
     return data;
   }
@@ -34,17 +38,18 @@ export function GoogleLoginButton() {
 
     if (googleUser) {
       let mongoUser = await getMongoUser(googleUser.email);
+      let mongoEmpresa = await getMongoEmpresa(mongoUser.empresa);
+
       setGoogleUser(googleUser);
       setMongoUser(mongoUser);
-
-      console.log(googleUser);
-      console.log(mongoUser);
+      setMongoEmpresa(mongoEmpresa);
     }
   }
 
   function googleLogoutSuccess() {
     setGoogleUser(null);
     setMongoUser(null);
+    setMongoEmpresa(null);
   }
 
   function googleLoginError(response: GoogleLoginResponse) {
