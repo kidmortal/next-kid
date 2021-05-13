@@ -57,7 +57,7 @@ async function UpdateUserById(req: NextApiRequest, res: NextApiResponse) {
   let options = { upsert: true, returnOriginal: false };
   let response = await Client.db()
     .collection("usuarios")
-    .findOneAndUpdate(filter, { $set: props }, options);
+    .findOneAndUpdate(filter, props, options);
   res.status(200).json(response.ok);
 }
 

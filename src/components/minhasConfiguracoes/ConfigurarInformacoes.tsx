@@ -53,10 +53,12 @@ export function ConfigurarInformacoes({
         call: "updateUserById",
         id: mongoUser._id,
         props: {
-          nome: nome,
-          email: email,
-          celular: celular,
-          callmebotKey: callmebotkey,
+          $set: {
+            nome: nome,
+            email: email,
+            celular: celular,
+            callmebotKey: callmebotkey,
+          },
         },
       })
       .then((response) => {

@@ -18,6 +18,7 @@ import { RiUserSettingsLine, RiWhatsappLine } from "react-icons/ri";
 import { BsCardHeading } from "react-icons/bs";
 import { GoGraph } from "react-icons/go";
 import { TiArrowShuffle } from "react-icons/ti";
+import { VscSettingsGear } from "react-icons/vsc";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import Link from "next/link";
 import { useState } from "react";
@@ -90,8 +91,7 @@ export function SideMenu() {
                 <Link href="/minhasconfiguracoes">
                   <MenuButton
                     disabled={!mongoUser?.apps?.NOTIFICACOES}
-                    leftIcon={<BellIcon color="blue.100" />}
-                    rightIcon={<Icon as={RiWhatsappLine} color="green.200" />}
+                    leftIcon={<Icon as={VscSettingsGear} color="blue.100" />}
                   >
                     Minhas Configuracoes
                   </MenuButton>

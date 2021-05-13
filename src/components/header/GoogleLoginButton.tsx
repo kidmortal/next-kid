@@ -17,10 +17,10 @@ export function GoogleLoginButton() {
     useAppContext();
 
   async function getMongoUser(email: string) {
-    let call = "getUserByEmail";
+    let call = "getOneUser";
     let { data } = await axios.post<MongoUser>(`/api/mongodb/usuarios`, {
       call,
-      email,
+      props: { email },
     });
     return data;
   }

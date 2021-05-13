@@ -38,17 +38,10 @@ export function ConfigurarSeparado({
 
   const toast = useToast();
 
-  async function handleAddCliente() {
-    setLoading(true);
-    let response = await axios.post("/api/mongodb/usuarios", {
-      call: "addNewNotificationClient",
-      name: cliente,
-      email: mongoUser?.email,
-    });
+  async function successMessage(response) {
     if (response.data) {
       let newMongoUser = { ...mongoUser };
       newMongoUser.notificar?.SEPARADO?.push(cliente);
-      fetchUsers();
       toast({
         title: "Cadastrado Notificacao",
         status: "success",
@@ -71,38 +64,30 @@ export function ConfigurarSeparado({
       setLoading(false);
     }
   }
+
+  async function handleAddCliente() {
+    setLoading(true);
+    let response = await axios.post("/api/mongodb/usuarios", {
+      call: "updateUserById",
+      id: mongoUser._id,
+      props: {
+        $push: { "notificar.SEPARADO": cliente },
+      },
+    });
+    if (response.data) fetchUsers();
+    successMessage(response);
+  }
   async function handleRemoveCliente(cliente: string) {
     let response = await axios.post("/api/mongodb/usuarios", {
-      call: "removeNotificationClient",
-      name: cliente,
-      email: mongoUser?.email,
+      call: "updateUserById",
+      id: mongoUser._id,
+      props: {
+        $pull: { "notificar.SEPARADO": cliente },
+      },
     });
 
-    if (response.data) {
-      let newMongoUser = { ...mongoUser };
-      let index = newMongoUser.notificar?.SEPARADO?.findIndex(
-        (c) => c === cliente
-      );
-      if (index >= 0) newMongoUser.notificar?.SEPARADO?.splice(index, 1);
-      fetchUsers();
-      toast({
-        title: "Removido Notificacao",
-        status: "info",
-        description: cliente,
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
-    } else {
-      toast({
-        title: "Erro",
-        status: "error",
-        description: cliente,
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
-    }
+    if (response.data) fetchUsers();
+    successMessage(response);
   }
 
   return (
