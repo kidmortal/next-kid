@@ -50,7 +50,7 @@ export function ConfigurarNotificacoesModal({
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.600">
-          <ModalHeader>Edit User Notifications</ModalHeader>
+          <ModalHeader>Editar notificacoes</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <ConfigurarNotificacoes

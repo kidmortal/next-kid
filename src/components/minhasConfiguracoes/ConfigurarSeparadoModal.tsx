@@ -122,7 +122,9 @@ export function ConfigurarSeparadoModal({
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.600">
-          <ModalHeader>Edit User Informations</ModalHeader>
+          <ModalHeader>
+            Escolher pedidos para notificar quando separado
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <ConfigurarSeparado mongoUser={mongoUser} fetchUsers={fetchUsers} />

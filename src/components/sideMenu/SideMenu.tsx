@@ -66,7 +66,7 @@ export function SideMenu() {
                 </Link>
                 <Link href="/relatoriovendas">
                   <MenuButton
-                    disabled={!mongoUser?.apps?.CHEQUE_DEVOLVIDO}
+                    disabled={!mongoUser?.apps?.NOTIFICACOES}
                     leftIcon={<Icon as={GoGraph} color="blue.100" />}
                   >
                     Relatorio Vendas
@@ -74,18 +74,10 @@ export function SideMenu() {
                 </Link>
                 <Link href="/fluxocaixa">
                   <MenuButton
-                    disabled={!mongoUser?.apps?.CHEQUE_DEVOLVIDO}
+                    disabled={!mongoUser?.apps?.USUARIOS}
                     leftIcon={<Icon as={TiArrowShuffle} color="blue.100" />}
                   >
                     Fluxo de Caixa
-                  </MenuButton>
-                </Link>
-                <Link href="/chequedevolvido">
-                  <MenuButton
-                    disabled={!mongoUser?.apps?.CHEQUE_DEVOLVIDO}
-                    leftIcon={<Icon as={BsCardHeading} color="blue.100" />}
-                  >
-                    Cheque Devolvido
                   </MenuButton>
                 </Link>
                 <Link href="/minhasconfiguracoes">

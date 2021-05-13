@@ -46,7 +46,7 @@ export function ConfigurarInformacoesModal({
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.600">
-          <ModalHeader>Edit User Informations</ModalHeader>
+          <ModalHeader>Editar informacoes</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <ConfigurarInformacoes
