@@ -1,6 +1,7 @@
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  DeleteIcon,
   RepeatClockIcon,
 } from "@chakra-ui/icons";
 import {
@@ -81,9 +82,23 @@ export function BaixasRealizadasTable() {
           icon={<ChevronLeftIcon />}
           onClick={() => handlePreviousPage()}
         />
-        <Text>
-          Pagina {page} / {Math.floor(baixas?.length / 5 + 1)}
-        </Text>
+        <HStack>
+          <Text>
+            Pagina {page} / {Math.floor(baixas?.length / 5 + 1)}
+          </Text>
+          <Tooltip label="Deletar todo historico">
+            <IconButton
+              variant="unstyled"
+              onClick={() => {
+                setBaixas([]);
+              }}
+              aria-label="Delete all"
+              color="red.600"
+              _hover={{ color: "red.500" }}
+              icon={<DeleteIcon />}
+            />
+          </Tooltip>
+        </HStack>
         <IconButton
           size="sm"
           fontSize="larger"
