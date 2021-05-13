@@ -40,18 +40,12 @@ export function ConfigurarNotificacoesModal({
     <>
       <IconButton
         variant="solid"
-        bg="yellow.600"
-        _hover={{ bg: "yellow.500" }}
+        bg="yellow.500"
+        _hover={{ bg: "yellow.400" }}
         _focus={{ border: "none" }}
         aria-label="Manage Notifs"
         onClick={onOpen}
-        icon={
-          <Icon
-            color="green.200"
-            fontSize="x-large"
-            as={AiOutlineClockCircle}
-          />
-        }
+        icon={<Icon fontSize="x-large" as={AiOutlineClockCircle} />}
       />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

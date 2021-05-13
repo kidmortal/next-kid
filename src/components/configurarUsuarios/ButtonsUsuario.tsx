@@ -15,6 +15,7 @@ import { ConfigurarNotificacoesModal } from "../minhasConfiguracoes/ConfigurarNo
 import { ConfigurarAppsModal } from "./ConfigurarAppsModal";
 import { SendWhatsAppMessage } from "../misc/SendWhatsAppMessage";
 import { ConfigurarSeparadoModal } from "../minhasConfiguracoes/ConfigurarSeparadoModal";
+import { ConfigurarExcecoesBloqueioModal } from "../minhasConfiguracoes/ConfigurarExcecoesBloqueioModal";
 
 interface ButtonsUsuarioProps {
   user: MongoUser;
@@ -28,6 +29,10 @@ export function ButtonsUsuario({ user, fetchUsers }: ButtonsUsuarioProps) {
       <ConfigurarAppsModal mongoUser={user} fetchUsers={fetchUsers} />
       <ConfigurarNotificacoesModal mongoUser={user} fetchUsers={fetchUsers} />
       <ConfigurarSeparadoModal mongoUser={user} fetchUsers={fetchUsers} />
+      <ConfigurarExcecoesBloqueioModal
+        mongoUser={user}
+        fetchUsers={fetchUsers}
+      />
       <SendWhatsAppMessage user={user} />
     </ButtonGroup>
   );

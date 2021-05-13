@@ -5,6 +5,7 @@ import { useAppContext } from "../../context/AppContext";
 import { MongoUser } from "../../models/mongoUser";
 import { ConfigurarAppsModal } from "../configurarUsuarios/ConfigurarAppsModal";
 import { SendWhatsAppMessage } from "../misc/SendWhatsAppMessage";
+import { ConfigurarExcecoesBloqueioModal } from "./ConfigurarExcecoesBloqueioModal";
 import { ConfigurarInformacoesModal } from "./ConfigurarInformacoesModal";
 import { ConfigurarNotificacoesModal } from "./ConfigurarNotificacoesModal";
 import { ConfigurarSeparadoModal } from "./ConfigurarSeparadoModal";
@@ -35,6 +36,10 @@ export function MinhasConfiguracoes() {
           fetchUsers={fetchUser}
         />
         <ConfigurarSeparadoModal mongoUser={mongoUser} fetchUsers={fetchUser} />
+        <ConfigurarExcecoesBloqueioModal
+          mongoUser={mongoUser}
+          fetchUsers={fetchUser}
+        />
         <SendWhatsAppMessage user={mongoUser} />
       </HStack>
     </Stack>

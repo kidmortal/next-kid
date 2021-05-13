@@ -26,5 +26,6 @@ export interface MongoUser {
   email?: string;
   empresa?: string;
   callmebotKey?: string;
+  pedidos_pre_autorizados: string[];
   __v?: number;
 }
