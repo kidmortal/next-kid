@@ -87,13 +87,13 @@ export function SideMenu() {
                     Cheque Devolvido
                   </MenuButton>
                 </Link>
-                <Link href="/configurarnotificacoes">
+                <Link href="/minhasconfiguracoes">
                   <MenuButton
                     disabled={!mongoUser?.apps?.NOTIFICACOES}
                     leftIcon={<BellIcon color="blue.100" />}
                     rightIcon={<Icon as={RiWhatsappLine} color="green.200" />}
                   >
-                    Configurar Notificacoes
+                    Minhas Configuracoes
                   </MenuButton>
                 </Link>
                 <Link href="/configurarusuarios">

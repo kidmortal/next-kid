@@ -14,7 +14,6 @@ import { CampoLista } from "./CampoLista";
 
 export function ListaUsuarios() {
   const [users, setUsers] = useState<MongoUser[]>([]);
-  const [selectedUser, setSelectedUser] = useState<MongoUser>();
 
   function fetchUsers() {
     axios
@@ -53,12 +52,7 @@ export function ListaUsuarios() {
                 value={u.callmebotKey}
               />
             </Box>
-            <ButtonsUsuario
-              fetchUsers={fetchUsers}
-              user={u}
-              selectedUser={selectedUser}
-              setSelectedUser={setSelectedUser}
-            />
+            <ButtonsUsuario fetchUsers={fetchUsers} user={u} />
           </Stack>
         ))}
       </SimpleGrid>

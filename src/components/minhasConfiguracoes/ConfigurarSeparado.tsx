@@ -7,6 +7,16 @@ import {
   HStack,
   useToast,
   Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+  Icon,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useAppContext } from "../../context/AppContext";
@@ -14,8 +24,15 @@ import { useState } from "react";
 import axios from "axios";
 import { MongoUser } from "../../models/mongoUser";
 
-export function NotificacoesClientes() {
-  const { mongoUser, setMongoUser } = useAppContext();
+interface ConfigurarSeparadoProps {
+  mongoUser: MongoUser;
+  fetchUsers: () => void;
+}
+
+export function ConfigurarSeparado({
+  mongoUser,
+  fetchUsers,
+}: ConfigurarSeparadoProps) {
   const [loading, setLoading] = useState(false);
   const [cliente, setCliente] = useState("");
 
@@ -31,7 +48,7 @@ export function NotificacoesClientes() {
     if (response.data) {
       let newMongoUser = { ...mongoUser };
       newMongoUser.notificar?.SEPARADO?.push(cliente);
-      setMongoUser(newMongoUser);
+      fetchUsers();
       toast({
         title: "Cadastrado Notificacao",
         status: "success",
@@ -67,7 +84,7 @@ export function NotificacoesClientes() {
         (c) => c === cliente
       );
       if (index >= 0) newMongoUser.notificar?.SEPARADO?.splice(index, 1);
-      setMongoUser(newMongoUser);
+      fetchUsers();
       toast({
         title: "Removido Notificacao",
         status: "info",
@@ -107,7 +124,7 @@ export function NotificacoesClientes() {
         />
       </HStack>
       <List spacing={3}>
-        {mongoUser?.notificar.SEPARADO.map((cliente) => (
+        {mongoUser?.notificar?.SEPARADO?.map((cliente) => (
           <ListItem key={cliente}>
             <Text fontSize="small" as="span">
               {cliente}

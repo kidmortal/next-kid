@@ -15,6 +15,7 @@ import {
   ModalOverlay,
   Stack,
   Text,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -22,21 +23,16 @@ import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import { MongoUser } from "../../models/mongoUser";
 
 interface ConfigurarAppsProps {
-  selectedUser: MongoUser;
-  setSelectedUser: (user: MongoUser) => void;
-  isOpen: boolean;
-  onClose: () => void;
+  mongoUser: MongoUser;
   fetchUsers: () => void;
 }
 
 export function ConfigurarAppsModal({
-  selectedUser,
-  setSelectedUser,
-  isOpen,
-  onClose,
+  mongoUser,
   fetchUsers,
 }: ConfigurarAppsProps) {
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   async function toastNotify(success) {
     if (success === 1) {
@@ -60,73 +56,88 @@ export function ConfigurarAppsModal({
   }
 
   async function handleBaixarContas() {
-    let active = !selectedUser?.apps.BAIXAR_CONTAS;
+    let active = !mongoUser?.apps.BAIXAR_CONTAS;
     let response = await axios.post("/api/mongodb/usuarios", {
       call: "updateUserById",
-      id: selectedUser._id,
+      id: mongoUser._id,
       props: { "apps.BAIXAR_CONTAS": active },
     });
     toastNotify(response.data);
     if (response.data === 1) {
       let newMongoUser: MongoUser = {
-        ...selectedUser,
+        ...mongoUser,
       };
       newMongoUser.apps.BAIXAR_CONTAS = active;
-      setSelectedUser(newMongoUser);
+      fetchUsers();
     }
   }
   async function handleUsuarios() {
-    let active = !selectedUser?.apps.USUARIOS;
+    let active = !mongoUser?.apps.USUARIOS;
     let response = await axios.post("/api/mongodb/usuarios", {
       call: "updateUserById",
-      id: selectedUser._id,
+      id: mongoUser._id,
       props: { "apps.USUARIOS": active },
     });
     toastNotify(response.data);
     if (response.data === 1) {
       let newMongoUser: MongoUser = {
-        ...selectedUser,
+        ...mongoUser,
       };
       newMongoUser.apps.USUARIOS = active;
-      setSelectedUser(newMongoUser);
+      fetchUsers();
     }
   }
   async function handleFuncoesAdministrativas() {
-    let active = !selectedUser?.apps.FUNCOES_ADMINISTRATIVAS;
+    let active = !mongoUser?.apps.FUNCOES_ADMINISTRATIVAS;
     let response = await axios.post("/api/mongodb/usuarios", {
       call: "updateUserById",
-      id: selectedUser._id,
+      id: mongoUser._id,
       props: { "apps.FUNCOES_ADMINISTRATIVAS": active },
     });
     toastNotify(response.data);
     if (response.data === 1) {
       let newMongoUser: MongoUser = {
-        ...selectedUser,
+        ...mongoUser,
       };
       newMongoUser.apps.FUNCOES_ADMINISTRATIVAS = active;
-      setSelectedUser(newMongoUser);
+      fetchUsers();
     }
   }
 
   async function handleNotificacoes() {
-    let active = !selectedUser?.apps.NOTIFICACOES;
+    let active = !mongoUser?.apps.NOTIFICACOES;
     let response = await axios.post("/api/mongodb/usuarios", {
       call: "updateUserById",
-      id: selectedUser._id,
+      id: mongoUser._id,
       props: { "apps.NOTIFICACOES": active },
     });
     toastNotify(response.data);
     if (response.data === 1) {
       let newMongoUser: MongoUser = {
-        ...selectedUser,
+        ...mongoUser,
       };
       newMongoUser.apps.NOTIFICACOES = active;
-      setSelectedUser(newMongoUser);
+      fetchUsers();
     }
   }
 
   return (
     <>
+      <IconButton
+        variant="solid"
+        bg="pink.600"
+        _hover={{ bg: "pink.500" }}
+        _focus={{ border: "none" }}
+        aria-label="Apps"
+        onClick={onOpen}
+        icon={
+          <Icon
+            color="green.200"
+            fontSize="x-large"
+            as={AiOutlineAppstoreAdd}
+          />
+        }
+      />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.600">
@@ -141,7 +152,7 @@ export function ConfigurarAppsModal({
                   _focus={{ border: "none" }}
                   aria-label=""
                   icon={
-                    selectedUser?.apps?.BAIXAR_CONTAS ? (
+                    mongoUser?.apps?.BAIXAR_CONTAS ? (
                       <Icon
                         as={AiOutlineAppstoreAdd}
                         fontSize="x-large"
@@ -168,7 +179,7 @@ export function ConfigurarAppsModal({
                   _focus={{ border: "none" }}
                   aria-label=""
                   icon={
-                    selectedUser?.apps?.USUARIOS ? (
+                    mongoUser?.apps?.USUARIOS ? (
                       <Icon
                         as={AiOutlineAppstoreAdd}
                         fontSize="x-large"
@@ -195,7 +206,7 @@ export function ConfigurarAppsModal({
                   _focus={{ border: "none" }}
                   aria-label=""
                   icon={
-                    selectedUser?.apps?.NOTIFICACOES ? (
+                    mongoUser?.apps?.NOTIFICACOES ? (
                       <Icon
                         as={AiOutlineAppstoreAdd}
                         fontSize="x-large"
@@ -223,7 +234,7 @@ export function ConfigurarAppsModal({
                   _focus={{ border: "none" }}
                   aria-label=""
                   icon={
-                    selectedUser?.apps?.FUNCOES_ADMINISTRATIVAS ? (
+                    mongoUser?.apps?.FUNCOES_ADMINISTRATIVAS ? (
                       <Icon
                         as={AiOutlineAppstoreAdd}
                         fontSize="x-large"

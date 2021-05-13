@@ -8,8 +8,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (!call) return res.status(200).json({ erro: "Funcao call nao informada" });
   switch (call) {
-    case "getUserByEmail":
+    case "getOneUser":
       await GetOneUser(req, res);
+      break;
+
+    case "getUserById":
+      await GetUserById(req, res);
       break;
 
     case "updateUserById":
@@ -26,11 +30,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 async function GetOneUser(req: NextApiRequest, res: NextApiResponse) {
-  const { email } = req.body;
+  const { props } = req.body;
   let user;
-  if (!email) return res.status(200).json({ erro: "Email nao foi informado" });
+  if (!props) return res.status(200).json({ erro: "Props nao foi informado" });
   let Client = await connectToCachedDb();
-  user = await Client.db().collection("usuarios").findOne({ email });
+  user = await Client.db().collection("usuarios").findOne(props);
+  res.status(200).json(user);
+}
+
+async function GetUserById(req: NextApiRequest, res: NextApiResponse) {
+  const { id } = req.body;
+  let user;
+  if (!id) return res.status(200).json({ erro: "Id nao foi informado" });
+  let filter = { _id: new ObjectId(id) };
+  let Client = await connectToCachedDb();
+  user = await Client.db().collection("usuarios").findOne(filter);
   res.status(200).json(user);
 }
 

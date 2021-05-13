@@ -5,6 +5,8 @@ import {
   FormControl,
   FormLabel,
   HStack,
+  Icon,
+  IconButton,
   Input,
   Modal,
   ModalBody,
@@ -15,38 +17,51 @@ import {
   ModalOverlay,
   Stack,
   Text,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { AiOutlineClockCircle } from "react-icons/ai";
 import { MongoUser } from "../../models/mongoUser";
-import { NotificacoesCheckBox } from "../configurarNotificacoes/NotificacoesCheckBox";
+import { ConfigurarNotificacoes } from "./ConfigurarNotificacoes";
 
 interface ConfigurarNotificacoesProps {
-  selectedUser: MongoUser;
-  setSelectedUser: (user: MongoUser) => void;
-  isOpen: boolean;
-  onClose: () => void;
+  mongoUser: MongoUser;
   fetchUsers: () => void;
 }
 
 export function ConfigurarNotificacoesModal({
-  selectedUser,
-  setSelectedUser,
-  isOpen,
-  onClose,
+  mongoUser,
   fetchUsers,
 }: ConfigurarNotificacoesProps) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <>
+      <IconButton
+        variant="solid"
+        bg="yellow.600"
+        _hover={{ bg: "yellow.500" }}
+        _focus={{ border: "none" }}
+        aria-label="Manage Notifs"
+        onClick={onOpen}
+        icon={
+          <Icon
+            color="green.200"
+            fontSize="x-large"
+            as={AiOutlineClockCircle}
+          />
+        }
+      />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.600">
           <ModalHeader>Edit User Notifications</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <NotificacoesCheckBox
-              mongoUser={selectedUser}
-              setMongoUser={setSelectedUser}
+            <ConfigurarNotificacoes
+              mongoUser={mongoUser}
+              fetchUsers={fetchUsers}
             />
           </ModalBody>
         </ModalContent>

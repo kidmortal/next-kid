@@ -8,15 +8,15 @@ import axios from "axios";
 import { BiBell, BiBellOff } from "react-icons/bi";
 import { MongoUser } from "../../models/mongoUser";
 
-interface NotificacoesCheckBoxProps {
+interface ConfigurarNotificacoesProps {
   mongoUser: MongoUser;
-  setMongoUser: (user: MongoUser) => void;
+  fetchUsers: () => void;
 }
 
-export function NotificacoesCheckBox({
+export function ConfigurarNotificacoes({
   mongoUser,
-  setMongoUser,
-}: NotificacoesCheckBoxProps) {
+  fetchUsers,
+}: ConfigurarNotificacoesProps) {
   const toast = useToast();
 
   async function toastNotify(success) {
@@ -53,7 +53,7 @@ export function NotificacoesCheckBox({
         ...mongoUser,
       };
       newMongoUser.notificar.RELATORIO_DIARIO = active;
-      setMongoUser(newMongoUser);
+      fetchUsers();
     }
   }
   async function handleSemData() {
@@ -69,7 +69,7 @@ export function NotificacoesCheckBox({
         ...mongoUser,
       };
       newMongoUser.notificar.DATA_INCORRETA = active;
-      setMongoUser(newMongoUser);
+      fetchUsers();
     }
   }
   async function handleSemCodicao() {
@@ -85,7 +85,7 @@ export function NotificacoesCheckBox({
         ...mongoUser,
       };
       newMongoUser.notificar.SEM_CONDICAO = active;
-      setMongoUser(newMongoUser);
+      fetchUsers();
     }
   }
 
@@ -102,7 +102,7 @@ export function NotificacoesCheckBox({
         ...mongoUser,
       };
       newMongoUser.notificar.CLIENTE_COM_PENDENCIA = active;
-      setMongoUser(newMongoUser);
+      fetchUsers();
     }
   }
   async function handleErroSuspeito() {
@@ -118,7 +118,7 @@ export function NotificacoesCheckBox({
         ...mongoUser,
       };
       newMongoUser.notificar.ERRO_SUSPEITO = active;
-      setMongoUser(newMongoUser);
+      fetchUsers();
     }
   }
 
