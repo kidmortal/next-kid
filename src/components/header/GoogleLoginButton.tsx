@@ -22,6 +22,13 @@ export function GoogleLoginButton() {
     return data;
   }
 
+  async function getEmpresa(empresa: string) {
+    let { data } = await axios.post(`/api/mongodb/empresas`, {
+      empresa,
+    });
+    return data;
+  }
+
   async function googleLoginSuccess(response: GoogleLoginResponse) {
     let googleUser = response.profileObj;
 

@@ -129,8 +129,8 @@ export function BaixarContaAReceberForm() {
       observacao,
       nota,
       desconto: parseFloat(desconto),
-      juros: parseFloat(desconto),
-      valor: parseFloat(desconto),
+      juros: parseFloat(juros),
+      valor: parseFloat(valor),
     });
 
     if (response) {
