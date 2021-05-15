@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/client";
 import { RequestOmie } from "../../_request";
 
 export interface Nota {
@@ -163,6 +164,8 @@ export interface Result {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const session = await getSession({ req });
+  if (!session) return res.status(401).json({ erro: "Nao autorizado" });
   let nota = req.query.nota as string;
   if (!nota)
     return res

@@ -6,13 +6,7 @@ import { connectToCachedDb } from "../../../../util/mongodb";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { call } = req.body;
   const session = await getSession({ req });
-  if (session) {
-    // Signed in
-    console.log("logado");
-  } else {
-    console.log("n logado");
-    res.status(401);
-  }
+  if (!session) return res.status(401).json({ erro: "Nao autorizado" });
 
   if (!call) return res.status(200).json({ erro: "Funcao call nao informada" });
   switch (call) {

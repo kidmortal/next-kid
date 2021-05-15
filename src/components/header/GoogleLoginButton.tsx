@@ -15,8 +15,21 @@ import { signin, signIn, signOut, useSession } from "next-auth/client";
 import { Stack } from "@chakra-ui/layout";
 
 export function GoogleLoginButton() {
-  const { googleUser, setGoogleUser, setMongoUser, setMongoEmpresa } =
-    useAppContext();
+  const {
+    googleUser,
+    setGoogleUser,
+    mongoUser,
+    setMongoUser,
+    setMongoEmpresa,
+  } = useAppContext();
+  const [session, loading] = useSession();
+
+  useEffect(() => {
+    console.log(session?.user?.name);
+    if (session && !mongoUser) {
+      SignInSuccess();
+    }
+  }, [session]);
 
   async function getMongoUser(email: string) {
     let call = "getOneUser";
@@ -36,6 +49,13 @@ export function GoogleLoginButton() {
     return data;
   }
 
+  async function SignInSuccess() {
+    let mongoUser = await getMongoUser(session?.user?.email);
+    let mongoEmpresa = await getMongoEmpresa(mongoUser.empresa);
+    setMongoUser(mongoUser);
+    setMongoEmpresa(mongoEmpresa);
+  }
+
   async function googleLoginSuccess(response: GoogleLoginResponse) {
     let googleUser = response.profileObj;
 
@@ -43,7 +63,6 @@ export function GoogleLoginButton() {
       console.log(response.accessToken);
       let mongoUser = await getMongoUser(googleUser.email);
       let mongoEmpresa = await getMongoEmpresa(mongoUser.empresa);
-      setGoogleUser(googleUser);
       setMongoUser(mongoUser);
       setMongoEmpresa(mongoEmpresa);
     }
@@ -59,7 +78,7 @@ export function GoogleLoginButton() {
     console.log(response);
   }
 
-  if (googleUser)
+  if (session)
     return (
       <Stack>
         <Button
@@ -68,13 +87,14 @@ export function GoogleLoginButton() {
           _hover={{ bg: "gray.500" }}
           _focus={{ border: "none", bg: "gray.500" }}
           variant="outline"
+          isLoading={loading}
           onClick={() => {
             signOut();
           }}
         >
-          Sign Out Falso
+          Sign Out
         </Button>
-        <GoogleLogout
+        {/*     <GoogleLogout
           buttonText=""
           style={{ backgroundColor: "#4A5568", color: "#4A5568" }}
           clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
@@ -91,11 +111,11 @@ export function GoogleLoginButton() {
               Sign Out
             </Button>
           )}
-        ></GoogleLogout>
+          ></GoogleLogout> */}
       </Stack>
     );
 
-  if (!googleUser)
+  if (!session)
     return (
       <Stack>
         <Button
@@ -104,13 +124,14 @@ export function GoogleLoginButton() {
           _hover={{ bg: "gray.500" }}
           _focus={{ border: "none" }}
           variant="outline"
+          isLoading={loading}
           onClick={() => {
             signIn();
           }}
         >
-          Sign In Falso
+          Sign In
         </Button>
-        <GoogleLogin
+        {/*   <GoogleLogin
           buttonText=""
           clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
           onSuccess={googleLoginSuccess}
@@ -129,7 +150,7 @@ export function GoogleLoginButton() {
               Sign In
             </Button>
           )}
-        ></GoogleLogin>
+          ></GoogleLogin> */}
       </Stack>
     );
 }

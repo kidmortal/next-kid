@@ -9,6 +9,7 @@ const options: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_SECRET,
     }),
   ],
+  theme: "light",
 };
 
 export default (req, res) => NextAuth(req, res, options);
