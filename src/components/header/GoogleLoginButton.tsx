@@ -105,7 +105,7 @@ export function GoogleLoginButton() {
           _focus={{ border: "none" }}
           variant="outline"
           onClick={() => {
-            signIn;
+            signIn();
           }}
         >
           Sign In Falso
