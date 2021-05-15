@@ -5,9 +5,12 @@ import { connectToCachedDb } from "../../../../util/mongodb";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { call } = req.body;
-  console.log(req.connection.remoteAddress);
-  console.log(res.connection.remoteAddress);
+
+  if (req.socket.remoteAddress != res.connection.remoteAddress)
+    return res.status(401).json({ erro: "Nao autorizado Conexões externas" });
+
   const session = await getSession({ req });
+
   if (!session) return res.status(401).json({ erro: "Nao autorizado" });
 
   if (!call) return res.status(200).json({ erro: "Funcao call nao informada" });
