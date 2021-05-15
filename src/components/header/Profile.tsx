@@ -11,7 +11,7 @@ export function Profile() {
         src={
           session
             ? session?.user?.image
-            : "https://cdn.discordapp.com/emojis/698680784911073285.png?v=1"
+            : "https://cdn.discordapp.com/emojis/763060140567691324.png?v=1"
         }
       />
       <Text>{session ? session.user?.name : "Sem Usuario"}</Text>

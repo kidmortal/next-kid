@@ -13,6 +13,7 @@ import { MongoEmpresa } from "../../models/mongoEmpresa";
 import { MongoUser } from "../../models/mongoUser";
 import { signin, signIn, signOut, useSession } from "next-auth/client";
 import { Stack } from "@chakra-ui/layout";
+import { toast, useToast } from "@chakra-ui/toast";
 
 export function GoogleLoginButton() {
   const {
@@ -23,6 +24,7 @@ export function GoogleLoginButton() {
     setMongoEmpresa,
   } = useAppContext();
   const [session, loading] = useSession();
+  const toast = useToast();
 
   useEffect(() => {
     console.log(session?.user?.name);
@@ -51,31 +53,10 @@ export function GoogleLoginButton() {
 
   async function SignInSuccess() {
     let mongoUser = await getMongoUser(session?.user?.email);
+    if (!mongoUser) return signOut();
     let mongoEmpresa = await getMongoEmpresa(mongoUser.empresa);
     setMongoUser(mongoUser);
     setMongoEmpresa(mongoEmpresa);
-  }
-
-  async function googleLoginSuccess(response: GoogleLoginResponse) {
-    let googleUser = response.profileObj;
-
-    if (googleUser) {
-      console.log(response.accessToken);
-      let mongoUser = await getMongoUser(googleUser.email);
-      let mongoEmpresa = await getMongoEmpresa(mongoUser.empresa);
-      setMongoUser(mongoUser);
-      setMongoEmpresa(mongoEmpresa);
-    }
-  }
-
-  function googleLogoutSuccess() {
-    setGoogleUser(null);
-    setMongoUser(null);
-    setMongoEmpresa(null);
-  }
-
-  function googleLoginError(response: GoogleLoginResponse) {
-    console.log(response);
   }
 
   if (session)
@@ -94,24 +75,6 @@ export function GoogleLoginButton() {
         >
           Sign Out
         </Button>
-        {/*     <GoogleLogout
-          buttonText=""
-          style={{ backgroundColor: "#4A5568", color: "#4A5568" }}
-          clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
-          onLogoutSuccess={googleLogoutSuccess}
-          render={(renderProps) => (
-            <Button
-              leftIcon={<Icon as={FcGoogle} />}
-              bg="gray.600"
-              _hover={{ bg: "gray.500" }}
-              _focus={{ border: "none", bg: "gray.500" }}
-              variant="outline"
-              onClick={renderProps.onClick}
-            >
-              Sign Out
-            </Button>
-          )}
-          ></GoogleLogout> */}
       </Stack>
     );
 
@@ -131,26 +94,6 @@ export function GoogleLoginButton() {
         >
           Sign In
         </Button>
-        {/*   <GoogleLogin
-          buttonText=""
-          clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
-          onSuccess={googleLoginSuccess}
-          onFailure={googleLoginError}
-          isSignedIn={true}
-          cookiePolicy={"single_host_origin"}
-          render={(renderProps) => (
-            <Button
-              leftIcon={<Icon as={FcGoogle} />}
-              bg="gray.600"
-              _hover={{ bg: "gray.500" }}
-              _focus={{ border: "none" }}
-              variant="outline"
-              onClick={renderProps.onClick}
-            >
-              Sign In
-            </Button>
-          )}
-          ></GoogleLogin> */}
       </Stack>
     );
 }
