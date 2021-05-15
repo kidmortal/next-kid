@@ -1,10 +1,18 @@
 import { MongoClient, ObjectId } from "mongodb";
+import { getSession } from "next-auth/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { MongoUser } from "../../../../models/mongoUser";
-import { connectToCachedDb, connectToNewDb } from "../../../../util/mongodb";
+import { connectToCachedDb } from "../../../../util/mongodb";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { call } = req.body;
+  const session = await getSession({ req });
+  if (session) {
+    // Signed in
+    console.log("logado");
+  } else {
+    console.log("n logado");
+    res.status(401);
+  }
 
   if (!call) return res.status(200).json({ erro: "Funcao call nao informada" });
   switch (call) {
