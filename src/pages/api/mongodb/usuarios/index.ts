@@ -5,6 +5,8 @@ import { connectToCachedDb } from "../../../../util/mongodb";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { call } = req.body;
+  console.log(req.connection.remoteAddress);
+  console.log(res.connection.remoteAddress);
   const session = await getSession({ req });
   if (!session) return res.status(401).json({ erro: "Nao autorizado" });
 
