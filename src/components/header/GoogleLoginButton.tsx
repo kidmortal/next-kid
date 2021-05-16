@@ -11,11 +11,17 @@ import { FcGoogle } from "react-icons/fc";
 import { useAppContext } from "../../context/AppContext";
 import { MongoEmpresa } from "../../models/mongoEmpresa";
 import { MongoUser } from "../../models/mongoUser";
-import { signin, signIn, signOut, useSession } from "next-auth/client";
+import {
+  getProviders,
+  signin,
+  signIn,
+  signOut,
+  useSession,
+} from "next-auth/client";
 import { Stack } from "@chakra-ui/layout";
 import { toast, useToast } from "@chakra-ui/toast";
 
-export function GoogleLoginButton() {
+export function GoogleLoginButton({ provider }) {
   const {
     googleUser,
     setGoogleUser,
@@ -27,7 +33,6 @@ export function GoogleLoginButton() {
   const toast = useToast();
 
   useEffect(() => {
-    console.log(session?.user?.name);
     if (session && !mongoUser) {
       SignInSuccess();
     }
@@ -61,39 +66,35 @@ export function GoogleLoginButton() {
 
   if (session)
     return (
-      <Stack>
-        <Button
-          leftIcon={<Icon as={FcGoogle} />}
-          bg="gray.600"
-          _hover={{ bg: "gray.500" }}
-          _focus={{ border: "none", bg: "gray.500" }}
-          variant="outline"
-          isLoading={loading}
-          onClick={() => {
-            signOut();
-          }}
-        >
-          Sign Out
-        </Button>
-      </Stack>
+      <Button
+        leftIcon={<Icon as={FcGoogle} />}
+        bg="gray.600"
+        _hover={{ bg: "gray.500" }}
+        _focus={{ border: "none", bg: "gray.500" }}
+        variant="outline"
+        isLoading={loading}
+        onClick={() => {
+          signOut();
+        }}
+      >
+        Sign Out
+      </Button>
     );
 
   if (!session)
     return (
-      <Stack>
-        <Button
-          leftIcon={<Icon as={FcGoogle} />}
-          bg="gray.600"
-          _hover={{ bg: "gray.500" }}
-          _focus={{ border: "none" }}
-          variant="outline"
-          isLoading={loading}
-          onClick={() => {
-            signIn();
-          }}
-        >
-          Sign In
-        </Button>
-      </Stack>
+      <Button
+        leftIcon={<Icon as={FcGoogle} />}
+        bg="gray.600"
+        _hover={{ bg: "gray.500" }}
+        _focus={{ border: "none" }}
+        variant="outline"
+        isLoading={loading}
+        onClick={() => {
+          signIn("google");
+        }}
+      >
+        Sign In
+      </Button>
     );
 }
