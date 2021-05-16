@@ -21,7 +21,7 @@ import {
 import { Stack } from "@chakra-ui/layout";
 import { toast, useToast } from "@chakra-ui/toast";
 
-export function GoogleLoginButton({ provider }) {
+export function GoogleLoginButton() {
   const {
     googleUser,
     setGoogleUser,
