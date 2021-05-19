@@ -40,7 +40,7 @@ function formatDate(data: string) {
 }
 
 export function FluxoCaixa() {
-  const { googleUser } = useAppContext();
+  const { mongoUser } = useAppContext();
   const [inicio, setInicio] = useState(format(new Date(), "yyyy-MM-dd"));
   const inicioFormat = formatDate(inicio);
   const [final, setFinal] = useState(format(new Date(), "yyyy-MM-dd"));
@@ -80,7 +80,7 @@ export function FluxoCaixa() {
 
   async function fetchContas() {
     let response = await axios.post<MongoConta[]>("/api/mongodb/contas", {
-      email: googleUser.email,
+      email: mongoUser.email,
     });
     response.data.forEach((conta) => {
       conta.dataFormat = new Date(formatDateString(conta.data));

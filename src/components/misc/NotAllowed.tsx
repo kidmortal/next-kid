@@ -1,5 +1,4 @@
-import { Image } from "@chakra-ui/image";
-import { Stack, Text } from "@chakra-ui/layout";
+import { Image, Stack, Text } from "@chakra-ui/react";
 
 export function NotAllowed() {
   return (
