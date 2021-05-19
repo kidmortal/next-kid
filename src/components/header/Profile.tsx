@@ -1,19 +1,20 @@
 import { HStack, Text, Avatar } from "@chakra-ui/react";
+import { useSession } from "next-auth/client";
 import { useAppContext } from "../../context/AppContext";
 
 export function Profile() {
-  const { googleUser } = useAppContext();
+  const [session, loading] = useSession();
   return (
     <HStack>
       <Avatar
-        name={googleUser ? googleUser.givenName : "User"}
+        name={session ? session.user?.name : "User"}
         src={
-          googleUser
-            ? googleUser.imageUrl
-            : "https://cdn.discordapp.com/emojis/698680784911073285.png?v=1"
+          session
+            ? session?.user?.image
+            : "https://cdn.discordapp.com/emojis/763060140567691324.png?v=1"
         }
       />
-      <Text>{googleUser ? googleUser.givenName : "Sem Usuario"}</Text>
+      <Text>{session ? session.user?.name : "Sem Usuario"}</Text>
     </HStack>
   );
 }

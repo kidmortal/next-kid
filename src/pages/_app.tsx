@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Header } from "../components/header/Header";
 import { AppContextProvider } from "../context/AppContext";
 import { theme } from "../styles/theme";
+import { Provider as AuthProvider } from "next-auth/client";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -26,12 +27,14 @@ function MyApp({ Component, pageProps }) {
   return (
     <AppContextProvider>
       <ChakraProvider theme={theme}>
-        <Stack align="center" spacing={2}>
-          <Stack width={[350, 500, 700]}>
-            <Header />
-            <Component {...pageProps} />
+        <AuthProvider session={pageProps.session}>
+          <Stack align="center" spacing={2}>
+            <Stack width={[350, 500, 700]}>
+              <Header />
+              <Component {...pageProps} />
+            </Stack>
           </Stack>
-        </Stack>
+        </AuthProvider>
       </ChakraProvider>
     </AppContextProvider>
   );

@@ -1,8 +1,11 @@
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/client";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { email } = req.body;
+  const session = await getSession({ req });
+  if (!session) return res.status(401).json({ erro: "Nao autorizado" });
   if (!email) return res.status(200).json({ erro: "Usuario não possui email" });
   res
     .status(200)

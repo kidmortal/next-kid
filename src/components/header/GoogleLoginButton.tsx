@@ -11,10 +11,32 @@ import { FcGoogle } from "react-icons/fc";
 import { useAppContext } from "../../context/AppContext";
 import { MongoEmpresa } from "../../models/mongoEmpresa";
 import { MongoUser } from "../../models/mongoUser";
+import {
+  getProviders,
+  signin,
+  signIn,
+  signOut,
+  useSession,
+} from "next-auth/client";
+import { Stack } from "@chakra-ui/layout";
+import { toast, useToast } from "@chakra-ui/toast";
 
 export function GoogleLoginButton() {
-  const { googleUser, setGoogleUser, setMongoUser, setMongoEmpresa } =
-    useAppContext();
+  const {
+    googleUser,
+    setGoogleUser,
+    mongoUser,
+    setMongoUser,
+    setMongoEmpresa,
+  } = useAppContext();
+  const [session, loading] = useSession();
+  const toast = useToast();
+
+  useEffect(() => {
+    if (session && !mongoUser) {
+      SignInSuccess();
+    }
+  }, [session]);
 
   async function getMongoUser(email: string) {
     let call = "getOneUser";
@@ -22,6 +44,7 @@ export function GoogleLoginButton() {
       call,
       props: { email },
     });
+
     return data;
   }
 
@@ -33,72 +56,45 @@ export function GoogleLoginButton() {
     return data;
   }
 
-  async function googleLoginSuccess(response: GoogleLoginResponse) {
-    let googleUser = response.profileObj;
-
-    if (googleUser) {
-      let mongoUser = await getMongoUser(googleUser.email);
-      let mongoEmpresa = await getMongoEmpresa(mongoUser.empresa);
-
-      setGoogleUser(googleUser);
-      setMongoUser(mongoUser);
-      setMongoEmpresa(mongoEmpresa);
-    }
+  async function SignInSuccess() {
+    let mongoUser = await getMongoUser(session?.user?.email);
+    if (!mongoUser) return signOut();
+    let mongoEmpresa = await getMongoEmpresa(mongoUser.empresa);
+    setMongoUser(mongoUser);
+    setMongoEmpresa(mongoEmpresa);
   }
 
-  function googleLogoutSuccess() {
-    setGoogleUser(null);
-    setMongoUser(null);
-    setMongoEmpresa(null);
-  }
-
-  function googleLoginError(response: GoogleLoginResponse) {
-    console.log(response);
-  }
-
-  if (googleUser)
+  if (session)
     return (
-      <GoogleLogout
-        buttonText=""
-        style={{ backgroundColor: "#4A5568", color: "#4A5568" }}
-        clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
-        onLogoutSuccess={googleLogoutSuccess}
-        render={(renderProps) => (
-          <Button
-            leftIcon={<Icon as={FcGoogle} />}
-            bg="gray.600"
-            _hover={{ bg: "gray.500" }}
-            _focus={{ border: "none", bg: "gray.500" }}
-            variant="outline"
-            onClick={renderProps.onClick}
-          >
-            Sign Out
-          </Button>
-        )}
-      ></GoogleLogout>
+      <Button
+        leftIcon={<Icon as={FcGoogle} />}
+        bg="gray.600"
+        _hover={{ bg: "gray.500" }}
+        _focus={{ border: "none", bg: "gray.500" }}
+        variant="outline"
+        isLoading={loading}
+        onClick={() => {
+          signOut();
+        }}
+      >
+        Sign Out
+      </Button>
     );
 
-  if (!googleUser)
+  if (!session)
     return (
-      <GoogleLogin
-        buttonText=""
-        clientId="199765150861-i5tb6qamqsns207m42jd9iqrugra021n.apps.googleusercontent.com"
-        onSuccess={googleLoginSuccess}
-        onFailure={googleLoginError}
-        isSignedIn={true}
-        cookiePolicy={"single_host_origin"}
-        render={(renderProps) => (
-          <Button
-            leftIcon={<Icon as={FcGoogle} />}
-            bg="gray.600"
-            _hover={{ bg: "gray.500" }}
-            _focus={{ border: "none" }}
-            variant="outline"
-            onClick={renderProps.onClick}
-          >
-            Sign In
-          </Button>
-        )}
-      ></GoogleLogin>
+      <Button
+        leftIcon={<Icon as={FcGoogle} />}
+        bg="gray.600"
+        _hover={{ bg: "gray.500" }}
+        _focus={{ border: "none" }}
+        variant="outline"
+        isLoading={loading}
+        onClick={() => {
+          signIn("google");
+        }}
+      >
+        Sign In
+      </Button>
     );
 }

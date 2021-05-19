@@ -23,9 +23,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import { MenuButton } from "./MenuButton";
+import { useSession } from "next-auth/client";
 
 export function SideMenu() {
-  const { googleUser, mongoUser } = useAppContext();
+  const [session, loading] = useSession();
+  const { mongoUser } = useAppContext();
   const [isOpen, setIsOpen] = useState(false);
 
   Router.events.on("routeChangeComplete", (url) => {
@@ -35,7 +37,7 @@ export function SideMenu() {
   return (
     <>
       <Button
-        disabled={!googleUser}
+        disabled={!mongoUser}
         bg="gray.500"
         _hover={{ bg: "gray.400" }}
         onClick={() => setIsOpen(!isOpen)}
