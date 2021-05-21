@@ -8,6 +8,7 @@ import {
   TagLeftIcon,
   HStack,
   Button,
+  Switch,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { format } from "date-fns";
@@ -41,6 +42,8 @@ function formatDate(data: string) {
 
 export function FluxoCaixa() {
   const { mongoUser } = useAppContext();
+  const [pyramid, setPyramid] = useState(true);
+  const [dix, setDix] = useState(true);
   const [inicio, setInicio] = useState(format(new Date(), "yyyy-MM-dd"));
   const inicioFormat = formatDate(inicio);
   const [final, setFinal] = useState(format(new Date(), "yyyy-MM-dd"));
@@ -52,7 +55,8 @@ export function FluxoCaixa() {
         conta.dataFormat.valueOf() > inicioFormat.valueOf() &&
         conta.dataFormat.valueOf() < finalFormat.valueOf()
       ) {
-        return acc + conta.valor;
+        if (conta.empresa === "PYRAMID" && pyramid) return acc + conta.valor;
+        if (conta.empresa === "DIX" && dix) return acc + conta.valor;
       }
     }
     return acc;
@@ -63,7 +67,8 @@ export function FluxoCaixa() {
         conta.dataFormat.valueOf() > inicioFormat.valueOf() &&
         conta.dataFormat.valueOf() < finalFormat.valueOf()
       ) {
-        return acc + conta.valor;
+        if (conta.empresa === "PYRAMID" && pyramid) return acc + conta.valor;
+        if (conta.empresa === "DIX" && dix) return acc + conta.valor;
       }
     }
     return acc;
@@ -113,6 +118,28 @@ export function FluxoCaixa() {
             setFinal(e.target.value);
           }}
         />
+        <HStack justify="space-between">
+          <HStack>
+            <Switch
+              id="pyramid"
+              isChecked={pyramid}
+              onChange={() => {
+                setPyramid(!pyramid);
+              }}
+            />
+            <Text>Dix</Text>
+          </HStack>
+          <HStack>
+            <Switch
+              id="dix"
+              isChecked={dix}
+              onChange={() => {
+                setDix(!dix);
+              }}
+            />
+            <Text>Pyramid</Text>
+          </HStack>
+        </HStack>
       </Stack>
 
       <Stack>
