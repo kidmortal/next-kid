@@ -98,9 +98,10 @@ export function FluxoCaixa() {
   }, []);
 
   return (
-    <Stack justify="center" align="center">
-      <Stack>
+    <Stack justify="center" align="center" spacing={6}>
+      <Stack w="300px" spacing={5}>
         <Input
+          fontSize="xl"
           type="date"
           _focus={{}}
           placeholder="Data Inicio"
@@ -110,6 +111,7 @@ export function FluxoCaixa() {
           }}
         />
         <Input
+          fontSize="xl"
           type="date"
           _focus={{}}
           placeholder="Data Fim"
@@ -127,7 +129,9 @@ export function FluxoCaixa() {
                 setPyramid(!pyramid);
               }}
             />
-            <Text>Dix</Text>
+            <Text fontSize="2xl" color="orange.300">
+              Dix
+            </Text>
           </HStack>
           <HStack>
             <Switch
@@ -137,27 +141,31 @@ export function FluxoCaixa() {
                 setDix(!dix);
               }}
             />
-            <Text>Pyramid</Text>
+            <Text fontSize="2xl" color="orange.300">
+              Pyramid
+            </Text>
           </HStack>
         </HStack>
       </Stack>
 
-      <Stack>
-        <Tag size="lg" variant="outline" colorScheme="blue">
+      <Stack w="300px">
+        <Tag padding="5px" fontSize="2xl" variant="outline" colorScheme="blue">
           <TagLeftIcon fontSize="large" as={RiArrowRightUpLine} />
           <TagLabel>Boletos: {formatter.format(totalReceber)}</TagLabel>
         </Tag>
-        <Tag size="lg" variant="outline" colorScheme="blue">
+        <Tag padding="5px" fontSize="2xl" variant="outline" colorScheme="blue">
           <TagLeftIcon fontSize="large" as={RiArrowRightUpLine} />
           <TagLabel>Cheques: {formatter.format(totalCheques)}</TagLabel>
         </Tag>
-        <Tag size="lg" variant="outline" colorScheme="red">
+        <Tag padding="5px" fontSize="2xl" variant="outline" colorScheme="red">
           <TagLeftIcon fontSize="large" as={RiArrowRightDownLine} />
           <TagLabel>Pagar: {formatter.format(totalPagar)}</TagLabel>
         </Tag>
       </Stack>
       <Tag
-        size="lg"
+        padding="5px"
+        w="300px"
+        fontSize="2xl"
         variant="outline"
         colorScheme={balance > 0 ? "green" : "red"}
       >
