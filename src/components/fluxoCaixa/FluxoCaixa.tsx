@@ -44,6 +44,7 @@ export function FluxoCaixa() {
   const { mongoUser } = useAppContext();
   const [pyramid, setPyramid] = useState(true);
   const [dix, setDix] = useState(true);
+  const [cheques, setCheques] = useState(true);
   const [inicio, setInicio] = useState(format(new Date(), "yyyy-MM-dd"));
   const inicioFormat = formatDate(inicio);
   const [final, setFinal] = useState(format(new Date(), "yyyy-MM-dd"));
@@ -76,7 +77,7 @@ export function FluxoCaixa() {
   const totalCheques = contas.reduce((acc, conta) => {
     if (conta.tipo === "CHEQUE") {
       if (isBefore(conta.dataFormat, finalFormat)) {
-        return acc + conta.valor;
+        if (cheques) return acc + conta.valor;
       }
     }
     return acc;
@@ -129,7 +130,7 @@ export function FluxoCaixa() {
                 setPyramid(!pyramid);
               }}
             />
-            <Text fontSize="2xl" color="orange.300">
+            <Text fontSize="md" color="orange.300">
               Dix
             </Text>
           </HStack>
@@ -141,8 +142,20 @@ export function FluxoCaixa() {
                 setDix(!dix);
               }}
             />
-            <Text fontSize="2xl" color="orange.300">
+            <Text fontSize="md" color="orange.300">
               Pyramid
+            </Text>
+          </HStack>
+          <HStack>
+            <Switch
+              id="cheques"
+              isChecked={cheques}
+              onChange={() => {
+                setCheques(!cheques);
+              }}
+            />
+            <Text fontSize="md" color="orange.300">
+              Cheques
             </Text>
           </HStack>
         </HStack>
