@@ -7,6 +7,7 @@ export function Profile() {
   return (
     <HStack>
       <Avatar
+        id="userAvatar"
         name={session ? session.user?.name : "User"}
         src={
           session

@@ -30,7 +30,7 @@ export function GoogleLoginButton() {
     setMongoEmpresa,
   } = useAppContext();
   const [session, loading] = useSession();
-  const toast = useToast();
+
 
   useEffect(() => {
     if (session && !mongoUser) {

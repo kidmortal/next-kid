@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "noImplicitAny": false,
-    "types": ["node"],
+    "types": [
+      "node",
+      "@types/jest"
+    ],
     "target": "es5",
     "lib": [
       "dom",
@@ -23,8 +26,9 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/pages/api/mongodb/teste/index.js", "src/components/chequeDevolvido/ChequeDevolvido.js", "src/components/chequeDevolvido/ChequeDevolvido.js"  ],
+    "**/*.tsx",
+    "./setupTests.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
