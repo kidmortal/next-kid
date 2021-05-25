@@ -91,11 +91,9 @@ export function BaixarContaAReceberForm() {
     let newState = [...baixas];
     setLoadingBatch(true);
 
-    let finishedProcessing = 0;
-
     for (let index = 0; index < nfArray.length; index++) {
       const nota = nfArray[index];
-      baixarConta({
+      let response = await baixarConta({
         dataBaixa: formatDate(dataBaixa),
         Cc,
         observacao,
@@ -103,20 +101,16 @@ export function BaixarContaAReceberForm() {
         desconto: 0,
         juros: 0,
         valor: 0,
-      }).then((response) => {
-        finishedProcessing++;
-        if (response) {
-          newState.push(response);
-          console.log(newState);
-          setBaixas([...newState]);
-        }
-
-        if (finishedProcessing >= nfArray.length) {
-          setLoadingBatch(false);
-          setBatch("");
-        }
       });
+
+      if (response) {
+        newState.push(response);
+        console.log(newState);
+        setBaixas([...newState]);
+      }
     }
+    setLoadingBatch(false);
+    setBatch("");
   }
 
   async function handleSubmitBaixaConta() {

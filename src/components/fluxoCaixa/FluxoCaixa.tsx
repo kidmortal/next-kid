@@ -162,15 +162,15 @@ export function FluxoCaixa() {
       </Stack>
 
       <Stack w="300px">
-        <Tag padding="5px" fontSize="2xl" variant="outline" colorScheme="blue">
+        <Tag padding="6px" fontSize="2xl" variant="outline" colorScheme="blue">
           <TagLeftIcon fontSize="large" as={RiArrowRightUpLine} />
-          <TagLabel>Boletos: {formatter.format(totalReceber)}</TagLabel>
+          <TagLabel>Receber: {formatter.format(totalReceber)}</TagLabel>
         </Tag>
-        <Tag padding="5px" fontSize="2xl" variant="outline" colorScheme="blue">
+        <Tag padding="6px" fontSize="2xl" variant="outline" colorScheme="blue">
           <TagLeftIcon fontSize="large" as={RiArrowRightUpLine} />
           <TagLabel>Cheques: {formatter.format(totalCheques)}</TagLabel>
         </Tag>
-        <Tag padding="5px" fontSize="2xl" variant="outline" colorScheme="red">
+        <Tag padding="6px" fontSize="2xl" variant="outline" colorScheme="red">
           <TagLeftIcon fontSize="large" as={RiArrowRightDownLine} />
           <TagLabel>Pagar: {formatter.format(totalPagar)}</TagLabel>
         </Tag>
