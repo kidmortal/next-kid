@@ -46,6 +46,7 @@ describe('Google Signin Button', () => {
   test('Should call "Sign Out" function when clicked while logged in', async () => {
     useSessionMocked.mockReturnValueOnce([{ user: { name: "John doe" } }, false])
     const signOutMocked = mocked(signOut)
+    signOutMocked.mockResolvedValueOnce({ url: process.env.NEXTAUTH_URL })
     render(<GoogleLoginButton />)
     const loginButton = screen.getByText("Sign Out")
     fireEvent.click(loginButton)

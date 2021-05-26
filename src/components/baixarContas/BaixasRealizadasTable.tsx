@@ -119,7 +119,7 @@ export function BaixasRealizadasTable() {
               <Td>
                 <HStack justify="space-around">
                   <Text fontSize={12}>
-                    Liquidado: {data.liquidado === "S" ? "✔" : "❌"}{" "}
+                    Liquidado: {data.liquidado === "S" ? "✔" : "❌"}
                   </Text>
                   <Tooltip label="Desfazer Lançamento">
                     <IconButton
