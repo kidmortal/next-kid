@@ -1,3 +1,4 @@
+import { SearchIcon } from "@chakra-ui/icons";
 import {
   Text,
   Input,
@@ -9,6 +10,7 @@ import {
   HStack,
   Button,
   Switch,
+  IconButton,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { format } from "date-fns";
@@ -53,7 +55,7 @@ export function FluxoCaixa() {
   const contasPagar = contas.reduce((acc, conta) => {
     if (conta.tipo === "PAGAR") {
       if (
-        conta.dataFormat.valueOf() > inicioFormat.valueOf() &&
+        conta.dataFormat.valueOf() >= inicioFormat.valueOf() &&
         conta.dataFormat.valueOf() < finalFormat.valueOf()
       ) {
         if (conta.empresa === "PYRAMID" && pyramid) return [...acc, conta];
@@ -65,7 +67,7 @@ export function FluxoCaixa() {
   const contasReceber = contas.reduce((acc, conta) => {
     if (conta.tipo === "RECEBER") {
       if (
-        conta.dataFormat.valueOf() > inicioFormat.valueOf() &&
+        conta.dataFormat.valueOf() >= inicioFormat.valueOf() &&
         conta.dataFormat.valueOf() < finalFormat.valueOf()
       ) {
         if (conta.empresa === "PYRAMID" && pyramid) return [...acc, conta];
@@ -74,29 +76,11 @@ export function FluxoCaixa() {
     }
     return acc;
   }, []);
-  const totalPagar = contas.reduce((acc, conta) => {
-    if (conta.tipo === "PAGAR") {
-      if (
-        conta.dataFormat.valueOf() > inicioFormat.valueOf() &&
-        conta.dataFormat.valueOf() < finalFormat.valueOf()
-      ) {
-        if (conta.empresa === "PYRAMID" && pyramid) return acc + conta.valor;
-        if (conta.empresa === "DIX" && dix) return acc + conta.valor;
-      }
-    }
-    return acc;
+  const totalPagar = contasPagar.reduce((acc, conta) => {
+    return acc + conta.valor;
   }, 0);
-  const totalReceber = contas.reduce((acc, conta) => {
-    if (conta.tipo === "RECEBER") {
-      if (
-        conta.dataFormat.valueOf() > inicioFormat.valueOf() &&
-        conta.dataFormat.valueOf() < finalFormat.valueOf()
-      ) {
-        if (conta.empresa === "PYRAMID" && pyramid) return acc + conta.valor;
-        if (conta.empresa === "DIX" && dix) return acc + conta.valor;
-      }
-    }
-    return acc;
+  const totalReceber = contasReceber.reduce((acc, conta) => {
+    return acc + conta.valor;
   }, 0);
   const totalCheques = contas.reduce((acc, conta) => {
     if (conta.tipo === "CHEQUE") {
@@ -186,23 +170,62 @@ export function FluxoCaixa() {
       </Stack>
 
       <Stack w="300px">
-        <Tag padding="6px" fontSize="2xl" variant="outline" colorScheme="blue">
+        <Tag
+          justifyContent="space-between"
+          padding="6px"
+          fontSize="xl"
+          variant="outline"
+          colorScheme="blue"
+        >
           <TagLeftIcon fontSize="large" as={RiArrowRightUpLine} />
           <TagLabel>Receber: {formatter.format(totalReceber)}</TagLabel>
+          <TagRightIcon
+            onClick={() => {
+              console.log(contasReceber);
+            }}
+            fontSize="large"
+            as={SearchIcon}
+          />
         </Tag>
-        <Tag padding="6px" fontSize="2xl" variant="outline" colorScheme="blue">
+        <Tag
+          justifyContent="space-between"
+          padding="6px"
+          fontSize="xl"
+          variant="outline"
+          colorScheme="blue"
+        >
           <TagLeftIcon fontSize="large" as={RiArrowRightUpLine} />
           <TagLabel>Cheques: {formatter.format(totalCheques)}</TagLabel>
+          <TagRightIcon
+            onClick={() => {
+              console.log("nada");
+            }}
+            fontSize="large"
+            as={SearchIcon}
+          />
         </Tag>
-        <Tag padding="6px" fontSize="2xl" variant="outline" colorScheme="red">
+        <Tag
+          justifyContent="space-between"
+          padding="6px"
+          fontSize="xl"
+          variant="outline"
+          colorScheme="red"
+        >
           <TagLeftIcon fontSize="large" as={RiArrowRightDownLine} />
           <TagLabel>Pagar: {formatter.format(totalPagar)}</TagLabel>
+          <TagRightIcon
+            onClick={() => {
+              console.log(contasPagar);
+            }}
+            fontSize="large"
+            as={SearchIcon}
+          />
         </Tag>
       </Stack>
       <Tag
         padding="5px"
         w="300px"
-        fontSize="2xl"
+        fontSize="xl"
         variant="outline"
         colorScheme={balance > 0 ? "green" : "red"}
       >
