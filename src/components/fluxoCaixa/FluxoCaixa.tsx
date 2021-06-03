@@ -50,6 +50,30 @@ export function FluxoCaixa() {
   const [final, setFinal] = useState(format(new Date(), "yyyy-MM-dd"));
   const finalFormat = formatDate(final);
   const [contas, setContas] = useState<MongoConta[]>([]);
+  const contasPagar = contas.reduce((acc, conta) => {
+    if (conta.tipo === "PAGAR") {
+      if (
+        conta.dataFormat.valueOf() > inicioFormat.valueOf() &&
+        conta.dataFormat.valueOf() < finalFormat.valueOf()
+      ) {
+        if (conta.empresa === "PYRAMID" && pyramid) return [...acc, conta];
+        if (conta.empresa === "DIX" && dix) return [...acc, conta];
+      }
+    }
+    return acc;
+  }, []);
+  const contasReceber = contas.reduce((acc, conta) => {
+    if (conta.tipo === "RECEBER") {
+      if (
+        conta.dataFormat.valueOf() > inicioFormat.valueOf() &&
+        conta.dataFormat.valueOf() < finalFormat.valueOf()
+      ) {
+        if (conta.empresa === "PYRAMID" && pyramid) return [...acc, conta];
+        if (conta.empresa === "DIX" && dix) return [...acc, conta];
+      }
+    }
+    return acc;
+  }, []);
   const totalPagar = contas.reduce((acc, conta) => {
     if (conta.tipo === "PAGAR") {
       if (
@@ -131,7 +155,7 @@ export function FluxoCaixa() {
               }}
             />
             <Text fontSize="md" color="orange.300">
-              Dix
+              Pyramid
             </Text>
           </HStack>
           <HStack>
@@ -143,7 +167,7 @@ export function FluxoCaixa() {
               }}
             />
             <Text fontSize="md" color="orange.300">
-              Pyramid
+              Dix
             </Text>
           </HStack>
           <HStack>

@@ -88,12 +88,12 @@ export function BaixarContaAReceberForm() {
   async function handleSumbitBaixarTodos() {
     if (verificarCamposObrigatorios()) return;
     let nfArray = batch.split("\n");
-    let newState = [...baixas];
+    let promises = [];
     setLoadingBatch(true);
 
     for (let index = 0; index < nfArray.length; index++) {
       const nota = nfArray[index];
-      let response = await baixarConta({
+      let response = baixarConta({
         dataBaixa: formatDate(dataBaixa),
         Cc,
         observacao,
@@ -103,12 +103,11 @@ export function BaixarContaAReceberForm() {
         valor: 0,
       });
 
-      if (response) {
-        newState.push(response);
-        console.log(newState);
-        setBaixas([...newState]);
-      }
+      promises.push(response);
     }
+    let result: BaixaProps[] = await Promise.all(promises);
+    console.log(result);
+    setBaixas([...baixas, ...result]);
     setLoadingBatch(false);
     setBatch("");
   }
