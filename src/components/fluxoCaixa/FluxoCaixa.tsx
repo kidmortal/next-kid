@@ -243,11 +243,6 @@ export function FluxoCaixa() {
         <TagLeftIcon fontSize="large" as={RiArrowUpDownLine} />
         <TagLabel>Balanço: {formatter.format(balance)}</TagLabel>
       </Tag>
-      <Button onClick={() => {
-        console.log(contasReceber)
-        console.log(inicioFormat.getDate())
-        console.log(finalFormat.getDate())
-      }} >Check</Button>
     </Stack>
   );
 }
