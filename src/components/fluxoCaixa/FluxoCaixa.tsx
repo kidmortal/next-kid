@@ -42,6 +42,19 @@ function formatDate(data: string) {
   return format;
 }
 
+function dateIsBetween(data: Date, start: Date, end: Date): boolean {
+  let dateDay = data.getDate()
+  let dateMonth = data.getMonth()
+
+  if (dateDay >= start.getDate() &&
+    dateDay <= end.getDate() &&
+    dateMonth <= start.getMonth() &&
+    dateMonth >= start.getMonth()) {
+    return true
+  }
+  return false
+}
+
 export function FluxoCaixa() {
   const { mongoUser } = useAppContext();
   const [pyramid, setPyramid] = useState(true);
@@ -55,8 +68,7 @@ export function FluxoCaixa() {
   const contasPagar = contas.reduce((acc, conta) => {
     if (conta.tipo === "PAGAR") {
       if (
-        conta.dataFormat.valueOf() >= inicioFormat.valueOf() &&
-        conta.dataFormat.valueOf() < finalFormat.valueOf()
+        dateIsBetween(conta.dataFormat, inicioFormat, finalFormat)
       ) {
         if (conta.empresa === "PYRAMID" && pyramid) return [...acc, conta];
         if (conta.empresa === "DIX" && dix) return [...acc, conta];
@@ -67,8 +79,7 @@ export function FluxoCaixa() {
   const contasReceber = contas.reduce((acc, conta) => {
     if (conta.tipo === "RECEBER") {
       if (
-        conta.dataFormat.valueOf() >= inicioFormat.valueOf() &&
-        conta.dataFormat.valueOf() < finalFormat.valueOf()
+        dateIsBetween(conta.dataFormat, inicioFormat, finalFormat)
       ) {
         if (conta.empresa === "PYRAMID" && pyramid) return [...acc, conta];
         if (conta.empresa === "DIX" && dix) return [...acc, conta];
@@ -232,6 +243,11 @@ export function FluxoCaixa() {
         <TagLeftIcon fontSize="large" as={RiArrowUpDownLine} />
         <TagLabel>Balanço: {formatter.format(balance)}</TagLabel>
       </Tag>
+      <Button onClick={() => {
+        console.log(contasReceber)
+        console.log(inicioFormat.getDate())
+        console.log(finalFormat.getDate())
+      }} >Check</Button>
     </Stack>
   );
 }
